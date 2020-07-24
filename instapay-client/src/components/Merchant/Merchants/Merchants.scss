@@ -1,0 +1,30 @@
+.merchantsContainer {
+  margin-top: 80px;
+}
+
+.merchantsHeader {
+  display: flex;
+  flex-direction: row;
+}
+
+.merchantsTitle {
+  display: flex;
+  justify-content: center;
+}
+
+.merchantsTable {
+  display: flex;
+  justify-content: center;
+}
+
+.merchantFormHeader {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+}
+
+.saveMerchant {
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
+}

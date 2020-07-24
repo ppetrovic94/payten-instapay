@@ -1,0 +1,19 @@
+.tableDetails {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.tableSearch {
+  padding-bottom: 10px;
+}
+
+.tableHeader {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.tableHeaderWrapper {
+  display: flex;
+}
