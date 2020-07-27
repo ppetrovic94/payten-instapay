@@ -74,7 +74,7 @@ public class GroupServiceImpl implements GroupService {
 
 
     @Override
-    public Group updateGroup(GroupDto groupDto, Integer groupId, BindingResult result) {
+    public GroupDto updateGroup(GroupDto groupDto, Integer groupId, BindingResult result) {
         Group found = groupRepository.getByGroupId(groupId);
 
         if (found == null) {
@@ -92,7 +92,8 @@ public class GroupServiceImpl implements GroupService {
         }
 
         Group group = convertToEntity(groupDto, found);
-        return groupRepository.save(group);
+        groupRepository.save(group);
+        return convertToDto(group);
     }
 
     @Override

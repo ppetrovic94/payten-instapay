@@ -4,6 +4,7 @@ import { Button, Dropdown } from 'semantic-ui-react';
 import _ from 'lodash';
 import UserGroups from '../User/UserGroups/UserGroups';
 import './CustomForm.scss';
+import GroupRoles from '../Group/GroupRoles/GroupRoles';
 
 const CustomForm = ({ formConfig, formFields, setFormFields, formSubmitHandler, formErrors }) => {
   const onChange = (e) => {
@@ -41,6 +42,8 @@ const CustomForm = ({ formConfig, formFields, setFormFields, formSubmitHandler, 
         console.log(formFields, 'checkbox fields');
         if (formFields.groupIds)
           return <UserGroups userFields={formFields} setUserFields={setFormFields} />;
+        if (formFields.roleIds)
+          return <GroupRoles groupFields={formFields} setGroupFields={setFormFields} />;
 
       case 'TEXT':
       case 'PASSWORD':

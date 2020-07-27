@@ -43,7 +43,7 @@ public class CityController {
 
     @PutMapping("/cities/{cityId}/update")
     @ResponseStatus(value = HttpStatus.OK)
-    public City updateCity(@Valid @RequestBody CityDto cityDto, @PathVariable Integer cityId, BindingResult result){
+    public City updateCity(@PathVariable Integer cityId, @Valid @RequestBody CityDto cityDto, BindingResult result){
         return cityService.updateCity(cityDto, cityId, result);
     }
 

@@ -1,6 +1,7 @@
 package com.payten.instapay.dto.Group;
 
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GroupDto {
@@ -10,7 +11,7 @@ public class GroupDto {
 
     private String description;
 
-    private List<Integer> roleIds;
+    private List<Integer> roleIds = new ArrayList<>();
 
     public String getGroupName() {
         return groupName;

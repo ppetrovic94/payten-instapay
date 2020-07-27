@@ -1,9 +1,7 @@
 package com.payten.instapay.controllers;
 
-import com.payten.instapay.dto.Group.GroupDto;
 import com.payten.instapay.dto.User.UserDto;
 import com.payten.instapay.model.Group;
-import com.payten.instapay.model.Role;
 import com.payten.instapay.model.User;
 import com.payten.instapay.services.UserService;
 import org.springframework.data.domain.Page;

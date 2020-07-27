@@ -33,7 +33,7 @@ const EditUser = () => {
       history.push('/users');
     } catch (err) {
       setLoading(false);
-      setErrors(err.response);
+      setErrors(err.response.data);
     }
   };
 

@@ -9,7 +9,9 @@ import java.util.Set;
 @Entity
 @Table(name="GROUPS")
 public class Group {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="GROUP_ID")
     private Integer groupId;
 
