@@ -1,2 +1,2 @@
 # payten-instapay
-Administracija trgovaca koji koriste IPS resenje
+Izrada administrativne konzole za korisnike IPS resenja
