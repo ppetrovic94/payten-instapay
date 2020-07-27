@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import CustomTable from '../../CustomTable/CustomTable';
-import { Table } from 'semantic-ui-react';
-import { groupTableHeader, formatGroupData } from '../utils/groupTable';
+import { Table, Icon, Pagination, Input, Button } from 'semantic-ui-react';
+import TableActions from '../../TableActions/TableActions';
+import { Link } from 'react-router-dom';
+import { groupActionConfig } from '../utils/groupTable';
 import './Groups.scss';
 
 const Groups = () => {
   const [groups, setGroups] = useState(null);
+  const intervalRef = useRef();
   const [roles, setRoles] = useState(null);
   const [errors, setErrors] = useState(null);
 
@@ -27,40 +29,95 @@ const Groups = () => {
     fetchRoles();
   }, []);
 
-  const onChangeSearchTerm = async (term) => {
+  const getFilteredGroups = async (term) => {
     const filtered = await axios.get(`http://localhost:8080/admin/groups?searchTerm=${term}`);
     setGroups(filtered.data.content);
   };
 
+  const onChangeSearchTerm = (e) => {
+    const value = e.target.value;
+    clearTimeout(intervalRef.current);
+    intervalRef.current = setTimeout(() => getFilteredGroups(value), 350);
+  };
+
+  const onPageChange = () => {};
+
   return (
-    <div className="groupsAndRolesContainer">
-      <div className="rolesContainer">
-        <h2 className="groupsTitle">Uloge</h2>
-        <Table basic="very">
-          <Table.Row>
-            <Table.HeaderCell>Naziv</Table.HeaderCell>
-            <Table.HeaderCell>Opis</Table.HeaderCell>
-          </Table.Row>
-          <Table.Body>
-            {roles &&
-              roles.map((role, key) => (
-                <Table.Row key={key}>
-                  <Table.Cell>{role.roleName}</Table.Cell>
-                  <Table.Cell>{role.description}</Table.Cell>
+    <div>
+      <h2 className="groupsTitle">Administracija grupa</h2>
+      <div className="groupsTable">
+        <div className="groupsTableDetails">
+          <div className="groupTableHeader">
+            <div className="groupTablePageing">
+              <Pagination
+                siblingRange={null}
+                activePage={0}
+                onPageChange={onPageChange}
+                totalPages={2}
+              />
+            </div>
+            <div className="groupTableHeaderWrapper">
+              <div>
+                <Button as={Link} to={'/groups/add'} color="black">
+                  Dodaj
+                </Button>
+              </div>
+              <div className="groupTableSearch">
+                <Input
+                  icon={{ name: 'search', circular: true, link: true }}
+                  placeholder="Pretraži..."
+                  type="text"
+                  onChange={onChangeSearchTerm}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="groupTableContent">
+            <Table collapsing celled structured>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell rowSpan="2">Naziv</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="2">Opis</Table.HeaderCell>
+                  {roles && (
+                    <Table.HeaderCell textAlign="center" colSpan={roles.length}>
+                      Uloge
+                    </Table.HeaderCell>
+                  )}
+                  <Table.HeaderCell rowSpan="2">Akcije</Table.HeaderCell>
                 </Table.Row>
-              ))}
-          </Table.Body>
-        </Table>
-      </div>
-      <div className="groupsContainer">
-        <h2 className="groupsTitle">Grupe uloga</h2>
-        <div className="groupsTable">
-          <CustomTable
-            tableAddItem={''}
-            tableHeader={groupTableHeader}
-            content={groups && formatGroupData(groups)}
-            tableSearchHandler={onChangeSearchTerm}
-          />
+                <Table.Row>
+                  {roles &&
+                    roles.map((role, key) => (
+                      <Table.HeaderCell key={key}>{role.roleName}</Table.HeaderCell>
+                    ))}
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {groups &&
+                  groups.map((group, key) => (
+                    <Table.Row key={key}>
+                      <Table.Cell>{group.groupName}</Table.Cell>
+                      <Table.Cell>{group.description}</Table.Cell>
+                      {roles &&
+                        roles.map((role) => {
+                          return !!group.roles.find(
+                            (groupRole) => role.roleId == groupRole.roleId,
+                          ) ? (
+                            <Table.Cell textAlign="center">
+                              <Icon color="green" name="checkmark" size="large" />
+                            </Table.Cell>
+                          ) : (
+                            <Table.Cell></Table.Cell>
+                          );
+                        })}
+                      <Table.Cell>
+                        <TableActions actionConfig={groupActionConfig} actionKey={group.groupId} />
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+              </Table.Body>
+            </Table>
+          </div>
         </div>
       </div>
     </div>

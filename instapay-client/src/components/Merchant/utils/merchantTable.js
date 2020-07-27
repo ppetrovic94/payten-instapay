@@ -45,14 +45,14 @@ export const merchantActionConfig = (id) => {
       name: 'editMerchant',
       label: 'Izmeni',
       redirectLink: `/merchant/${id}`,
-      icon: '',
+      icon: 'edit',
     },
     {
       type: 'GET',
       name: 'getPointOfSales',
       label: 'Prodajna mesta',
       redirectLink: `/merchant/${id}/pos`,
-      icon: '',
+      icon: 'warehouse',
     },
   ];
 };

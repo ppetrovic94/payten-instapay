@@ -45,14 +45,14 @@ export const pointOfSaleActionConfig = (id) => {
       name: 'editPointOfSale',
       label: 'Izmeni',
       redirectLink: `/pos/${id}`,
-      icon: '',
+      icon: 'edit',
     },
     {
       type: 'GET',
       name: 'getTerminals',
       label: 'Terminali',
       redirectLink: `/pos/${id}/terminals`,
-      icon: '',
+      icon: 'calculator',
     },
   ];
 };

@@ -28,7 +28,7 @@ const Users = () => {
   };
 
   return (
-    <div className="usersContainer">
+    <div>
       <Button as={Link} to={'/groups'}>
         Grupe uloga
       </Button>

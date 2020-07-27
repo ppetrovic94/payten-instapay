@@ -34,7 +34,7 @@ const Terminals = () => {
   };
 
   return (
-    <div className="terminalsContainer">
+    <div>
       <h2 className="terminalsTitle">Terminali</h2>
       <div className="terminalsTable">
         <CustomTable

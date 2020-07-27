@@ -1,7 +1,3 @@
-.groupsContainer {
-  margin-top: 80px;
-}
-
 .groupsTable {
   display: flex;
   justify-content: center;
@@ -10,4 +6,24 @@
 .groupsTitle {
   display: flex;
   justify-content: center;
+}
+
+.groupsTableDetails {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.groupTableSearch {
+  padding-bottom: 10px;
+}
+
+.groupTableHeader {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.groupTableHeaderWrapper {
+  display: flex;
 }

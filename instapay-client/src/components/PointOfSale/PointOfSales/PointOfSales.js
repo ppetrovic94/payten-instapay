@@ -36,7 +36,7 @@ const PointOfSales = () => {
   };
 
   return (
-    <div className="pointOfSalesContainer">
+    <div>
       <h2 className="pointOfSalesTitle">Prodajna mesta</h2>
       <div className="pointOfSalesTable">
         <CustomTable

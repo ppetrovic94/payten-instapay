@@ -26,23 +26,25 @@ const App = () => {
       <Provider store={Store}>
         <Router>
           <Header />
-          <Switch>
-            <Route path="/" exact component={HomePage} />
-            {/* <Route path="/merchants" exact component={Merchants} /> */}
-            <Route path="/addMerchant" exact component={AddMerchant} />
-            <Route path="/merchant/:id" exact component={EditMerchant} />
-            <Route path="/merchant/:id/pos" exact component={PointOfSales} />
-            <Route path="/merchant/:id/pos/add" exact component={AddPointOfSale} />
-            <Route path="/pos/:id" exact component={EditPointOfSale} />
-            <Route path="/pos/:id/terminals" exact component={Terminals} />
-            <Route path="/pos/:id/terminals/add" exact component={AddTerminal} />
-            <Route path="/terminals/:id" exact component={EditTerminal} />
-            <Route path="/terminals/:id/details" exact component={TerminalDetails} />
-            <Route path="/users" exact component={Users} />
-            <Route path="/users/add" exact component={AddUser} />
-            <Route path="/users/:id" exact component={EditUser} />
-            <Route path="/groups" exact component={Groups} />
-          </Switch>
+          <div className="appContent">
+            <Switch>
+              <Route path="/" exact component={HomePage} />
+              {/* <Route path="/merchants" exact component={Merchants} /> */}
+              <Route path="/addMerchant" exact component={AddMerchant} />
+              <Route path="/merchant/:id" exact component={EditMerchant} />
+              <Route path="/merchant/:id/pos" exact component={PointOfSales} />
+              <Route path="/merchant/:id/pos/add" exact component={AddPointOfSale} />
+              <Route path="/pos/:id" exact component={EditPointOfSale} />
+              <Route path="/pos/:id/terminals" exact component={Terminals} />
+              <Route path="/pos/:id/terminals/add" exact component={AddTerminal} />
+              <Route path="/terminals/:id" exact component={EditTerminal} />
+              <Route path="/terminals/:id/details" exact component={TerminalDetails} />
+              <Route path="/users" exact component={Users} />
+              <Route path="/users/add" exact component={AddUser} />
+              <Route path="/users/:id" exact component={EditUser} />
+              <Route path="/groups" exact component={Groups} />
+            </Switch>
+          </div>
         </Router>
       </Provider>
     </div>

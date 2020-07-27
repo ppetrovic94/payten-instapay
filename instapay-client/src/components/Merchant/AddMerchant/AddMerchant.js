@@ -42,7 +42,7 @@ const AddMerchant = () => {
     <CustomLoader />
   ) : (
     merchantMetadata && (
-      <div className="merchantFormContainer">
+      <div>
         <h2 className="merchantFormHeader">Trgovac</h2>
         <CustomForm
           formConfig={getFormConfig(merchantMetadata)}

@@ -53,7 +53,7 @@ const EditTerminal = () => {
     <CustomLoader />
   ) : (
     terminalMetadata && (
-      <div className="terminalFormContainer">
+      <div>
         <h2 className="terminalFormHeader">Terminal</h2>
         <CustomForm
           formConfig={getTerminalFormConfig(terminalMetadata)}

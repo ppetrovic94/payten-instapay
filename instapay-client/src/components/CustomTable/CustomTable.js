@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { Table, Input, Button } from 'semantic-ui-react';
+import { Table, Input, Button, Pagination } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { Pagination } from 'semantic-ui-react';
 import _ from 'lodash';
 import TableActions from '../TableActions/TableActions';
 import './CustomTable.scss';
@@ -55,7 +54,7 @@ const CustomTable = ({
           <div className="tableSearch">
             <Input
               icon={{ name: 'search', circular: true, link: true }}
-              placeholder="Search..."
+              placeholder="Pretraži..."
               type="text"
               onChange={handleTextInputChange}
             />

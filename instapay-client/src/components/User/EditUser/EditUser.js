@@ -40,7 +40,7 @@ const EditUser = () => {
   return loading ? (
     <CustomLoader />
   ) : (
-    <div className="userFormContainer">
+    <div>
       <h2 className="userFormHeader">Izmena korisnika</h2>
       <CustomForm
         formConfig={userFormConfig}

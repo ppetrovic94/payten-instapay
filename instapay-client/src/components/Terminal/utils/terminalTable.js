@@ -40,18 +40,18 @@ export const formatTerminalData = (data) => {
 export const terminalActionConfig = (id) => {
   return [
     {
-      type: 'DETAILS',
-      name: 'terminalDetails',
-      label: 'Generiši kredencijale',
-      redirectLink: `/terminals/${id}/details`,
-      icon: '',
-    },
-    {
       type: 'UPDATE',
       name: 'editTerminal',
       label: 'Izmeni',
       redirectLink: `/terminals/${id}`,
-      icon: '',
+      icon: 'edit',
+    },
+    {
+      type: 'DETAILS',
+      name: 'terminalDetails',
+      label: 'Generiši kredencijale',
+      redirectLink: `/terminals/${id}/details`,
+      icon: 'qrcode',
     },
   ];
 };

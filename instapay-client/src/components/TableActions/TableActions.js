@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'semantic-ui-react';
+import { Button, Popup, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 const TableActions = ({ actionKey, actionConfig }) => {
@@ -10,9 +10,15 @@ const TableActions = ({ actionKey, actionConfig }) => {
       {actions &&
         actions.map((action, key) => {
           return (
-            <Button key={key} as={Link} to={{ pathname: action.redirectLink }}>
-              {action.label}
-            </Button>
+            <Popup
+              key={key}
+              content={action.label}
+              trigger={
+                <Link to={{ pathname: action.redirectLink }}>
+                  <Icon name={action.icon} size="big" />
+                </Link>
+              }
+            />
           );
         })}
     </div>

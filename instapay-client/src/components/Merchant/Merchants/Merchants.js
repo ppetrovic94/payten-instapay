@@ -93,7 +93,7 @@ const Merchants = () => {
   };
 
   return (
-    <div className="merchantsContainer">
+    <div>
       <h2 className="merchantsTitle">Trgovci</h2>
       <div className="merchantsTable">
         <CustomTable

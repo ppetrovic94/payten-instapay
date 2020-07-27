@@ -1,7 +1,14 @@
 * {
   box-sizing: border-box;
+  a {
+    color: black;
+  }
 }
 
 .App {
   height: 100vh;
+}
+
+.appContent {
+  margin-top: 110px;
 }

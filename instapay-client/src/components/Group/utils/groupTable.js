@@ -14,3 +14,22 @@ export const formatGroupData = (data) => {
     };
   });
 };
+
+export const groupActionConfig = (id) => {
+  return [
+    {
+      type: 'UPDATE',
+      name: 'updateGroup',
+      label: 'Izmeni',
+      redirectLink: `/groups/${id}`,
+      icon: 'edit',
+    },
+    {
+      type: 'DELETE',
+      name: 'deleteGroup',
+      label: 'Ukloni',
+      redirectLink: '',
+      icon: 'trash',
+    },
+  ];
+};

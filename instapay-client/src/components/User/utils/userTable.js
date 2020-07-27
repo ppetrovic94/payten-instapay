@@ -33,14 +33,14 @@ export const userActionConfig = (id) => {
       name: 'updateUser',
       label: 'Izmeni',
       redirectLink: `/users/${id}`,
-      icon: '',
+      icon: 'edit',
     },
     {
       type: 'DELETE',
       name: 'deleteUser',
       label: 'Ukloni',
       redirectLink: '',
-      icon: '',
+      icon: 'trash',
     },
   ];
 };

@@ -1,12 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Label } from 'semantic-ui-react';
+import Logo from './Logo';
 import './Header.scss';
 
 const Header = () => {
   return (
     <div className="headerHolder">
-      <div className="headerLogo"></div>
+      <div className="headerLogo">
+        <Logo />
+      </div>
       <div className="headerLinks">
         {/* <Label basic as={Link} to={'/'}>
           Trgovci

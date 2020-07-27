@@ -42,7 +42,7 @@ const AddPointOfSale = () => {
     <CustomLoader />
   ) : (
     pointOfSaleMetadata && (
-      <div className="pointOfSaleFormContainer">
+      <div>
         <h2 className="pointOfSaleFormHeader">Prodajno mesto</h2>
         <CustomForm
           formConfig={getPointOfSaleFormConfig(pointOfSaleMetadata)}

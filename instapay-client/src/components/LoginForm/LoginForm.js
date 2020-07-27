@@ -28,36 +28,34 @@ const LoginFrom = () => {
   };
 
   return (
-    <div className="loginFormContainer">
-      <Form onSubmit={onSubmit}>
-        <Form.Field>
-          <label>Username</label>
-          <input
-            type="text"
-            placeholder=""
-            name="username"
-            value={loginRequest.username}
-            onChange={onChange}
-          />
-        </Form.Field>
-        <Form.Field>
-          <label>Password</label>
-          <input
-            type="password"
-            placeholder=""
-            name="password"
-            value={loginRequest.password}
-            onChange={onChange}
-          />
-        </Form.Field>
-        <p style={{ color: 'red' }}>{errors && errors.message}</p>
-        {/* <Form.Field className="checkboxWrapper">
+    <Form onSubmit={onSubmit}>
+      <Form.Field>
+        <label>Username</label>
+        <input
+          type="text"
+          placeholder=""
+          name="username"
+          value={loginRequest.username}
+          onChange={onChange}
+        />
+      </Form.Field>
+      <Form.Field>
+        <label>Password</label>
+        <input
+          type="password"
+          placeholder=""
+          name="password"
+          value={loginRequest.password}
+          onChange={onChange}
+        />
+      </Form.Field>
+      <p style={{ color: 'red' }}>{errors && errors.message}</p>
+      {/* <Form.Field className="checkboxWrapper">
             <input type="checkbox" onClick={this.onClick} name="Remember me" />
             <span className="loginLabel">Remember me</span>
           </Form.Field> */}
-        <Button type="submit">Submit</Button>
-      </Form>
-    </div>
+      <Button type="submit">Submit</Button>
+    </Form>
   );
 };
 
