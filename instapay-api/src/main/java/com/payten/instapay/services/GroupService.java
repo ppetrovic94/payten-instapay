@@ -15,7 +15,7 @@ public interface GroupService {
 
     Group addGroup(GroupDto groupDto, BindingResult result);
 
-    Group updateGroup(GroupDto groupDto, Integer groupId, BindingResult result);
+    GroupDto updateGroup(GroupDto groupDto, Integer groupId, BindingResult result);
 
     void deleteGroup(Integer groupId);
 

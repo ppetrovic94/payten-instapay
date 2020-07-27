@@ -44,11 +44,11 @@ public class GroupController {
 
     @PutMapping("/groups/{groupId}/update")
     @ResponseStatus(value = HttpStatus.OK)
-    public Group updateGroup(@Valid @RequestBody GroupDto groupDto, @PathVariable Integer groupId, BindingResult result){
+    public GroupDto updateGroup(@PathVariable Integer groupId, @Valid @RequestBody GroupDto groupDto, BindingResult result){
         return groupService.updateGroup(groupDto, groupId, result);
     }
 
-    @DeleteMapping("/groups/{groupId}/update")
+    @DeleteMapping("/groups/{groupId}/delete")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteGroup(@PathVariable Integer groupId){
         groupService.deleteGroup(groupId);
