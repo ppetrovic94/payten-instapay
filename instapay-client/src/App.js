@@ -19,6 +19,8 @@ import Users from './components/User/Users/Users';
 import AddUser from './components/User/AddUser/AddUser';
 import EditUser from './components/User/EditUser/EditUser';
 import Groups from './components/Group/Groups/Groups';
+import AddGroup from './components/Group/AddGroup/AddGroup';
+import EditGroup from './components/Group/EditGroup/EditGroup';
 
 const App = () => {
   return (
@@ -43,6 +45,8 @@ const App = () => {
               <Route path="/users/add" exact component={AddUser} />
               <Route path="/users/:id" exact component={EditUser} />
               <Route path="/groups" exact component={Groups} />
+              <Route path="/groups/add" exact component={AddGroup} />
+              <Route path="/groups/:id" exact component={EditGroup} />
             </Switch>
           </div>
         </Router>
