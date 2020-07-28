@@ -29,9 +29,6 @@ const Users = () => {
 
   return (
     <div>
-      <Button as={Link} to={'/groups'}>
-        Grupe uloga
-      </Button>
       <h2 className="usersTitle">Korisnici</h2>
       <div className="usersTable">
         <CustomTable

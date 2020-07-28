@@ -61,7 +61,7 @@ export const merchantFormConfig = {
     ],
     required: false,
   },
-  paymentCode: { key: 'paymentCode', title: 'Kod plaćanja', type: 'NUMBER', required: true },
+  paymentCode: { key: 'paymentCode', title: 'Kod plaćanja', type: 'NUMBER', required: false },
   ereceiptEnabled: {
     key: 'ereceiptEnabled',
     title: 'Omogućen e-receipt',
