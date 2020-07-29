@@ -74,7 +74,12 @@ const CustomForm = ({ formConfig, formFields, setFormFields, formSubmitHandler, 
             {value.required ? (
               <label className="requiredField">{value.title}</label>
             ) : (
-              <label>{value.title}</label>
+              <label
+                className={
+                  value.title == 'Grupe' || value.title == 'Uloge' ? 'groupField' : 'singleField'
+                }>
+                {value.title}
+              </label>
             )}
             {renderField({ ...value })}
           </Form.Field>

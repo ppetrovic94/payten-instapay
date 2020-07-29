@@ -44,7 +44,7 @@ export const userFormConfig = {
   },
   groupIds: {
     key: 'groupIds',
-    title: 'Grupe uloga',
+    title: 'Grupe',
     type: 'CHECKBOX',
     options: [],
     required: false,

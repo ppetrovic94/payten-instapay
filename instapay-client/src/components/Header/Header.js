@@ -16,7 +16,7 @@ const Header = () => {
         <Logo />
       </div>
       <div className="headerLinks">
-        <Menu size={'massive'} inverted>
+        <Menu size={'large'} inverted>
           <Menu.Item
             as={Link}
             to={'/'}
@@ -65,7 +65,7 @@ const Header = () => {
           />
         </Menu>
       </div>
-      <div className="headerAccount"></div>
+      {/* <div className="headerAccount"></div> */}
     </div>
   );
 };
