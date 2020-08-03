@@ -21,6 +21,7 @@ import EditUser from './components/User/EditUser/EditUser';
 import Groups from './components/Group/Groups/Groups';
 import AddGroup from './components/Group/AddGroup/AddGroup';
 import EditGroup from './components/Group/EditGroup/EditGroup';
+import LoginFrom from './components/LoginForm/LoginForm';
 
 const App = () => {
   return (
@@ -31,7 +32,7 @@ const App = () => {
           <div className="appContent">
             <Switch>
               <Route path="/" exact component={HomePage} />
-              {/* <Route path="/merchants" exact component={Merchants} /> */}
+              <Route path="/merchants" exact component={Merchants} />
               <Route path="/addMerchant" exact component={AddMerchant} />
               <Route path="/merchant/:id" exact component={EditMerchant} />
               <Route path="/merchant/:id/pos" exact component={PointOfSales} />

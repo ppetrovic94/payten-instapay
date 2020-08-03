@@ -13,7 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(path="/user",produces = "application/json")
+@RequestMapping(path="/api/user",produces = "application/json")
 @CrossOrigin(origins="*")
 public class MerchantController {
 

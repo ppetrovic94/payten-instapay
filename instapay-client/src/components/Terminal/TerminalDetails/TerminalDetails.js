@@ -16,7 +16,7 @@ const TerminalDetails = () => {
     setLoading(true);
     const generateCredentials = async (id) => {
       try {
-        await axios.get(`http://localhost:8080/user/terminals/${id}/generateCredentials`);
+        await axios.get(`http://localhost:8080/api/user/terminals/${id}/generateCredentials`);
         setGenerated(true);
       } catch (err) {
         console.error(err.response);
@@ -25,7 +25,7 @@ const TerminalDetails = () => {
 
     const fetchTerminalById = async (id) => {
       try {
-        const response = await axios.get(`http://localhost:8080/user/terminals/${id}`);
+        const response = await axios.get(`http://localhost:8080/api/user/terminals/${id}`);
         setTerminalDetails(response.data);
         setLoading(false);
       } catch (err) {
@@ -58,7 +58,7 @@ const TerminalDetails = () => {
           <h3 className="terminalDetailsUserId">User ID (scan)</h3>
 
           <Image
-            src={`http://localhost:8080/user/terminals/qrcode/${terminalDetails.userId}`}
+            src={`http://localhost:8080/api/user/terminals/qrcode/${terminalDetails.userId}`}
             style={{
               width: '400px',
             }}

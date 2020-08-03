@@ -16,7 +16,7 @@ const EditGroup = () => {
   useEffect(() => {
     const fetchGroupById = async (id) => {
       try {
-        const response = await axios.get(`http://localhost:8080/admin/groups/${id}`);
+        const response = await axios.get(`http://localhost:8080/api/admin/groups/${id}`);
         console.log(response, 'response grupa ');
         setFormFields({ ...response.data });
       } catch (err) {
@@ -29,7 +29,7 @@ const EditGroup = () => {
   const updateGroup = async (updatedGroup) => {
     setLoading(true);
     try {
-      await axios.put(`http://localhost:8080/admin/groups/${id}/update`, updatedGroup);
+      await axios.put(`http://localhost:8080/api/admin/groups/${id}/update`, updatedGroup);
       setLoading(false);
       history.push('/groups');
     } catch (err) {

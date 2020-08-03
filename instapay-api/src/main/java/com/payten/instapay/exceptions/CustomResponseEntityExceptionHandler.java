@@ -3,13 +3,18 @@ package com.payten.instapay.exceptions;
 import com.payten.instapay.exceptions.handlers.RequestedResourceNotFoundException;
 import com.payten.instapay.exceptions.handlers.ValidationException;
 import com.payten.instapay.exceptions.handlers.ValueAlreadyExistException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @ControllerAdvice
@@ -28,7 +33,7 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMap);
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(ValueAlreadyExistException.class)
     public final ResponseEntity<Object> handleUniqueConstraints(ValueAlreadyExistException ex){
         ValueAlreadyExistException exceptionResponse = new ValueAlreadyExistException(ex.getMessage());
         return new ResponseEntity<>(exceptionResponse.getMessage(), HttpStatus.BAD_REQUEST);

@@ -15,14 +15,14 @@ const Groups = () => {
   useEffect(() => {
     const fetchGroups = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/admin/groups`);
+        const response = await axios.get(`http://localhost:8080/api/admin/groups`);
         setGroups(response.data.content);
       } catch (err) {
         setErrors(err.response);
       }
     };
     const fetchRoles = async () => {
-      const response = await axios.get('http://localhost:8080/admin/roles');
+      const response = await axios.get('http://localhost:8080/api/admin/roles');
       setRoles(response.data);
     };
     fetchGroups();
@@ -30,7 +30,7 @@ const Groups = () => {
   }, []);
 
   const getFilteredGroups = async (term) => {
-    const filtered = await axios.get(`http://localhost:8080/admin/groups?searchTerm=${term}`);
+    const filtered = await axios.get(`http://localhost:8080/api/admin/groups?searchTerm=${term}`);
     setGroups(filtered.data.content);
   };
 

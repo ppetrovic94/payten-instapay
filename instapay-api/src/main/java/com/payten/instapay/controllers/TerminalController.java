@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 @RestController
-@RequestMapping(path="/user",produces = "application/json")
+@RequestMapping(path="/api/user",produces = "application/json")
 @CrossOrigin(origins="*")
 public class TerminalController {
 

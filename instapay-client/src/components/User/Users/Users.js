@@ -13,7 +13,7 @@ const Users = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/admin/users`);
+        const response = await axios.get(`http://localhost:8080/api/admin/users`);
         setUsers(response.data.content);
       } catch (err) {
         setErrors(err.response);
@@ -23,7 +23,7 @@ const Users = () => {
   }, []);
 
   const onChangeSearchTerm = async (term) => {
-    const filtered = await axios.get(`http://localhost:8080/admin/users?searchTerm=${term}`);
+    const filtered = await axios.get(`http://localhost:8080/api/admin/users?searchTerm=${term}`);
     setUsers(filtered.data.content);
   };
 

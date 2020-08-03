@@ -15,7 +15,7 @@ const UserGroups = ({ userFields, setUserFields }) => {
     setLoading(true);
     const fetchGroups = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/admin/users/groups');
+        const response = await axios.get('http://localhost:8080/api/admin/users/groups');
         setGroups(response.data);
         setLoading(false);
       } catch (err) {

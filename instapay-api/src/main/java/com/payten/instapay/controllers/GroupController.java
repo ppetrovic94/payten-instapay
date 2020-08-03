@@ -13,7 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(path="/admin",produces = "application/json")
+@RequestMapping(path="/api/admin",produces = "application/json")
 @CrossOrigin(origins="*")
 public class GroupController {
 

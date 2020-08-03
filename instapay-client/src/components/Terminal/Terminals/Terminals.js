@@ -17,7 +17,7 @@ const Terminals = () => {
   useEffect(() => {
     const fetchTerminals = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/user/pos/${id}/terminals`);
+        const response = await axios.get(`http://localhost:8080/api/user/pos/${id}/terminals`);
         setTerminals(response.data.content);
       } catch (err) {
         setErrors(err.response);
@@ -28,7 +28,7 @@ const Terminals = () => {
 
   const onChangeSearchTerm = async (term) => {
     const filtered = await axios.get(
-      `http://localhost:8080/user/pos/${id}/terminals?searchTerm=${term}`,
+      `http://localhost:8080/api/user/pos/${id}/terminals?searchTerm=${term}`,
     );
     setTerminals(filtered.data.content);
   };

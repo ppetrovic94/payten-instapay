@@ -18,7 +18,7 @@ const EditMerchant = () => {
     setLoading(true);
     const fetchMerchantMetadata = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/user/merchants/metadata');
+        const response = await axios.get('http://localhost:8080/api/user/merchants/metadata');
         setMerchantMetadata(response.data);
       } catch (err) {
         setErrors(err.response);
@@ -26,7 +26,7 @@ const EditMerchant = () => {
     };
     const fetchMerchantById = async (id) => {
       try {
-        const response = await axios.get(`http://localhost:8080/user/merchants/${id}`);
+        const response = await axios.get(`http://localhost:8080/api/user/merchants/${id}`);
         setFormFields({ ...response.data });
       } catch (err) {
         setErrors(err.response);
@@ -41,7 +41,7 @@ const EditMerchant = () => {
   const editMerchant = async (updatedMerchant) => {
     setLoading(true);
     try {
-      await axios.put(`http://localhost:8080/user/merchant/${id}/edit`, updatedMerchant);
+      await axios.put(`http://localhost:8080/api/user/merchant/${id}/edit`, updatedMerchant);
       setLoading(false);
       history.push('/');
     } catch (err) {

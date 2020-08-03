@@ -15,7 +15,7 @@ const GroupRoles = ({ groupFields, setGroupFields }) => {
     setLoading(true);
     const fetchRoles = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/admin/roles');
+        const response = await axios.get('http://localhost:8080/api/admin/roles');
         setRoles(response.data);
         setLoading(false);
       } catch (err) {

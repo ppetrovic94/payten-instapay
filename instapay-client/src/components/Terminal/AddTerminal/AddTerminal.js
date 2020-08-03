@@ -17,7 +17,7 @@ const AddTerminal = () => {
   useEffect(() => {
     const fetchTerminalMetadata = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/user/terminals/metadata');
+        const response = await axios.get('http://localhost:8080/api/user/terminals/metadata');
         setTerminalMetadata(response.data);
       } catch (err) {
         setErrors(err.response);
@@ -29,7 +29,7 @@ const AddTerminal = () => {
   const saveTerminal = async () => {
     setLoading(true);
     try {
-      await axios.post(`http://localhost:8080/user/pos/${id}/terminals/add`, formFields);
+      await axios.post(`http://localhost:8080/api/user/pos/${id}/terminals/add`, formFields);
       setLoading(false);
       history.push(`/pos/${id}/terminals`);
     } catch (err) {

@@ -17,7 +17,7 @@ const EditTerminal = () => {
   useEffect(() => {
     const fetchTerminalMetadata = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/user/terminals/metadata');
+        const response = await axios.get('http://localhost:8080/api/user/terminals/metadata');
         setTerminalMetadata(response.data);
       } catch (err) {
         setErrors(err.response);
@@ -26,7 +26,7 @@ const EditTerminal = () => {
 
     const fetchTerminalById = async (id) => {
       try {
-        const response = await axios.get(`http://localhost:8080/user/terminals/${id}`);
+        const response = await axios.get(`http://localhost:8080/api/user/terminals/${id}`);
         setFormFields({ ...response.data });
       } catch (err) {
         setErrors(err.response);
@@ -40,7 +40,7 @@ const EditTerminal = () => {
   const editTerminal = async (updatedTerminal) => {
     setLoading(true);
     try {
-      await axios.put(`http://localhost:8080/user/terminals/${id}/edit`, updatedTerminal);
+      await axios.put(`http://localhost:8080/api/user/terminals/${id}/edit`, updatedTerminal);
       setLoading(false);
       history.push(`/pos/${id}/terminals`);
     } catch (err) {

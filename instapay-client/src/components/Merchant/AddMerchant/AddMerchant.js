@@ -16,7 +16,7 @@ const AddMerchant = () => {
   useEffect(() => {
     const fetchMerchantMetadata = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/user/merchants/metadata');
+        const response = await axios.get('http://localhost:8080/api/user/merchants/metadata');
         setMerchantMetadata(response.data);
       } catch (err) {
         setErrors(err.response);
@@ -28,7 +28,7 @@ const AddMerchant = () => {
   const saveMerchant = async (merchant) => {
     setLoading(true);
     try {
-      await axios.post('http://localhost:8080/user/merchants/add', merchant);
+      await axios.post('http://localhost:8080/api/user/merchants/add', merchant);
       setLoading(false);
       history.push('/');
     } catch (err) {

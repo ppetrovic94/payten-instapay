@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(path="/user",produces = "application/json")
+@RequestMapping(path="/api/user",produces = "application/json")
 @CrossOrigin(origins="*")
 public class PointOfSaleController {
 

@@ -18,7 +18,7 @@ const PointOfSales = () => {
   useEffect(() => {
     const fetchPointOfSales = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/user/merchant/${id}/pos`);
+        const response = await axios.get(`http://localhost:8080/api/user/merchant/${id}/pos`);
         setPointOfSales(response.data.content);
       } catch (err) {
         setErrors(err.response);
@@ -29,7 +29,7 @@ const PointOfSales = () => {
 
   const onChangeSearchTerm = async (term) => {
     const filtered = await axios.get(
-      `http://localhost:8080/user/merchant/${id}/pos?searchTerm=${term}`,
+      `http://localhost:8080/api/user/merchant/${id}/pos?searchTerm=${term}`,
     );
     console.log(filtered, 'filtered');
     setPointOfSales(filtered.data.content);

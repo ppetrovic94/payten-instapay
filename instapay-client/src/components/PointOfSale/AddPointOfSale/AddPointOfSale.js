@@ -17,7 +17,7 @@ const AddPointOfSale = () => {
   useEffect(() => {
     const fetchMerchantMetadata = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/user/merchants/metadata');
+        const response = await axios.get('http://localhost:8080/api/user/merchants/metadata');
         setPointOfSaleMetadata(response.data);
       } catch (err) {
         setErrors(err.response);
@@ -29,7 +29,7 @@ const AddPointOfSale = () => {
   const savePointOfSale = async (pointOfSale) => {
     setLoading(true);
     try {
-      await axios.post(`http://localhost:8080/user/merchant/${id}/pos/add`, pointOfSale);
+      await axios.post(`http://localhost:8080/api/user/merchant/${id}/pos/add`, pointOfSale);
       setLoading(false);
       history.push(`/merchant/${id}/pos`);
     } catch (err) {
