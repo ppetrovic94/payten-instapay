@@ -1,9 +1,11 @@
 package com.payten.instapay.repositories;
 
+import com.payten.instapay.dto.Merchant.MerchantNames;
 import com.payten.instapay.model.Merchant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -26,5 +28,8 @@ public interface MerchantRepository extends JpaRepository<Merchant, Integer>, Pa
     boolean existsByLocalMerchantId(String localMerchantId);
     boolean existsByPersonalIdentityNumber(String personalIdentityNumber);
     boolean existsByTaxIdentityNumber(String taxIdentityNumber);
+
+    @Query("SELECT " + " new com.payten.instapay.dto.Merchant.MerchantNames(m.merchantId, m.merchantName) " + "FROM " + "Merchant m")
+    List<MerchantNames> findMerchantNames();
 
 }
