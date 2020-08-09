@@ -2,7 +2,6 @@ package com.payten.instapay.controllers;
 
 import com.payten.instapay.dto.City.CityDto;
 import com.payten.instapay.model.City;
-import com.payten.instapay.model.Country;
 import com.payten.instapay.services.CityService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;

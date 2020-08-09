@@ -2,7 +2,10 @@ package com.payten.instapay.controllers;
 
 import com.payten.instapay.dto.Merchant.MerchantDto;
 import com.payten.instapay.dto.Merchant.MerchantMetadata;
+import com.payten.instapay.model.FeeRule;
+import com.payten.instapay.model.Group;
 import com.payten.instapay.model.Merchant;
+import com.payten.instapay.services.FeeService;
 import com.payten.instapay.services.MerchantService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -18,9 +21,11 @@ import java.util.List;
 public class MerchantController {
 
     private final MerchantService merchantService;
+    private final FeeService feeService;
 
-    public MerchantController(MerchantService merchantService){
+    public MerchantController(MerchantService merchantService, FeeService feeService){
         this.merchantService = merchantService;
+        this.feeService = feeService;
     }
 
     @GetMapping("/merchants")
@@ -31,6 +36,19 @@ public class MerchantController {
                                                 @RequestParam(name = "direction", required = false, defaultValue = "ASC") String direction)
     {
         return merchantService.findAllMerchantsPaginated(pageNumber, searchTerm, sortBy, direction);
+    }
+
+    @GetMapping("/merchants/{merchantId}/fees")
+    @ResponseStatus(value = HttpStatus.OK)
+    public Page<FeeRule> getFeesByMerchantId(@PathVariable Integer merchantId, @RequestParam(name="pagenum",required = false, defaultValue = "0") int pageNumber,
+                                             @RequestParam(name="searchTerm", required = false, defaultValue="") String searchTerm) {
+        return feeService.getFeeRulesByMerchantId(merchantId, pageNumber, searchTerm);
+    }
+
+    @GetMapping("/merchants/{merchantId}/name")
+    @ResponseStatus(value = HttpStatus.OK)
+    public String getMerchantNameById(@PathVariable Integer merchantId){
+        return merchantService.getMerchantNameById(merchantId);
     }
 
     @GetMapping("/merchants/all")

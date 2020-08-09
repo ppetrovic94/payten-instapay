@@ -17,5 +17,5 @@ public interface MerchantService {
     void deleteMerchant(Integer id);
     MerchantMetadata getMerchantMetadata();
     MerchantDto editMerchant(Integer id, MerchantDto merchant, BindingResult result);
-
+    String getMerchantNameById(Integer merchantId);
 }

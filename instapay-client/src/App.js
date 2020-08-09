@@ -21,6 +21,9 @@ import EditUser from './components/User/EditUser/EditUser';
 import Groups from './components/Group/Groups/Groups';
 import AddGroup from './components/Group/AddGroup/AddGroup';
 import EditGroup from './components/Group/EditGroup/EditGroup';
+import Fees from './components/Fee/Fees/Fees';
+import AddFee from './components/Fee/AddFee/AddFee';
+import EditFee from './components/Fee/EditFee/EditFee';
 
 const App = () => {
   return (
@@ -35,6 +38,7 @@ const App = () => {
               <Route path="/addMerchant" exact component={AddMerchant} />
               <Route path="/merchant/:id" exact component={EditMerchant} />
               <Route path="/merchant/:id/pos" exact component={PointOfSales} />
+              <Route path="/merchant/:id/fees" exact component={Fees} />
               <Route path="/merchant/:id/pos/add" exact component={AddPointOfSale} />
               <Route path="/pos/:id" exact component={EditPointOfSale} />
               <Route path="/pos/:id/terminals" exact component={Terminals} />
@@ -47,6 +51,9 @@ const App = () => {
               <Route path="/groups" exact component={Groups} />
               <Route path="/groups/add" exact component={AddGroup} />
               <Route path="/groups/:id" exact component={EditGroup} />
+              <Route path="/fees" exact component={Fees} />
+              <Route path="/fees/add" exact component={AddFee} />
+              <Route path="/fees/:id" exact component={EditFee} />
             </Switch>
           </div>
         </Router>

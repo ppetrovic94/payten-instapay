@@ -51,7 +51,7 @@ const Header = () => {
           />
           <Menu.Item
             as={Link}
-            to={'/'}
+            to={'/fees'}
             name="Provizije"
             active={activeItem == 'Provizije'}
             onClick={onItemClick}
@@ -59,7 +59,7 @@ const Header = () => {
           <Menu.Item
             as={Link}
             to={'/'}
-            name={`Izveštaji`}
+            name="Izveštaji"
             active={activeItem == 'Izveštaji'}
             onClick={onItemClick}
           />

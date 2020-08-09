@@ -54,5 +54,12 @@ export const merchantActionConfig = (id) => {
       redirectLink: `/merchant/${id}/pos`,
       icon: 'warehouse',
     },
+    {
+      type: 'GET',
+      name: 'getFees',
+      label: 'Provizije',
+      redirectLink: `/merchant/${id}/fees`,
+      icon: 'file powerpoint',
+    },
   ];
 };
