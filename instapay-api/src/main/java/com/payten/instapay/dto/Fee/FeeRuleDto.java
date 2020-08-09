@@ -1,7 +1,8 @@
 package com.payten.instapay.dto.Fee;
 
-import javax.validation.constraints.NotNull;
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class FeeRuleDto {
 
@@ -9,11 +10,9 @@ public class FeeRuleDto {
     private Integer feeTypeId;
     private Integer feeReceiverId;
     private Integer productTypeId;
-
-    @NotNull(message = "Morate uneti iznos provizije")
+    private Integer condition;
     private Float amount;
-
-    private Date validityDate;
+    private String validityDate;
 
     public FeeRuleDto() {}
 
@@ -57,11 +56,27 @@ public class FeeRuleDto {
         this.amount = amount;
     }
 
-    public Date getValidityDate() {
-        return validityDate;
+    public Date getValidityDate(){
+        Date parsedDate = null;
+        try {
+            java.util.Date formatedDate = new SimpleDateFormat("yyyy-MM-dd").parse(validityDate);
+            parsedDate = new Date(formatedDate.getTime());
+            return parsedDate;
+        } catch(ParseException e){
+            e.printStackTrace();
+        }
+        return parsedDate;
     }
 
-    public void setValidityDate(Date validityDate) {
+    public void setValidityDate(String validityDate) {
         this.validityDate = validityDate;
+    }
+
+    public Integer getCondition() {
+        return condition;
+    }
+
+    public void setCondition(Integer condition) {
+        this.condition = condition;
     }
 }

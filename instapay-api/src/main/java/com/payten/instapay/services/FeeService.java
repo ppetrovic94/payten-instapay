@@ -8,7 +8,8 @@ import org.springframework.validation.BindingResult;
 
 public interface FeeService {
     Page<FeeRule> getFeeRules(int pageNumber, String searchTerm);
-    FeeRule getFeeRule(Integer feeRuleId);
+    Page<FeeRule> getFeeRulesByMerchantId(Integer merchantId, int pageNumber, String searchTerm);
+    FeeRuleDto getFeeRule(Integer feeRuleId);
     FeeRule addFeeRule(FeeRuleDto feeRuleDto, BindingResult result);
     FeeRule updateFeeRule(Integer feeRuleId, FeeRuleDto feeRuleDto, BindingResult result);
     void deleteFeeRule(Integer feeRuleId);

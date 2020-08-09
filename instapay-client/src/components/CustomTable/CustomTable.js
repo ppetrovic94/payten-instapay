@@ -103,6 +103,9 @@ const CustomTable = ({
                           {item.userId && (
                             <TableActions actionKey={item.userId} actionConfig={tableActions} />
                           )}
+                          {item.feeId && (
+                            <TableActions actionKey={item.feeId} actionConfig={tableActions} />
+                          )}
                         </Table.Cell>
                       ) : (
                         <Table.Cell key={key}>{item[header]}</Table.Cell>

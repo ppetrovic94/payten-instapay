@@ -31,7 +31,7 @@ public class FeeController {
 
     @GetMapping("/fees/{feeRuleId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public FeeRule getFeeRule(@PathVariable Integer feeRuleId){
+    public FeeRuleDto getFeeRule(@PathVariable Integer feeRuleId){
         return feeService.getFeeRule(feeRuleId);
     }
 
