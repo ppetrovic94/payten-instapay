@@ -47,11 +47,11 @@ export const terminalActionConfig = (id) => {
       icon: 'edit',
     },
     {
-      type: 'DETAILS',
-      name: 'terminalDetails',
-      label: 'Generiši kredencijale',
+      type: 'ANDROID_DETAILS',
+      name: 'androidDetails',
+      label: 'Kredencijali za ANDROID',
       redirectLink: `/terminals/${id}/details`,
-      icon: 'qrcode',
+      icon: 'android',
     },
   ];
 };

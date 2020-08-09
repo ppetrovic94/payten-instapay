@@ -48,8 +48,14 @@ public class TerminalController {
 
     @PutMapping("/terminals/{terminalId}/edit")
     @ResponseStatus(value = HttpStatus.OK)
-    public TerminalDto updateTerminal(@PathVariable Integer terminalId, @Valid @RequestBody TerminalDto terminalDto, BindingResult result){
+    public Terminal updateTerminal(@PathVariable Integer terminalId, @Valid @RequestBody TerminalDto terminalDto, BindingResult result){
         return terminalService.updateTerminal(terminalId, terminalDto, result);
+    }
+
+    @DeleteMapping("/terminals/{terminalId}/delete")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void deleteTerminal(@PathVariable Integer terminalId){
+        terminalService.deleteTerminal(terminalId);
     }
 
     @GetMapping("/terminals/metadata")

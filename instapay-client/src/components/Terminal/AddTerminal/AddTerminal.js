@@ -3,13 +3,18 @@ import { useHistory, useParams } from 'react-router-dom';
 import axios from 'axios';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
-import { terminalFormTemplate, getTerminalFormConfig } from '../utils/terminalForm';
+import {
+  terminalFormTemplate,
+  getTerminalFormConfig,
+  generateCredentials,
+} from '../utils/terminalForm';
 import './AddTerminal.scss';
 
 const AddTerminal = () => {
   const [loading, setLoading] = useState(false);
   const [terminalMetadata, setTerminalMetadata] = useState(null);
-  const [formFields, setFormFields] = useState({ ...terminalFormTemplate });
+  const [terminalFields, setTerminalFields] = useState({ ...terminalFormTemplate });
+  const [terminalId, setTerminalId] = useState('');
   const [errors, setErrors] = useState(null);
   const history = useHistory();
   const { id } = useParams();
@@ -26,11 +31,24 @@ const AddTerminal = () => {
     fetchTerminalMetadata();
   }, []);
 
+  useEffect(() => {
+    console.log(terminalId, 'USEEFFECT ZA TERMINALID');
+    if (terminalId && terminalFields.terminalTypeId == '1') {
+      console.log('terminalId', terminalId);
+      console.log('USO JE DA GENERISE');
+      generateCredentials(terminalId);
+    }
+    setLoading(false);
+  }, [terminalId]);
+
   const saveTerminal = async () => {
     setLoading(true);
     try {
-      await axios.post(`http://localhost:8080/user/pos/${id}/terminals/add`, formFields);
-      setLoading(false);
+      const addedTerminal = await axios.post(
+        `http://localhost:8080/user/pos/${id}/terminals/add`,
+        terminalFields,
+      );
+      setTerminalId(addedTerminal.data.terminalId);
       history.push(`/pos/${id}/terminals`);
     } catch (err) {
       setLoading(false);
@@ -45,9 +63,9 @@ const AddTerminal = () => {
       <div>
         <h2 className="terminalFormHeader">Terminal</h2>
         <CustomForm
-          formConfig={getTerminalFormConfig(terminalMetadata)}
-          formFields={formFields}
-          setFormFields={setFormFields}
+          formConfig={getTerminalFormConfig(terminalMetadata, true)}
+          formFields={terminalFields}
+          setFormFields={setTerminalFields}
           formSubmitHandler={saveTerminal}
           formErrors={errors}
         />

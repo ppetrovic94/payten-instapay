@@ -19,7 +19,7 @@ const CustomForm = ({ formConfig, formFields, setFormFields, formSubmitHandler, 
     await formSubmitHandler(formFields);
   };
 
-  const renderField = ({ key, title, type, options }) => {
+  const renderField = ({ key, title, type, options, disabled }) => {
     switch (type) {
       case 'DROPDOWN':
         console.log(options, 'opcije');
@@ -34,6 +34,7 @@ const CustomForm = ({ formConfig, formFields, setFormFields, formSubmitHandler, 
               value={formFields[key]}
               onChange={handleDropdown}
               placeholder="Odaberi opciju"
+              disabled={disabled}
             />
             {formErrors && <p style={{ color: 'red' }}>{formErrors[key]}</p>}
           </>
