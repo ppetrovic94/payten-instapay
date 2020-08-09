@@ -1,6 +1,8 @@
+import axios from 'axios';
+
 export const terminalFormTemplate = {
   acquirerTid: '',
-  statusId: 200,
+  statusId: 100,
   paymentMethodId: '',
   setupDate: '',
   terminalTypeId: '',
@@ -20,6 +22,7 @@ export const terminalFormConfig = {
     type: 'DROPDOWN',
     options: [],
     required: true,
+    disabled: false,
   },
   paymentMethod: {
     key: 'paymentMethodId',
@@ -27,6 +30,7 @@ export const terminalFormConfig = {
     type: 'DROPDOWN',
     options: [],
     required: true,
+    disabled: false,
   },
   terminalType: {
     key: 'terminalTypeId',
@@ -34,6 +38,7 @@ export const terminalFormConfig = {
     type: 'DROPDOWN',
     options: [],
     required: true,
+    disabled: false,
   },
   setupDate: { key: 'setupDate', title: 'Datum postavljanja', type: 'DATE', required: true },
 
@@ -45,7 +50,15 @@ export const terminalFormConfig = {
   },
 };
 
-export const getTerminalFormConfig = (data) => {
+export const generateCredentials = async (id) => {
+  try {
+    await axios.get(`http://localhost:8080/user/terminals/${id}/generateCredentials`);
+  } catch (err) {
+    console.error(err.response);
+  }
+};
+
+export const getTerminalFormConfig = (data, isNew) => {
   return {
     ...terminalFormConfig,
     terminalType: {
@@ -68,6 +81,7 @@ export const getTerminalFormConfig = (data) => {
     },
     status: {
       ...terminalFormConfig.status,
+      disabled: isNew,
       options: data.statuses.map(({ statusId, statusName }) => {
         return {
           value: statusId,

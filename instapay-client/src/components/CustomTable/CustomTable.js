@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import TableActions from '../TableActions/TableActions';
 import './CustomTable.scss';
+import TerminalActions from '../Terminal/TerminalActions/TerminalActions';
 
 const CustomTable = ({
   tableHeader,
@@ -98,7 +99,7 @@ const CustomTable = ({
                             />
                           )}
                           {item.terminalId && (
-                            <TableActions actionKey={item.terminalId} actionConfig={tableActions} />
+                            <TerminalActions terminal={item} actionConfig={tableActions} />
                           )}
                           {item.userId && (
                             <TableActions actionKey={item.userId} actionConfig={tableActions} />

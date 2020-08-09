@@ -33,6 +33,7 @@ export const merchantFormConfig = {
     type: 'DROPDOWN',
     options: [],
     required: false,
+    disabled: false,
   },
   status: {
     key: 'statusId',
@@ -40,6 +41,7 @@ export const merchantFormConfig = {
     type: 'DROPDOWN',
     options: [],
     required: false,
+    disabled: false,
   },
   setupDate: { key: 'setupDate', title: 'Datum postavljanja', type: 'DATE', required: true },
   mcc: { key: 'mcc', title: 'MCC', type: 'NUMBER', required: true },
@@ -50,6 +52,7 @@ export const merchantFormConfig = {
     type: 'DROPDOWN',
     options: [],
     required: true,
+    disabled: false,
   },
   returnEnabled: {
     key: 'returnEnabled',
@@ -60,6 +63,7 @@ export const merchantFormConfig = {
       { value: 0, text: 'Ne' },
     ],
     required: false,
+    disabled: false,
   },
   paymentCode: { key: 'paymentCode', title: 'Kod plaćanja', type: 'NUMBER', required: false },
   ereceiptEnabled: {
@@ -71,6 +75,7 @@ export const merchantFormConfig = {
       { value: 0, text: 'Ne' },
     ],
     required: false,
+    disabled: false,
   },
   serviceAmountLimit: {
     key: 'serviceAmountLimit',
