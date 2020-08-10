@@ -35,9 +35,9 @@ const Terminals = () => {
 
   return (
     <div>
-      <h2 className="terminalsTitle">Terminali</h2>
       <div className="terminalsTable">
         <CustomTable
+          tableTitle="Terminali"
           tableAddItem={`/pos/${id}/terminals/add`}
           tableHeader={terminalTableHeader}
           tableActions={terminalActionConfig}

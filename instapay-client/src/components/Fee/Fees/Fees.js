@@ -61,9 +61,9 @@ const Fees = () => {
 
   return (
     <div>
-      <h2 className="feesTitle">{merchantName ? `${merchantName} - Provizije` : 'Provizije'}</h2>
       <div className="feesTable">
         <CustomTable
+          tableTitle={merchantName ? `${merchantName} - Provizije` : 'Provizije'}
           tableAddItem={'/fees/add'}
           tableHeader={feeTableHeader}
           content={fees && formatFeeData(fees)}

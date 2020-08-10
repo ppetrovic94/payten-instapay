@@ -32,6 +32,7 @@ const AddFee = () => {
       setLoading(false);
       history.goBack();
     } catch (err) {
+      console.log(err, 'greskaaaa');
       setLoading(false);
       setErrors(err.response.data);
     }

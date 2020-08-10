@@ -45,11 +45,9 @@ const PointOfSales = () => {
 
   return (
     <div>
-      <h2 className="pointOfSalesTitle">
-        {merchantTitle ? `${merchantTitle} - Prodajna mesta` : 'Prodajna mesta'}
-      </h2>
       <div className="pointOfSalesTable">
         <CustomTable
+          tableTitle={merchantTitle ? `${merchantTitle} - Prodajna mesta` : 'Prodajna mesta'}
           tableAddItem={`/merchant/${id}/pos/add`}
           tableHeader={pointOfSaleTableHeader}
           tableActions={pointOfSaleActionConfig}

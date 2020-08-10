@@ -29,9 +29,9 @@ const Users = () => {
 
   return (
     <div>
-      <h2 className="usersTitle">Korisnici</h2>
       <div className="usersTable">
         <CustomTable
+          tableTitle="Korisnici"
           tableAddItem={'/users/add'}
           tableHeader={userTableHeader}
           content={users && formatUserData(users)}
