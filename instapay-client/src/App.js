@@ -24,6 +24,7 @@ import EditGroup from './components/Group/EditGroup/EditGroup';
 import Fees from './components/Fee/Fees/Fees';
 import AddFee from './components/Fee/AddFee/AddFee';
 import EditFee from './components/Fee/EditFee/EditFee';
+import IpsReport from './components/IpsReport/IpsReport';
 
 const App = () => {
   return (
@@ -54,6 +55,7 @@ const App = () => {
               <Route path="/fees" exact component={Fees} />
               <Route path="/fees/add" exact component={AddFee} />
               <Route path="/fees/:id" exact component={EditFee} />
+              <Route path="/reports" exact component={IpsReport} />
             </Switch>
           </div>
         </Router>

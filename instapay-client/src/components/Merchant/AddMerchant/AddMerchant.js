@@ -43,7 +43,7 @@ const AddMerchant = () => {
   ) : (
     merchantMetadata && (
       <div>
-        <h2 className="merchantFormHeader">Trgovac</h2>
+        <h2 className="merchantFormHeader">Dodavanje trgovca</h2>
         <CustomForm
           formConfig={getFormConfig(merchantMetadata)}
           formFields={formFields}

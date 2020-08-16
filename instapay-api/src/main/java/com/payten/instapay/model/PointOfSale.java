@@ -43,7 +43,7 @@ public class PointOfSale {
     @Column(name = "POINT_OF_SALE_ACCOUNT")
     private String pointOfSaleAccount;
 
-    @Column(name = "MCC")
+    @Column(name = "POINT_OF_SALE_MCC")
     private String pointOfSaleMCC;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "pointOfSaleId", cascade = CascadeType.ALL)

@@ -144,10 +144,10 @@ public class FeeServiceImpl implements FeeService {
         feeRuleDto.setFeeReceiverId(feeRule.getFeeReceiver().getReceiverId());
         feeRuleDto.setFeeTypeId(feeRule.getFeeType().getTypeId());
         feeRuleDto.setProductTypeId(feeRule.getProductType().getTypeId());
-        feeRuleDto.setMerchantId(feeRule.getMerchant().getMerchantId());
+        feeRuleDto.setMerchantId(feeRule.getMerchant() != null ? feeRule.getMerchant().getMerchantId() : null);
         feeRuleDto.setAmount(feeRule.getAmount());
         feeRuleDto.setCondition(feeRule.getCondition());
-        feeRuleDto.setValidityDate(feeRule.getValidityDate().toString());
+        feeRuleDto.setValidityDate(feeRule.getValidityDate() != null ? feeRule.getValidityDate().toString() : null);
         return feeRuleDto;
     }
 

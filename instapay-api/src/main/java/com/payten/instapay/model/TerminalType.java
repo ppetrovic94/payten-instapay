@@ -6,13 +6,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="ACQ_TERMINALS_TYPE")
+@Table(name="ACQ_TERMINAL_TYPES")
 public class TerminalType {
     @Id
-    @Column(name = "TERMINAL_TYPE_ID")
+    @Column(name = "ID")
     private Integer terminalTypeId;
 
-    @Column(name = "TERMINAL_TYPE_NAME")
+    @Column(name = "NAME")
     private String terminalTypeName;
 
     public Integer getTerminalTypeId() {

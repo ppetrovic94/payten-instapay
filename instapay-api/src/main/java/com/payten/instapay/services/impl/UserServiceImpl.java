@@ -27,13 +27,11 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
     private final MapValidationErrorService mapValidationErrorService;
-    private final ModelMapper modelMapper;
 
-    public UserServiceImpl(UserRepository userRepository, GroupRepository groupRepository, MapValidationErrorService mapValidationErrorService, ModelMapper modelMapper) {
+    public UserServiceImpl(UserRepository userRepository, GroupRepository groupRepository, MapValidationErrorService mapValidationErrorService) {
         this.userRepository = userRepository;
         this.groupRepository = groupRepository;
         this.mapValidationErrorService = mapValidationErrorService;
-        this.modelMapper = modelMapper;
     }
 
     @Override
