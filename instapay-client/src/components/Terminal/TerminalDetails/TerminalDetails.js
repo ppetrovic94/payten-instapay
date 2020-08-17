@@ -4,24 +4,14 @@ import { Image, Card } from 'semantic-ui-react';
 import { useParams } from 'react-router-dom';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import './TerminalDetails.scss';
-import { set } from 'lodash';
 
 const TerminalDetails = () => {
   const [loading, setLoading] = useState(false);
-  const [generated, setGenerated] = useState(false);
   const [terminalDetails, setTerminalDetails] = useState(null);
   const { id } = useParams();
 
   useEffect(() => {
     setLoading(true);
-    const generateCredentials = async (id) => {
-      try {
-        await axios.get(`http://localhost:8080/api/user/terminals/${id}/generateCredentials`);
-        setGenerated(true);
-      } catch (err) {
-        console.error(err.response);
-      }
-    };
 
     const fetchTerminalById = async (id) => {
       try {
@@ -33,12 +23,9 @@ const TerminalDetails = () => {
       }
     };
 
-    if (generated) {
-      fetchTerminalById(id);
-    } else {
-      generateCredentials(id);
-    }
-  }, [id, generated]);
+    fetchTerminalById(id);
+    setLoading(false);
+  }, [id]);
 
   console.log('render', terminalDetails && terminalDetails.userId);
 
@@ -57,14 +44,15 @@ const TerminalDetails = () => {
           color="red">
           <h3 className="terminalDetailsUserId">User ID (scan)</h3>
 
-          <Image
-            src={`http://localhost:8080/api/user/terminals/qrcode/${terminalDetails.userId}`}
-            style={{
-              width: '400px',
-            }}
-            wrapped
-          />
-
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Image
+              src={`http://localhost:8080/api/user/terminals/qrcode/${terminalDetails.userId}`}
+              style={{
+                width: '200px',
+              }}
+              wrapped
+            />
+          </div>
           <Card.Content>
             <div className="terminalDetailsCardContent">
               <h3>TID:</h3>

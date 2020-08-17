@@ -3,13 +3,19 @@ import { useHistory, useParams } from 'react-router-dom';
 import axios from 'axios';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
-import { terminalFormTemplate, getTerminalFormConfig } from '../utils/terminalForm';
+import {
+  terminalFormTemplate,
+  getTerminalFormConfig,
+  generateCredentials,
+} from '../utils/terminalForm';
 import './EditTerminal.scss';
 
 const EditTerminal = () => {
   const [loading, setLoading] = useState(false);
   const [terminalMetadata, setTerminalMetadata] = useState(null);
-  const [formFields, setFormFields] = useState({ ...terminalFormTemplate });
+  const [terminalFields, setTerminalFields] = useState({ ...terminalFormTemplate });
+  const [currentTerminal, setCurrentTerminal] = useState({});
+  const [terminalId, setTerminalId] = useState('');
   const [errors, setErrors] = useState(null);
   const history = useHistory();
   const { id } = useParams();
@@ -27,7 +33,8 @@ const EditTerminal = () => {
     const fetchTerminalById = async (id) => {
       try {
         const response = await axios.get(`http://localhost:8080/api/user/terminals/${id}`);
-        setFormFields({ ...response.data });
+        setTerminalFields({ ...response.data });
+        setCurrentTerminal({ ...response.data });
       } catch (err) {
         setErrors(err.response);
       }
@@ -37,12 +44,30 @@ const EditTerminal = () => {
     fetchTerminalById(id);
   }, [id]);
 
-  const editTerminal = async (updatedTerminal) => {
+  useEffect(() => {
+    if (
+      terminalId &&
+      currentTerminal.statusId !== terminalFields.statusId &&
+      terminalFields.terminalTypeId == '1' &&
+      terminalFields.statusId == '100'
+    ) {
+      console.log('terminalId', terminalId);
+      console.log('USO JE DA GENERISE');
+      generateCredentials(terminalId);
+    }
+    setLoading(false);
+  }, [terminalId]);
+
+  const editTerminal = async () => {
     setLoading(true);
     try {
-      await axios.put(`http://localhost:8080/api/user/terminals/${id}/edit`, updatedTerminal);
-      setLoading(false);
-      history.push(`/pos/${id}/terminals`);
+      const updatedTerminal = await axios.put(
+        `http://localhost:8080/api/user/terminals/${id}/edit`,
+        terminalFields,
+      );
+
+      setTerminalId(updatedTerminal.data.terminalId);
+      history.goBack();
     } catch (err) {
       setLoading(false);
       setErrors(err.response.data);
@@ -56,9 +81,9 @@ const EditTerminal = () => {
       <div>
         <h2 className="terminalFormHeader">Terminal</h2>
         <CustomForm
-          formConfig={getTerminalFormConfig(terminalMetadata)}
-          formFields={formFields}
-          setFormFields={setFormFields}
+          formConfig={getTerminalFormConfig(terminalMetadata, false)}
+          formFields={terminalFields}
+          setFormFields={setTerminalFields}
           formSubmitHandler={editTerminal}
           formErrors={errors}
         />

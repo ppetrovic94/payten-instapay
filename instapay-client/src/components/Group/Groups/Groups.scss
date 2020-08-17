@@ -3,9 +3,9 @@
   justify-content: center;
 }
 
-.groupsTitle {
+.groupTitle {
   display: flex;
-  justify-content: center;
+  align-items: flex-end;
 }
 
 .groupsTableDetails {
@@ -22,6 +22,11 @@
   display: flex;
   width: 100%;
   justify-content: space-between;
+}
+
+.groupTablePageing {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .groupTableHeaderWrapper {

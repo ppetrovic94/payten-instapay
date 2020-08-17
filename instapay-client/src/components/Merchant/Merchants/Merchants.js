@@ -100,9 +100,10 @@ const Merchants = () => {
 
   return (
     <div>
-      <h2 className="merchantsTitle">Trgovci</h2>
+      {/* <h2 className="merchantsTitle">Trgovci</h2> */}
       <div className="merchantsTable">
         <CustomTable
+          tableTitle="Lista trgovaca"
           tableAddItem="/addMerchant"
           tableHeader={merchantTableHeader}
           tableActions={merchantActionConfig}

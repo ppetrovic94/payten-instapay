@@ -30,6 +30,7 @@ export const pointOfSaleFormConfig = {
     type: 'DROPDOWN',
     options: [],
     required: false,
+    disabled: false,
   },
   status: {
     key: 'statusId',
@@ -37,6 +38,7 @@ export const pointOfSaleFormConfig = {
     type: 'DROPDOWN',
     options: [],
     required: false,
+    disabled: false,
   },
   setupDate: { key: 'setupDate', title: 'Datum postavljanja', type: 'DATE', required: true },
   pointOfSaleMcc: { key: 'pointOfSaleMcc', title: 'MCC', type: 'NUMBER', required: false },
@@ -52,6 +54,7 @@ export const pointOfSaleFormConfig = {
     type: 'DROPDOWN',
     options: [],
     required: true,
+    disabled: false,
   },
 };
 

@@ -15,7 +15,7 @@ const TableActions = ({ actionKey, actionConfig }) => {
               content={action.label}
               trigger={
                 <Link to={{ pathname: action.redirectLink }}>
-                  <Icon name={action.icon} size="big" />
+                  <Icon name={action.icon} size="large" />
                 </Link>
               }
             />

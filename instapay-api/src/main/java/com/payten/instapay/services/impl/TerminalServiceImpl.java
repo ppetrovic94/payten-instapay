@@ -12,9 +12,6 @@ import com.payten.instapay.repositories.TerminalTypeRepository;
 import com.payten.instapay.services.TerminalService;
 import com.payten.instapay.services.validation.MapValidationErrorService;
 import org.apache.commons.lang3.math.NumberUtils;
-//import org.modelmapper.ModelMapper;
-//import org.modelmapper.PropertyMap;
-//import org.modelmapper.TypeMap;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +31,6 @@ public class TerminalServiceImpl implements TerminalService {
     private final MapValidationErrorService mapValidationErrorService;
     private final TerminalTypeRepository terminalTypeRepository;
     private final AcqStatusRepository acqStatusRepository;
-    //private final ModelMapper modelMapper;
 
     public TerminalServiceImpl(TerminalRepository terminalRepository, PaymentMethodRepository paymentMethodRepository, MapValidationErrorService mapValidationErrorService, TerminalTypeRepository terminalTypeRepository, AcqStatusRepository acqStatusRepository) {
         this.terminalRepository = terminalRepository;
@@ -42,7 +38,6 @@ public class TerminalServiceImpl implements TerminalService {
         this.mapValidationErrorService = mapValidationErrorService;
         this.terminalTypeRepository = terminalTypeRepository;
         this.acqStatusRepository = acqStatusRepository;
-        //this.modelMapper = modelMapper;
     }
 
     @Override
@@ -95,7 +90,7 @@ public class TerminalServiceImpl implements TerminalService {
     }
 
     @Override
-    public TerminalDto updateTerminal(Integer terminalId, TerminalDto terminalDto, BindingResult result) {
+    public Terminal updateTerminal(Integer terminalId, TerminalDto terminalDto, BindingResult result) {
         Terminal found = terminalRepository.getByTerminalId(terminalId);
 
         if (found == null) {
@@ -112,8 +107,7 @@ public class TerminalServiceImpl implements TerminalService {
             }
         }
 
-        terminalRepository.save(convertToEntity(terminalDto,found));
-        return convertToDto(found);
+        return terminalRepository.save(convertToEntity(terminalDto,found));
     }
 
     @Override
@@ -133,7 +127,13 @@ public class TerminalServiceImpl implements TerminalService {
 
     @Override
     public void deleteTerminal(Integer terminalId) {
+        Terminal found = terminalRepository.getByTerminalId(terminalId);
 
+        if (found == null) {
+            throw new RequestedResourceNotFoundException("Terminal sa ID-em: " + terminalId + " ne postoji");
+        }
+
+        terminalRepository.delete(found);
     }
 
     @Override
@@ -181,10 +181,9 @@ public class TerminalServiceImpl implements TerminalService {
         }
     }
 
-    private TerminalDto convertToDto(Terminal terminal){
+    private TerminalDto convertToDto(Terminal terminal) {
         TerminalDto terminalDto = new TerminalDto();
         TerminalType terminalType = terminalTypeRepository.getByTerminalTypeName(terminal.getTerminalType());
-        //PaymentMethod paymentMethod = paymentMethodRepository.getByPaymentMethodId(terminal.getPaymentMethod());
 
         terminalDto.setAcquirerTid(terminal.getAcquirerTid());
         terminalDto.setActivationCode(terminal.getActivationCode());

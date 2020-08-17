@@ -11,7 +11,7 @@ public interface TerminalService {
     Terminal addTerminal(Integer pointOfSaleId, TerminalDto terminalDto, BindingResult result);
     TerminalDto findById(Integer terminalId);
     TerminalMetadata getTerminalMetadata();
-    TerminalDto updateTerminal(Integer terminalId, TerminalDto terminalDto, BindingResult result);
+    Terminal updateTerminal(Integer terminalId, TerminalDto terminalDto, BindingResult result);
     void deleteTerminal(Integer terminalId);
     void generateCredentials(Integer terminalId);
 }

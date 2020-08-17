@@ -4,8 +4,10 @@ import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import TableActions from '../TableActions/TableActions';
 import './CustomTable.scss';
+import TerminalActions from '../Terminal/TerminalActions/TerminalActions';
 
 const CustomTable = ({
+  tableTitle,
   tableHeader,
   tableActions,
   content,
@@ -35,13 +37,8 @@ const CustomTable = ({
   return (
     <div className="tableDetails">
       <div className="tableHeader">
-        <div className="tablePageing">
-          <Pagination
-            siblingRange={null}
-            activePage={tableActivePage}
-            onPageChange={tableHandlePageChange}
-            totalPages={tableTotalPages}
-          />
+        <div className="tableTitle">
+          <h3>{tableTitle ? tableTitle : ''}</h3>
         </div>
         <div className="tableHeaderWrapper">
           {tableAddItem && (
@@ -85,8 +82,8 @@ const CustomTable = ({
               content.map((item, key) => (
                 <Table.Row key={key}>
                   {tableHeader &&
-                    Object.keys(tableHeader).map((header, key) =>
-                      header === 'actions' && tableActions ? (
+                    Object.keys(tableHeader).map((header, key) => {
+                      return header === 'actions' && tableActions ? (
                         <Table.Cell key={key}>
                           {item.merchantId && (
                             <TableActions actionKey={item.merchantId} actionConfig={tableActions} />
@@ -98,20 +95,39 @@ const CustomTable = ({
                             />
                           )}
                           {item.terminalId && (
-                            <TableActions actionKey={item.terminalId} actionConfig={tableActions} />
+                            <TerminalActions terminal={item} actionConfig={tableActions} />
                           )}
                           {item.userId && (
                             <TableActions actionKey={item.userId} actionConfig={tableActions} />
                           )}
+                          {item.feeId && (
+                            <TableActions actionKey={item.feeId} actionConfig={tableActions} />
+                          )}
+                        </Table.Cell>
+                      ) : header == 'groups' ? (
+                        <Table.Cell>
+                          <div className="groupWrapper">
+                            {item[header].map((groupName) => {
+                              return <p>{`${groupName} `}</p>;
+                            })}
+                          </div>
                         </Table.Cell>
                       ) : (
                         <Table.Cell key={key}>{item[header]}</Table.Cell>
-                      ),
-                    )}
+                      );
+                    })}
                 </Table.Row>
               ))}
           </Table.Body>
         </Table>
+      </div>
+      <div className="tablePageing">
+        <Pagination
+          siblingRange={null}
+          activePage={tableActivePage}
+          onPageChange={tableHandlePageChange}
+          totalPages={tableTotalPages}
+        />
       </div>
     </div>
   );

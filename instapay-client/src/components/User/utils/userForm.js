@@ -41,6 +41,7 @@ export const userFormConfig = {
       { value: 0, text: 'Ne' },
     ],
     required: false,
+    disabled: false,
   },
   groupIds: {
     key: 'groupIds',

@@ -44,18 +44,10 @@ const Groups = () => {
 
   return (
     <div>
-      <h2 className="groupsTitle">Administracija grupa</h2>
       <div className="groupsTable">
         <div className="groupsTableDetails">
           <div className="groupTableHeader">
-            <div className="groupTablePageing">
-              <Pagination
-                siblingRange={null}
-                activePage={0}
-                onPageChange={onPageChange}
-                totalPages={2}
-              />
-            </div>
+            <h3 className="groupTitle">Grupe</h3>
             <div className="groupTableHeaderWrapper">
               <div>
                 <Button as={Link} to={'/groups/add'} color="black">
@@ -117,6 +109,14 @@ const Groups = () => {
                   ))}
               </Table.Body>
             </Table>
+          </div>
+          <div className="groupTablePageing">
+            <Pagination
+              siblingRange={null}
+              activePage={0}
+              onPageChange={onPageChange}
+              totalPages={2}
+            />
           </div>
         </div>
       </div>

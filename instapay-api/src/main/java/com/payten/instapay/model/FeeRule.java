@@ -8,20 +8,21 @@ import java.sql.Date;
 public class FeeRule {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "FEE_ID")
     private Integer feeId;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
-    @JoinColumn(name = "MERCHANT_ID", nullable = true)
+    @OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.REFRESH})
+    @JoinColumn(name = "MERCHANT_ID", nullable=true)
     private Merchant merchant;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH})
+    @OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
+            CascadeType.REFRESH })
     @JoinColumn(name = "FEE_TYPE")
     private FeeType feeType;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH})
+    @OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
+            CascadeType.REFRESH })
     @JoinColumn(name = "FEE_RECEIVER_ID")
     private FeeReceiver feeReceiver;
 
@@ -31,8 +32,8 @@ public class FeeRule {
     @Column(name = "FEE_AMOUNT")
     private Float amount;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH})
+    @OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
+            CascadeType.REFRESH })
     @JoinColumn(name = "PRODUCT_TYPE_ID")
     private ProductType productType;
 

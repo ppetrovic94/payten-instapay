@@ -17,3 +17,13 @@
 .tableHeaderWrapper {
   display: flex;
 }
+
+.tableTitle {
+  display: flex;
+  align-items: center;
+}
+
+.tablePageing {
+  display: flex;
+  justify-content: flex-end;
+}

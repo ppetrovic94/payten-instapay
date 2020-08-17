@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import java.security.Principal;
 import java.util.ArrayList;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
@@ -45,5 +46,13 @@ public class LoginController {
         session.setMaxInactiveInterval(30);
         session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
     }
+
+    @GetMapping("/currentroles")
+    @ResponseStatus(HttpStatus.OK)
+    public String getUserRoles(Principal currentUser) {
+        System.out.println(currentUser.getName() + "OVO JE TRENUTNI USER");
+        return currentUser.getName();
+    }
+
 
 }
