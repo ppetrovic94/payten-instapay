@@ -1,14 +1,10 @@
 package com.payten.instapay.services.impl;
 
-import com.payten.instapay.dto.Merchant.MerchantDto;
 import com.payten.instapay.dto.PointOfSale.PointOfSaleDto;
 import com.payten.instapay.exceptions.handlers.RequestedResourceNotFoundException;
 import com.payten.instapay.exceptions.handlers.ValidationException;
 import com.payten.instapay.model.*;
-import com.payten.instapay.repositories.AcqStatusRepository;
-import com.payten.instapay.repositories.CityRepository;
-import com.payten.instapay.repositories.PaymentMethodRepository;
-import com.payten.instapay.repositories.PointOfSaleRepository;
+import com.payten.instapay.repositories.*;
 import com.payten.instapay.services.PointOfSaleService;
 import com.payten.instapay.services.validation.MapValidationErrorService;
 import org.apache.commons.lang3.math.NumberUtils;

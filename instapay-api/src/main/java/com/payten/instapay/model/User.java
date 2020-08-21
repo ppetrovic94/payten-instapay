@@ -2,6 +2,7 @@ package com.payten.instapay.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -66,7 +67,14 @@ public class User implements UserDetails {
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        Set<GrantedAuthority> grantedRoles = new HashSet<>();
+        for (Group group: groups){
+            for (Role userRole : group.getRoles()){
+                GrantedAuthority authority = new SimpleGrantedAuthority(userRole.getRoleName());
+                grantedRoles.add(authority);
+            }
+        }
+        return grantedRoles;
     }
 
     public Integer getUserId() {

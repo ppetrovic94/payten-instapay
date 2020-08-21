@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import java.security.Principal;
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Set;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
@@ -34,24 +36,24 @@ public class LoginController {
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public void login(HttpServletRequest req, HttpServletResponse res, @RequestBody LoginRequest loginRequest) {
-
+    public Collection<? extends GrantedAuthority> login(HttpServletRequest req, HttpServletResponse res, @RequestBody LoginRequest loginRequest) {
         UsernamePasswordAuthenticationToken authReq
-                = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword(), new ArrayList<>());
+                = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
         Authentication auth = authenticationManager.authenticate(authReq);
-
+        Collection<? extends GrantedAuthority> grantedRoles = auth.getAuthorities();
         SecurityContext sc = SecurityContextHolder.getContext();
         sc.setAuthentication(auth);
+
         HttpSession session = req.getSession(true);
-        session.setMaxInactiveInterval(30);
+        session.setMaxInactiveInterval(120);
         session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
+        return grantedRoles;
     }
 
-    @GetMapping("/currentroles")
+    @GetMapping("/api/currentroles")
     @ResponseStatus(HttpStatus.OK)
-    public String getUserRoles(Principal currentUser) {
-        System.out.println(currentUser.getName() + "OVO JE TRENUTNI USER");
-        return currentUser.getName();
+    public Set<String> getUserRoles(Principal currentUser) {
+        return userService.getRolesForCurrentUser(currentUser.getName());
     }
 
 

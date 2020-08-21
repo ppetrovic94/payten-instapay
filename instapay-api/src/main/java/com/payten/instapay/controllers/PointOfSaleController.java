@@ -1,6 +1,5 @@
 package com.payten.instapay.controllers;
 
-import com.payten.instapay.dto.Merchant.MerchantDto;
 import com.payten.instapay.dto.PointOfSale.PointOfSaleDto;
 import com.payten.instapay.model.PointOfSale;
 import com.payten.instapay.services.PointOfSaleService;

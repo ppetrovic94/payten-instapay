@@ -3,8 +3,10 @@ import { useHistory } from 'react-router-dom';
 import { Form, Button } from 'semantic-ui-react';
 import axios from 'axios';
 import './LoginForm.scss';
+import { useAuthDataContext } from '../../security/AuthDataProvider/AuthDataProvider';
 
 const LoginFrom = () => {
+  const { onLogin } = useAuthDataContext();
   const [loginRequest, setLoginRequest] = useState({
     username: '',
     password: '',
@@ -21,10 +23,15 @@ const LoginFrom = () => {
     try {
       const res = await axios.post('http://localhost:8080/login', loginRequest);
       console.log(res, 'login response');
+      onLogin({ isAuthenticated: true, roles: getRoles(res.data) });
       history.push('/merchants');
     } catch (err) {
       setErrors(err.response.data);
     }
+  };
+
+  const getRoles = (authorities) => {
+    return authorities.map((role) => role['authority']);
   };
 
   return (
