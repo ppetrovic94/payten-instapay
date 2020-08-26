@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, Dropdown } from 'semantic-ui-react';
+import axios from '../../utils/API';
 import Logo from './Logo';
 import './Header.scss';
 import { useAuthDataContext } from '../../security/AuthDataProvider/AuthDataProvider';
@@ -11,6 +12,16 @@ const Header = () => {
   const onItemClick = (e, { name }) => {
     setActiveItem(name);
   };
+
+  const onLogout = async () => {
+    try {
+      document.cookie = 'JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      await axios.get('/logout');
+    } catch (error) {
+      console.log(error, 'logout err');
+    }
+  };
+
   return (
     <div className="headerHolder">
       <div className="headerLogo">
@@ -77,6 +88,11 @@ const Header = () => {
             </>
           )}
         </Menu>
+      </div>
+      <div className="logout">
+        <Link onClick={onLogout} to="/">
+          Odjavi se
+        </Link>
       </div>
     </div>
   );

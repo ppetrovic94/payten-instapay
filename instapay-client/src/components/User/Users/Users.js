@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-import { Button } from 'semantic-ui-react';
+import axios from '../../../utils/API';
 import CustomTable from '../../CustomTable/CustomTable';
 import { userTableHeader, formatUserData, userActionConfig } from '../utils/userTable';
 import './Users.scss';
@@ -13,7 +11,7 @@ const Users = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/admin/users`);
+        const response = await axios.get(`/admin/users`);
         setUsers(response.data.content);
       } catch (err) {
         setErrors(err.response);
@@ -23,7 +21,7 @@ const Users = () => {
   }, []);
 
   const onChangeSearchTerm = async (term) => {
-    const filtered = await axios.get(`http://localhost:8080/api/admin/users?searchTerm=${term}`);
+    const filtered = await axios.get(`/admin/users?searchTerm=${term}`);
     setUsers(filtered.data.content);
   };
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
 import { feeFormConfig, getFeeFormConfig } from '../utils/feeForm';
@@ -16,7 +16,7 @@ const AddFee = () => {
   useEffect(() => {
     const fetchFeeMetadata = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/user/fees/metadata');
+        const response = await axios.get('/user/fees/metadata');
         setFeeMetadata(response.data);
       } catch (err) {
         setErrors(err.response);
@@ -28,7 +28,7 @@ const AddFee = () => {
   const saveFee = async () => {
     setLoading(true);
     try {
-      await axios.post(`http://localhost:8080/api/user/fees/add`, formFields);
+      await axios.post(`/user/fees/add`, formFields);
       setLoading(false);
       history.goBack();
     } catch (err) {

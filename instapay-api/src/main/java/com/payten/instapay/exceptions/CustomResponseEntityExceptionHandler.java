@@ -1,5 +1,6 @@
 package com.payten.instapay.exceptions;
 
+import com.payten.instapay.exceptions.handlers.AccessDeniedException;
 import com.payten.instapay.exceptions.handlers.RequestedResourceNotFoundException;
 import com.payten.instapay.exceptions.handlers.ValidationException;
 import com.payten.instapay.exceptions.handlers.ValueAlreadyExistException;
@@ -25,6 +26,12 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     public ResponseEntity<Object> entityNotFound(RequestedResourceNotFoundException ex) {
         RequestedResourceNotFoundException exceptionResponse = new RequestedResourceNotFoundException(ex.getMessage());
         return new ResponseEntity<>(exceptionResponse.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> entityNotFound(AccessDeniedException ex) {
+        AccessDeniedException exceptionResponse = new AccessDeniedException(ex.getMessage());
+        return new ResponseEntity<>(exceptionResponse.getMessage(), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(ValidationException.class)

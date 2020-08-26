@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../../utils/API';
 import { getFormConfig, merchantFormTemplate } from '../utils/merchantForm';
 import CustomForm from '../../CustomForm/CustomForm';
 import CustomLoader from '../../CustomLoader/CustomLoader';
@@ -18,7 +18,7 @@ const EditMerchant = () => {
     setLoading(true);
     const fetchMerchantMetadata = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/user/merchants/metadata');
+        const response = await axios.get('/user/merchants/metadata');
         setMerchantMetadata(response.data);
       } catch (err) {
         setErrors(err.response);
@@ -26,7 +26,7 @@ const EditMerchant = () => {
     };
     const fetchMerchantById = async (id) => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/user/merchants/${id}`);
+        const response = await axios.get(`/user/merchants/${id}`);
         setFormFields({ ...response.data });
       } catch (err) {
         setErrors(err.response);
@@ -41,7 +41,7 @@ const EditMerchant = () => {
   const editMerchant = async (updatedMerchant) => {
     setLoading(true);
     try {
-      await axios.put(`http://localhost:8080/api/user/merchant/${id}/edit`, updatedMerchant);
+      await axios.put(`/user/merchant/${id}/edit`, updatedMerchant);
       setLoading(false);
       history.push('/');
     } catch (err) {

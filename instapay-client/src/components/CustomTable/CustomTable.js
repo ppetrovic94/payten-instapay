@@ -103,6 +103,9 @@ const CustomTable = ({
                           {item.feeId && (
                             <TableActions actionKey={item.feeId} actionConfig={tableActions} />
                           )}
+                          {item.cityId && (
+                            <TableActions actionKey={item.cityId} actionConfig={tableActions} />
+                          )}
                         </Table.Cell>
                       ) : header == 'groups' ? (
                         <Table.Cell>

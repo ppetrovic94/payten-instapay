@@ -42,12 +42,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login", "/static/**", "/webjars/**",
+                .antMatchers("/","/api/login", "/api/isauth", "/api/currentroles", "/static/**", "/webjars/**",
                         "/css/**",
                         "/js/**",
                         "/images/**")
                 .permitAll()
-                .antMatchers("/api/**").authenticated()
+                .antMatchers("/api/user/**").hasRole("USER")
+                .antMatchers("/api/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
                 .and()
                 .csrf().disable();
     }

@@ -21,14 +21,16 @@ import Fees from '../Fee/Fees/Fees';
 import AddFee from '../Fee/AddFee/AddFee';
 import EditFee from '../Fee/EditFee/EditFee';
 import { ProtectedRoute } from '../../security/ProtectedRoute/ProtectedRoute';
+import Cities from '../City/Cities/Cities';
+import './Layout.scss';
 
 const Layout = () => {
   return (
-    <>
+    <div className="appContent">
       <Header />
       <Switch>
         <ProtectedRoute path="/merchants" exact component={Merchants} />
-        <ProtectedRoute path="/addMerchant" exact component={AddMerchant} />
+        <ProtectedRoute path="/merchants/add" exact component={AddMerchant} />
         <ProtectedRoute path="/merchant/:id" exact component={EditMerchant} />
         <ProtectedRoute path="/merchant/:id/pos" exact component={PointOfSales} />
         <ProtectedRoute path="/merchant/:id/fees" exact component={Fees} />
@@ -38,6 +40,7 @@ const Layout = () => {
         <ProtectedRoute path="/pos/:id/terminals/add" exact component={AddTerminal} />
         <ProtectedRoute path="/terminals/:id" exact component={EditTerminal} />
         <ProtectedRoute path="/terminals/:id/details" exact component={TerminalDetails} />
+        <ProtectedRoute path="/cities" exact component={Cities} />
         <ProtectedRoute path="/users" exact component={Users} />
         <ProtectedRoute path="/users/add" exact component={AddUser} />
         <ProtectedRoute path="/users/:id" exact component={EditUser} />
@@ -48,7 +51,7 @@ const Layout = () => {
         <ProtectedRoute path="/fees/add" exact component={AddFee} />
         <ProtectedRoute path="/fees/:id" exact component={EditFee} />
       </Switch>
-    </>
+    </div>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
 import { feeFormConfig, getFeeFormConfig } from '../utils/feeForm';
@@ -17,7 +17,7 @@ const EditFee = () => {
   useEffect(() => {
     const fetchFeeMetadata = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/user/fees/metadata');
+        const response = await axios.get('/user/fees/metadata');
         setFeeMetadata(response.data);
       } catch (err) {
         setErrors(err.response);
@@ -25,7 +25,7 @@ const EditFee = () => {
     };
     const fetchFeeById = async (id) => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/user/fees/${id}`);
+        const response = await axios.get(`/user/fees/${id}`);
         setFormFields({ ...response.data });
       } catch (err) {
         setErrors(err.response);
@@ -39,7 +39,7 @@ const EditFee = () => {
   const updateFee = async (updatedFee) => {
     setLoading(true);
     try {
-      await axios.put(`http://localhost:8080/api/user/fees/${id}/update`, updatedFee);
+      await axios.put(`/user/fees/${id}/update`, updatedFee);
       setLoading(false);
       history.goBack();
     } catch (err) {

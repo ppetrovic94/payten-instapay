@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
 import {
@@ -23,7 +23,7 @@ const EditTerminal = () => {
   useEffect(() => {
     const fetchTerminalMetadata = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/user/terminals/metadata');
+        const response = await axios.get('/user/terminals/metadata');
         setTerminalMetadata(response.data);
       } catch (err) {
         setErrors(err.response);
@@ -32,7 +32,7 @@ const EditTerminal = () => {
 
     const fetchTerminalById = async (id) => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/user/terminals/${id}`);
+        const response = await axios.get(`/user/terminals/${id}`);
         setTerminalFields({ ...response.data });
         setCurrentTerminal({ ...response.data });
       } catch (err) {
@@ -61,10 +61,7 @@ const EditTerminal = () => {
   const editTerminal = async () => {
     setLoading(true);
     try {
-      const updatedTerminal = await axios.put(
-        `http://localhost:8080/api/user/terminals/${id}/edit`,
-        terminalFields,
-      );
+      const updatedTerminal = await axios.put(`/user/terminals/${id}/edit`, terminalFields);
 
       setTerminalId(updatedTerminal.data.terminalId);
       history.goBack();

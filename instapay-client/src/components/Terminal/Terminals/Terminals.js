@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import axios from '../../../utils/API';
 import CustomTable from '../../CustomTable/CustomTable';
 import {
   terminalTableHeader,
@@ -17,7 +17,7 @@ const Terminals = () => {
   useEffect(() => {
     const fetchTerminals = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/user/pos/${id}/terminals`);
+        const response = await axios.get(`/user/pos/${id}/terminals`);
         setTerminals(response.data.content);
       } catch (err) {
         setErrors(err.response);
@@ -27,9 +27,7 @@ const Terminals = () => {
   }, [id]);
 
   const onChangeSearchTerm = async (term) => {
-    const filtered = await axios.get(
-      `http://localhost:8080/api/user/pos/${id}/terminals?searchTerm=${term}`,
-    );
+    const filtered = await axios.get(`/user/pos/${id}/terminals?searchTerm=${term}`);
     setTerminals(filtered.data.content);
   };
 

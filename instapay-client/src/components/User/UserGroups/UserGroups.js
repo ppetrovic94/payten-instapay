@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Table } from 'semantic-ui-react';
 import _ from 'lodash';
+import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import './UserGroups.scss';
 
@@ -15,7 +15,7 @@ const UserGroups = ({ userFields, setUserFields }) => {
     setLoading(true);
     const fetchGroups = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/admin/users/groups');
+        const response = await axios.get('/admin/users/groups');
         setGroups(response.data);
         setLoading(false);
       } catch (err) {

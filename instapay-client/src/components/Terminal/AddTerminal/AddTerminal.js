@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
 import {
@@ -22,7 +22,7 @@ const AddTerminal = () => {
   useEffect(() => {
     const fetchTerminalMetadata = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/user/terminals/metadata');
+        const response = await axios.get('/user/terminals/metadata');
         setTerminalMetadata(response.data);
       } catch (err) {
         setErrors(err.response);
@@ -44,10 +44,7 @@ const AddTerminal = () => {
   const saveTerminal = async () => {
     setLoading(true);
     try {
-      const addedTerminal = await axios.post(
-        `http://localhost:8080/api/user/pos/${id}/terminals/add`,
-        terminalFields,
-      );
+      const addedTerminal = await axios.post(`/user/pos/${id}/terminals/add`, terminalFields);
       setTerminalId(addedTerminal.data.terminalId);
       history.push(`/pos/${id}/terminals`);
     } catch (err) {

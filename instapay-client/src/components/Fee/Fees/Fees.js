@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../../utils/API';
 import CustomTable from '../../CustomTable/CustomTable';
 import { feeTableHeader, formatFeeData, feeActionConfig } from '../utils/feeTable';
 import './Fees.scss';
@@ -14,12 +14,12 @@ const Fees = () => {
   useEffect(() => {
     const fetchFeesByMerchantId = async (merchantId) => {
       try {
-        const response = await axios.get(`http://localhost:8080/user/merchants/${merchantId}/fees`);
+        const response = await axios.get(`/user/merchants/${merchantId}/fees`);
         setFees(response.data.content);
         if (response.data.content[0]) {
           setMerchantName(response.data.content[0].merchant.merchantName);
         } else {
-          const res = await axios.get(`http://localhost:8080/user/merchants/${merchantId}/name`);
+          const res = await axios.get(`/user/merchants/${merchantId}/name`);
           setMerchantName(res.data);
         }
       } catch (err) {
@@ -28,7 +28,7 @@ const Fees = () => {
     };
     const fetchFees = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/user/fees`);
+        const response = await axios.get(`/user/fees`);
         setFees(response.data.content);
       } catch (err) {
         setErrors(err.response);
@@ -50,11 +50,9 @@ const Fees = () => {
   const onChangeSearchTerm = async (term) => {
     let filtered;
     if (id) {
-      filtered = await axios.get(
-        `http://localhost:8080/user/merchants/${id}/fees?searchTerm=${term}`,
-      );
+      filtered = await axios.get(`/user/merchants/${id}/fees?searchTerm=${term}`);
     } else {
-      filtered = await axios.get(`http://localhost:8080/api/user/fees?searchTerm=${term}`);
+      filtered = await axios.get(`/user/fees?searchTerm=${term}`);
     }
     setFees(filtered.data.content);
   };

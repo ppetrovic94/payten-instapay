@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
 import { userFormTemplate, userFormConfig } from '../utils/userForm';
@@ -15,7 +15,7 @@ const AddUser = () => {
   const saveUser = async () => {
     setLoading(true);
     try {
-      await axios.post(`http://localhost:8080/api/admin/users/add`, formFields);
+      await axios.post(`/admin/users/add`, formFields);
       setLoading(false);
       history.push('/users');
     } catch (err) {

@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useMemo, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../utils/API';
 
 export const AuthDataContext = createContext(null);
 
@@ -18,11 +18,14 @@ const AuthDataProvider = (props) => {
       return response;
     },
     function (error) {
-      // Any status codes that falls outside the range of 2xx cause this function to trigger
+      // Any status codes that falls outside the range of 2xx cause this function to trigge
       // Do something with response error
       console.log('error status', error.response.status);
       //setAuthData({ ...authData, isAuthenticated: false });
-      if (error.response.status == 403) history.push('/');
+      if (error.response.status == 403) {
+        document.cookie = 'JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        history.push('/');
+      }
 
       return Promise.reject(error);
     },
@@ -33,16 +36,17 @@ const AuthDataProvider = (props) => {
    * the localStorage.
    */
   useEffect(() => {
-    //console.log('isAuthenticated useEffecat', authData.isAuthenticated);
     const fetchCurrentUserRoles = async () => {
       try {
-        const res = await axios.get('http://localhost:8080/api/currentroles');
-        setAuthData({ ...authData, roles: res.data });
+        const roles = await axios.get('/currentroles');
+        setAuthData({
+          ...authData,
+          roles: roles.data,
+        });
       } catch (error) {
         console.error(error);
       }
     };
-
     fetchCurrentUserRoles();
   }, []);
 

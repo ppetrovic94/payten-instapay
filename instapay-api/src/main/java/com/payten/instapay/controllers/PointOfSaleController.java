@@ -12,7 +12,6 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(path="/api/user",produces = "application/json")
-@CrossOrigin(origins="*")
 public class PointOfSaleController {
 
     private final PointOfSaleService pointOfSaleService;

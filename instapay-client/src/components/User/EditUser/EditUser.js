@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
 import { userFormTemplate, userFormConfig } from '../utils/userForm';
@@ -16,7 +16,7 @@ const EditUser = () => {
   useEffect(() => {
     const fetchUserById = async (id) => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/admin/users/${id}`);
+        const response = await axios.get(`/admin/users/${id}`);
         setFormFields({ ...response.data });
       } catch (err) {
         setErrors(err.response);
@@ -28,7 +28,7 @@ const EditUser = () => {
   const updateUser = async (user) => {
     setLoading(true);
     try {
-      await axios.put(`http://localhost:8080/api/admin/users/${id}/edit`, user);
+      await axios.put(`/admin/users/${id}/edit`, user);
       setLoading(false);
       history.push('/users');
     } catch (err) {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Table } from 'semantic-ui-react';
 import _ from 'lodash';
+import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import './GroupRoles.scss';
 
@@ -15,7 +15,7 @@ const GroupRoles = ({ groupFields, setGroupFields }) => {
     setLoading(true);
     const fetchRoles = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/admin/roles');
+        const response = await axios.get('/admin/roles');
         setRoles(response.data);
         setLoading(false);
       } catch (err) {

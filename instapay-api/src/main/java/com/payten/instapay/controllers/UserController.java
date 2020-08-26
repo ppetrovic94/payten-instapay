@@ -14,7 +14,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path="/api/admin",produces = "application/json")
-@CrossOrigin(origins="*")
 public class UserController {
 
     private final UserService userService;

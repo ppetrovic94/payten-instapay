@@ -13,7 +13,6 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(path="/api/user",produces = "application/json")
-@CrossOrigin(origins="*")
 public class FeeController {
 
     private final FeeService feeService;

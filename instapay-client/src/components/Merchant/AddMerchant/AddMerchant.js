@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
 import { merchantFormTemplate, getFormConfig } from '../utils/merchantForm';
@@ -16,7 +16,7 @@ const AddMerchant = () => {
   useEffect(() => {
     const fetchMerchantMetadata = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/user/merchants/metadata');
+        const response = await axios.get('/user/merchants/metadata');
         setMerchantMetadata(response.data);
       } catch (err) {
         setErrors(err.response);
@@ -28,9 +28,9 @@ const AddMerchant = () => {
   const saveMerchant = async (merchant) => {
     setLoading(true);
     try {
-      await axios.post('http://localhost:8080/api/user/merchants/add', merchant);
+      await axios.post('/user/merchants/add', merchant);
       setLoading(false);
-      history.push('/');
+      history.push('/merchants');
     } catch (err) {
       console.log(err);
       setLoading(false);

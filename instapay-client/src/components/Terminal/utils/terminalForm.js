@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../../../utils/API';
 
 export const terminalFormTemplate = {
   acquirerTid: '',
@@ -52,7 +52,7 @@ export const terminalFormConfig = {
 
 export const generateCredentials = async (id) => {
   try {
-    await axios.get(`http://localhost:8080/user/terminals/${id}/generateCredentials`);
+    await axios.get(`/user/terminals/${id}/generateCredentials`);
   } catch (err) {
     console.error(err.response);
   }

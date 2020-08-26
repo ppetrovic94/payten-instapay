@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../../utils/API';
 import { getPointOfSaleFormConfig, pointOfSaleFormTemplate } from '../utils/pointOfSaleForm';
 import CustomForm from '../../CustomForm/CustomForm';
 import CustomLoader from '../../CustomLoader/CustomLoader';
@@ -18,7 +18,7 @@ const EditPointOfSale = () => {
     setLoading(true);
     const fetchMerchantMetadata = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/user/merchants/metadata');
+        const response = await axios.get('/user/merchants/metadata');
         setPointOfSaleMetadata(response.data);
       } catch (err) {
         setErrors(err.response);
@@ -26,7 +26,7 @@ const EditPointOfSale = () => {
     };
     const fetchPointOfSaleById = async (id) => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/user/pos/${id}`);
+        const response = await axios.get(`/user/pos/${id}`);
         console.log(response, 'response pos');
         setFormFields({ ...response.data });
       } catch (err) {
@@ -42,7 +42,7 @@ const EditPointOfSale = () => {
   const editPointOfSale = async (updatedPointOfSale) => {
     setLoading(true);
     try {
-      await axios.put(`http://localhost:8080/api/user/pos/${id}/edit`, updatedPointOfSale);
+      await axios.put(`/user/pos/${id}/edit`, updatedPointOfSale);
       setLoading(false);
       history.push('/');
     } catch (err) {

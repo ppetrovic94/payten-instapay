@@ -17,7 +17,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path="/api/user",produces = "application/json")
-@CrossOrigin(origins="*")
 public class MerchantController {
 
     private final MerchantService merchantService;

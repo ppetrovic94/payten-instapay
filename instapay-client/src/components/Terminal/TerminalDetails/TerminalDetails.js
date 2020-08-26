@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Image, Card } from 'semantic-ui-react';
 import { useParams } from 'react-router-dom';
+import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import './TerminalDetails.scss';
 
@@ -15,7 +15,7 @@ const TerminalDetails = () => {
 
     const fetchTerminalById = async (id) => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/user/terminals/${id}`);
+        const response = await axios.get(`/user/terminals/${id}`);
         setTerminalDetails(response.data);
         setLoading(false);
       } catch (err) {
