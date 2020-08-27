@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Menu, Dropdown } from 'semantic-ui-react';
 import axios from '../../utils/API';
 import Logo from './Logo';
@@ -8,6 +8,7 @@ import { useAuthDataContext } from '../../security/AuthDataProvider/AuthDataProv
 
 const Header = () => {
   const { roles } = useAuthDataContext();
+  const history = useHistory();
   const [activeItem, setActiveItem] = useState('');
   const onItemClick = (e, { name }) => {
     setActiveItem(name);
@@ -15,8 +16,9 @@ const Header = () => {
 
   const onLogout = async () => {
     try {
-      document.cookie = 'JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
       await axios.get('/logout');
+      document.cookie = 'JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      history.push('/');
     } catch (error) {
       console.log(error, 'logout err');
     }

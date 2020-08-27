@@ -41,16 +41,26 @@ public class TerminalServiceImpl implements TerminalService {
     }
 
     @Override
-    public Page<Terminal> findAllTerminalsPaginated(Integer pointOfSaleId, int pageNum, String searchTerm) {
-        Pageable page = PageRequest.of(pageNum, 25, Sort.by("terminalId"));
+    public Page<Terminal> findAllTerminalsPaginated(Integer pointOfSaleId, int pageNum, String searchTerm, String sortBy, String direction) {
+        Pageable page;
         Page<Terminal> terminals = null;
 
-        if (searchTerm.isEmpty()){
+        if(!terminalRepository.existsByPointOfSaleId(pointOfSaleId))
+            throw new RequestedResourceNotFoundException("Prodajno mesto sa ID-em: " + pointOfSaleId + " ne postoji");
+
+
+        if (sortBy.isEmpty()){
+            page = PageRequest.of(pageNum, 10,Sort.Direction.DESC, "setupDate");
+        } else {
+            page = PageRequest.of(pageNum, 10, direction.equals("ascending") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
+        }
+
+        if (searchTerm.isEmpty()) {
             terminals = terminalRepository.findAllByPointOfSaleId(pointOfSaleId, page);
             return terminals;
         }
 
-        terminals = searchByTerm(searchTerm, page);
+        terminals = searchByTerm(pointOfSaleId, searchTerm, page);
 
         return terminals;
     }
@@ -212,15 +222,15 @@ public class TerminalServiceImpl implements TerminalService {
         return null;
     }
 
-    private Page<Terminal> searchByTerm(String term, Pageable page) {
+    private Page<Terminal> searchByTerm(Integer pointOfSaleId, String term, Pageable page) {
         Page<Terminal> filtered;
 
         if (NumberUtils.isParsable(term)) {
-            filtered = terminalRepository.findByTerminalAccountContaining(term, page);
+            filtered = terminalRepository.findByPointOfSaleIdAndTerminalAccountContaining(pointOfSaleId, term, page);
             if(!filtered.getContent().isEmpty()) return filtered;
         }
 
-        filtered = terminalRepository.findByAcquirerTidContaining(term, page);
+        filtered = terminalRepository.findByPointOfSaleIdAndAcquirerTidContaining(pointOfSaleId, term, page);
         if (!filtered.getContent().isEmpty()) return filtered;
 
         return filtered;

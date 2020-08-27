@@ -20,6 +20,8 @@ public interface FeeRuleRepository extends JpaRepository<FeeRule, Integer>, Pagi
     Page<FeeRule> findByFeeType_TypeNameContaining(String typeName, Pageable page);
     Page<FeeRule> findByProductType_TypeNameContaining(String productType, Pageable page);
 
+    boolean existsByMerchant_MerchantId(Integer merchantId);
+
     Page<FeeRule> findByMerchant_MerchantIdAndMerchant_MerchantNameContaining(Integer merchantId, String merchantName, Pageable page);
     Page<FeeRule> findByMerchant_MerchantIdAndFeeReceiver_ReceiverNameContaining(Integer merchantId, String receiverName, Pageable page);
     Page<FeeRule> findByMerchant_MerchantIdAndFeeType_TypeNameContaining(Integer merchantId, String typeName, Pageable page);

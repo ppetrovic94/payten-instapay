@@ -10,7 +10,6 @@ import com.payten.instapay.repositories.GroupRepository;
 import com.payten.instapay.repositories.UserRepository;
 import com.payten.instapay.services.UserService;
 import com.payten.instapay.services.validation.MapValidationErrorService;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,9 +35,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> getUsers(int pageNum, String searchTerm) {
-        Pageable page = PageRequest.of(pageNum, 25, Sort.by("userId"));
-        Page<User> users = null;
+    public Page<User> getUsers(int pageNum, String searchTerm, String sortBy, String direction) {
+        Pageable page;
+        Page<User> users;
+
+        if (sortBy.isEmpty()){
+            page = PageRequest.of(pageNum, 10,Sort.Direction.ASC, "fullName");
+        } else {
+            page = PageRequest.of(pageNum, 10, direction.equals("ascending") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
+        }
 
         if (searchTerm.isEmpty()) {
             users = userRepository.findAll(page);

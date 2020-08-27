@@ -57,7 +57,7 @@ public class MerchantServiceImpl implements MerchantService {
         Page<Merchant> merchants = null;
 
         if (sortBy.isEmpty()){
-            page = PageRequest.of(pageNum, 10,Sort.Direction.ASC, "merchantName");
+            page = PageRequest.of(pageNum, 10,Sort.Direction.DESC, "setupDate");
         } else {
             page = PageRequest.of(pageNum, 10, direction.equals("ascending") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
         }

@@ -22,9 +22,12 @@ public class PointOfSaleController {
 
     @GetMapping("/merchant/{merchantId}/pos")
     @ResponseStatus(value = HttpStatus.OK)
-    public Page<PointOfSale> getMerchantPointOfSales(@PathVariable Integer merchantId, @RequestParam(name="pagenum",required = false, defaultValue = "0") int pageNumber,
-                                              @RequestParam(name="searchTerm", required = false, defaultValue="") String searchTerm){
-        return pointOfSaleService.findAllPointOfSalesForMerchantPaginated(merchantId, pageNumber, searchTerm);
+    public Page<PointOfSale> getMerchantPointOfSales(@PathVariable Integer merchantId,
+                                                     @RequestParam(name="pagenum",required = false, defaultValue = "0") int pageNumber,
+                                                     @RequestParam(name="searchTerm", required = false, defaultValue="") String searchTerm,
+                                                     @RequestParam(name ="sortBy", required = false, defaultValue = "") String sortBy,
+                                                     @RequestParam(name = "direction", required = false, defaultValue = "ASC") String direction){
+        return pointOfSaleService.findAllPointOfSalesForMerchantPaginated(merchantId, pageNumber, searchTerm, sortBy, direction);
     }
 
     @PostMapping("/merchant/{merchantId}/pos/add")

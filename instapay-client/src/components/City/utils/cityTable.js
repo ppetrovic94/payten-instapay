@@ -17,13 +17,6 @@ export const formatCitiesData = (data) => {
 export const cityActionConfig = (id) => {
   return [
     {
-      type: 'UPDATE',
-      name: 'updateCity',
-      label: 'Izmeni',
-      redirectLink: `/cities/${id}`,
-      icon: 'edit',
-    },
-    {
       type: 'DELETE',
       name: 'deleteCity',
       label: 'Ukloni',

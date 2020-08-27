@@ -29,8 +29,10 @@ public class TerminalController {
     @ResponseStatus(value = HttpStatus.OK)
     public Page<Terminal> getPosTerminals(@PathVariable Integer pointOfSaleId,
                                           @RequestParam(name="pagenum",required = false, defaultValue = "0") int pageNumber,
-                                          @RequestParam(name="searchTerm", required = false, defaultValue="") String searchTerm){
-        return terminalService.findAllTerminalsPaginated(pointOfSaleId, pageNumber, searchTerm);
+                                          @RequestParam(name="searchTerm", required = false, defaultValue="") String searchTerm,
+                                          @RequestParam(name ="sortBy", required = false, defaultValue = "") String sortBy,
+                                          @RequestParam(name = "direction", required = false, defaultValue = "ASC") String direction){
+        return terminalService.findAllTerminalsPaginated(pointOfSaleId, pageNumber, searchTerm, sortBy, direction);
     }
 
     @PostMapping("/pos/{pointOfSaleId}/terminals/add")

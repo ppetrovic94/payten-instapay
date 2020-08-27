@@ -8,6 +8,9 @@ import './Groups.scss';
 
 const Groups = () => {
   const [groups, setGroups] = useState(null);
+  const [activePage, setActivePage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
   const intervalRef = useRef();
   const [roles, setRoles] = useState(null);
   const [errors, setErrors] = useState(null);
@@ -17,6 +20,7 @@ const Groups = () => {
       try {
         const response = await axios.get(`/admin/groups`);
         setGroups(response.data.content);
+        setTotalPages(response.data.totalPages);
       } catch (err) {
         setErrors(err.response);
       }
@@ -29,8 +33,24 @@ const Groups = () => {
     fetchRoles();
   }, []);
 
+  const onPageChange = async (e, { activePage }) => {
+    setActivePage(activePage);
+    let response = null;
+    if (searchTerm) {
+      response = await axios.get(
+        `/admin/groups?searchTerm=${searchTerm}&pagenum=${activePage - 1}`,
+      );
+    } else {
+      response = await axios.get(`/admin/groups?pagenum=${activePage - 1}`);
+    }
+
+    setGroups(response.data.content);
+  };
+
   const getFilteredGroups = async (term) => {
     const filtered = await axios.get(`/admin/groups?searchTerm=${term}`);
+    setSearchTerm(term);
+    setTotalPages(filtered.data.totalPages);
     setGroups(filtered.data.content);
   };
 
@@ -39,8 +59,6 @@ const Groups = () => {
     clearTimeout(intervalRef.current);
     intervalRef.current = setTimeout(() => getFilteredGroups(value), 350);
   };
-
-  const onPageChange = () => {};
 
   return (
     <div>
@@ -103,7 +121,7 @@ const Groups = () => {
                           );
                         })}
                       <Table.Cell>
-                        <TableActions actionConfig={groupActionConfig} actionKey={group.groupId} />
+                        <TableActions actions={groupActionConfig(group.groupId)} />
                       </Table.Cell>
                     </Table.Row>
                   ))}
@@ -113,9 +131,9 @@ const Groups = () => {
           <div className="groupTablePageing">
             <Pagination
               siblingRange={null}
-              activePage={0}
+              activePage={activePage}
               onPageChange={onPageChange}
-              totalPages={2}
+              totalPages={totalPages}
             />
           </div>
         </div>

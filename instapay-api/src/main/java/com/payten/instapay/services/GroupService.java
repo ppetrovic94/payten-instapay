@@ -9,7 +9,7 @@ import org.springframework.validation.BindingResult;
 import java.util.List;
 
 public interface GroupService {
-    Page<Group> getGroups(int pageNumber, String searchTerm);
+    Page<Group> getGroups(int pageNumber, String searchTerm, String sortBy, String direction);
 
     GroupDto getGroupById(Integer groupId);
 

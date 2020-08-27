@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.validation.BindingResult;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Set;
 
@@ -15,7 +14,7 @@ public interface UserService extends UserDetailsService {
     User addUser(UserDto user, BindingResult result);
     UserDto getUserById(Integer userId);
     User findByUsernameAndPassword(String username, String password);
-    Page<User> getUsers(int pageNumber, String searchTerm);
+    Page<User> getUsers(int pageNumber, String searchTerm, String sortBy, String direction);
     User updateUser(Integer userId, UserDto user, BindingResult result);
     void deleteUser(Integer userId);
     List<Group> getGroups();

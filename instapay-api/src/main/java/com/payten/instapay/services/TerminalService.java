@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.validation.BindingResult;
 
 public interface TerminalService {
-    Page<Terminal> findAllTerminalsPaginated(Integer pointOfSaleId, int pageNum, String searchTerm);
+    Page<Terminal> findAllTerminalsPaginated(Integer pointOfSaleId, int pageNum, String searchTerm, String sortBy, String direction);
     Terminal addTerminal(Integer pointOfSaleId, TerminalDto terminalDto, BindingResult result);
     TerminalDto findById(Integer terminalId);
     TerminalMetadata getTerminalMetadata();

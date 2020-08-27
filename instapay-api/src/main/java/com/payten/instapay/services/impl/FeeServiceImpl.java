@@ -34,9 +34,15 @@ public class FeeServiceImpl implements FeeService {
     }
 
     @Override
-    public Page<FeeRule> getFeeRules(int pageNumber, String searchTerm) {
-        Pageable page = PageRequest.of(pageNumber, 10, Sort.by("feeId"));
+    public Page<FeeRule> getFeeRules(int pageNumber, String searchTerm, String sortBy, String direction) {
+        Pageable page;
         Page<FeeRule> feeRules = null;
+
+        if (sortBy.isEmpty()){
+            page = PageRequest.of(pageNumber, 10,Sort.Direction.DESC, "validityDate");
+        } else {
+            page = PageRequest.of(pageNumber, 10, direction.equals("ascending") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
+        }
 
         if (searchTerm.isEmpty()) {
             feeRules = feeRuleRepository.findAll(page);
@@ -48,16 +54,25 @@ public class FeeServiceImpl implements FeeService {
     }
 
     @Override
-    public Page<FeeRule> getFeeRulesByMerchantId(Integer merchantId, int pageNumber, String searchTerm) {
-        Pageable page = PageRequest.of(pageNumber, 10, Sort.by("feeId"));
+    public Page<FeeRule> getFeeRulesByMerchantId(Integer merchantId, int pageNumber, String searchTerm, String sortBy, String direction) {
+        Pageable page;
         Page<FeeRule> feeRules = null;
+
+        if(!feeRuleRepository.existsByMerchant_MerchantId(merchantId))
+            throw new RequestedResourceNotFoundException("Trgovac sa ID-em: " + merchantId + " ne postoji u bazi");
+
+        if (sortBy.isEmpty()) {
+            page = PageRequest.of(pageNumber, 10,Sort.Direction.DESC, "validityDate");
+        } else {
+            page = PageRequest.of(pageNumber, 10, direction.equals("ascending") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
+        }
 
         if (searchTerm.isEmpty()) {
             feeRules = feeRuleRepository.findAllByMerchant_MerchantId(merchantId, page);
             return feeRules;
         }
 
-        feeRules = searchByTerm(merchantId,searchTerm, page);
+        feeRules = searchByTerm(merchantId, searchTerm, page);
         return feeRules;
     }
 

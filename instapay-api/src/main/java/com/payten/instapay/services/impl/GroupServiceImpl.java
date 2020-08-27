@@ -32,9 +32,15 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Page<Group> getGroups(int pageNumber, String searchTerm) {
-        Pageable page = PageRequest.of(pageNumber, 25, Sort.by("groupName"));
-        Page<Group> groups = null;
+    public Page<Group> getGroups(int pageNumber, String searchTerm, String sortBy, String direction) {
+        Pageable page;
+        Page<Group> groups;
+
+        if (sortBy.isEmpty()){
+            page = PageRequest.of(pageNumber, 10,Sort.Direction.ASC, "groupName");
+        } else {
+            page = PageRequest.of(pageNumber, 10, direction.equals("ascending") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
+        }
 
         if (searchTerm.isEmpty()) {
             groups = groupRepository.findAll(page);

@@ -11,13 +11,14 @@ import org.springframework.stereotype.Repository;
 public interface PointOfSaleRepository extends JpaRepository<PointOfSale, Integer>, PagingAndSortingRepository<PointOfSale, Integer> {
     Page<PointOfSale> findAllByMerchantId(Integer merchantId, Pageable page);
 
-    Page<PointOfSale> findByPointOfSaleLocalIdContaining(String localPointOfSaleId, Pageable page);
-    Page<PointOfSale> findByPointOfSaleNameContaining(String pointOfSaleName, Pageable page);
-    Page<PointOfSale> findByPointOfSaleAccountContaining(String pointOfSaleAcc, Pageable page);
-    Page<PointOfSale> findByCity_cityNameContaining(String cityName, Pageable page);
+    Page<PointOfSale> findByMerchantIdAndPointOfSaleLocalIdContaining(Integer merchantId, String localPointOfSaleId, Pageable page);
+    Page<PointOfSale> findByMerchantIdAndPointOfSaleNameContaining(Integer merchantId, String pointOfSaleName, Pageable page);
+    Page<PointOfSale> findByMerchantIdAndPointOfSaleAccountContaining(Integer merchantId, String pointOfSaleAcc, Pageable page);
+    Page<PointOfSale> findByMerchantIdAndCity_cityNameContaining(Integer merchantId, String cityName, Pageable page);
 
     PointOfSale getByPointOfSaleId(Integer id);
 
+    boolean existsByMerchantId(Integer merchantId);
     boolean existsByPointOfSaleLocalId(String pointOfSaleLocalId);
 
 }

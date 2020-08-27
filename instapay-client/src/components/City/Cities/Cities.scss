@@ -1,0 +1,10 @@
+.cityContainer {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.requiredField::after {
+  content: '*';
+  color: red;
+}

@@ -41,16 +41,25 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
     }
 
     @Override
-    public Page<PointOfSale> findAllPointOfSalesForMerchantPaginated(Integer merchantId, int pageNum, String searchTerm) {
-        Pageable page = PageRequest.of(pageNum, 25, Sort.by("merchantId"));
+    public Page<PointOfSale> findAllPointOfSalesForMerchantPaginated(Integer merchantId, int pageNum, String searchTerm, String sortBy, String direction) {
+        Pageable page;
         Page<PointOfSale> pointOfSales = null;
+
+        if(!pointOfSaleRepository.existsByMerchantId(merchantId))
+            throw new RequestedResourceNotFoundException("Ne postoji trgovac sa ID-em: " + merchantId);
+
+        if (sortBy.isEmpty()){
+            page = PageRequest.of(pageNum, 10,Sort.Direction.DESC, "setupDate");
+        } else {
+            page = PageRequest.of(pageNum, 10, direction.equals("ascending") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
+        }
 
         if (searchTerm.isEmpty()) {
             pointOfSales = pointOfSaleRepository.findAllByMerchantId(merchantId, page);
             return pointOfSales;
         }
 
-        pointOfSales = searchByTerm(searchTerm, page);
+        pointOfSales = searchByTerm(merchantId, searchTerm, page);
         return pointOfSales;
     }
 
@@ -184,19 +193,19 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
         return null;
     }
 
-    private Page<PointOfSale> searchByTerm(String term, Pageable page){
+    private Page<PointOfSale> searchByTerm(Integer merchantId, String term, Pageable page){
         Page<PointOfSale> filtered;
 
         if (NumberUtils.isParsable(term)) {
-            filtered = pointOfSaleRepository.findByPointOfSaleAccountContaining(term, page);
+            filtered = pointOfSaleRepository.findByMerchantIdAndPointOfSaleAccountContaining(merchantId, term, page);
             if (!filtered.getContent().isEmpty()) return filtered;
         }
 
-        filtered = pointOfSaleRepository.findByPointOfSaleNameContaining(term, page);
+        filtered = pointOfSaleRepository.findByMerchantIdAndPointOfSaleNameContaining(merchantId, term, page);
         if (!filtered.getContent().isEmpty()) return filtered;
-        filtered = pointOfSaleRepository.findByPointOfSaleLocalIdContaining(term, page);
+        filtered = pointOfSaleRepository.findByMerchantIdAndPointOfSaleLocalIdContaining(merchantId, term, page);
         if (!filtered.getContent().isEmpty()) return filtered;
-        filtered = pointOfSaleRepository.findByCity_cityNameContaining(term, page);
+        filtered = pointOfSaleRepository.findByMerchantIdAndCity_cityNameContaining(merchantId, term, page);
         if (!filtered.getContent().isEmpty()) return filtered;
 
         return filtered;

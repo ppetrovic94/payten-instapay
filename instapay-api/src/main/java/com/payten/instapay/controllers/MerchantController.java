@@ -39,9 +39,12 @@ public class MerchantController {
 
     @GetMapping("/merchants/{merchantId}/fees")
     @ResponseStatus(value = HttpStatus.OK)
-    public Page<FeeRule> getFeesByMerchantId(@PathVariable Integer merchantId, @RequestParam(name="pagenum",required = false, defaultValue = "0") int pageNumber,
-                                             @RequestParam(name="searchTerm", required = false, defaultValue="") String searchTerm) {
-        return feeService.getFeeRulesByMerchantId(merchantId, pageNumber, searchTerm);
+    public Page<FeeRule> getFeesByMerchantId(@PathVariable Integer merchantId,
+                                             @RequestParam(name="pagenum",required = false, defaultValue = "0") int pageNumber,
+                                             @RequestParam(name="searchTerm", required = false, defaultValue="") String searchTerm,
+                                             @RequestParam(name ="sortBy", required = false, defaultValue = "") String sortBy,
+                                             @RequestParam(name = "direction", required = false, defaultValue = "ASC") String direction) {
+        return feeService.getFeeRulesByMerchantId(merchantId, pageNumber, searchTerm, sortBy, direction);
     }
 
     @GetMapping("/merchants/{merchantId}/name")

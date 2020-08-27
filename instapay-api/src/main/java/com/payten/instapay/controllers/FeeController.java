@@ -24,8 +24,10 @@ public class FeeController {
     @GetMapping("/fees")
     @ResponseStatus(value = HttpStatus.OK)
     public Page<FeeRule> getFeeRules(@RequestParam(name="pagenum",required = false, defaultValue = "0") int pageNumber,
-                                     @RequestParam(name="searchTerm", required = false, defaultValue="") String searchTerm){
-        return feeService.getFeeRules(pageNumber, searchTerm);
+                                     @RequestParam(name="searchTerm", required = false, defaultValue="") String searchTerm,
+                                     @RequestParam(name ="sortBy", required = false, defaultValue = "") String sortBy,
+                                     @RequestParam(name = "direction", required = false, defaultValue = "ASC") String direction){
+        return feeService.getFeeRules(pageNumber, searchTerm, sortBy, direction);
     }
 
     @GetMapping("/fees/{feeRuleId}")

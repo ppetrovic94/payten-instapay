@@ -59,12 +59,12 @@ const CustomTable = ({
         </div>
       </div>
       <div className="tableContent">
-        <Table sortable collapsing color="red" size="large">
+        <Table sortable color="red" size="large">
           <Table.Header>
             <Table.Row>
               {tableHeader &&
                 _.map(tableHeader, (value, key) => {
-                  return key === 'actions' || !tableColumnSortHandler ? (
+                  return key === 'actions' || !tableColumnSortHandler || key === 'groups' ? (
                     <Table.HeaderCell key={key}>{value}</Table.HeaderCell>
                   ) : (
                     <Table.HeaderCell
@@ -85,27 +85,24 @@ const CustomTable = ({
                     Object.keys(tableHeader).map((header, key) => {
                       return header === 'actions' && tableActions ? (
                         <Table.Cell key={key}>
-                          {item.merchantId && (
-                            <TableActions actionKey={item.merchantId} actionConfig={tableActions} />
+                          {item.merchantId && !item.pointOfSaleId && (
+                            <TableActions actions={tableActions(item.merchantId)} />
                           )}
                           {item.pointOfSaleId && (
                             <TableActions
-                              actionKey={item.pointOfSaleId}
-                              actionConfig={tableActions}
+                              actionIds={{
+                                merchantId: item.merchantId,
+                                pointOfSaleId: item.pointOfSaleId,
+                              }}
+                              actions={tableActions(item.pointOfSaleId)}
                             />
                           )}
                           {item.terminalId && (
                             <TerminalActions terminal={item} actionConfig={tableActions} />
                           )}
-                          {item.userId && (
-                            <TableActions actionKey={item.userId} actionConfig={tableActions} />
-                          )}
-                          {item.feeId && (
-                            <TableActions actionKey={item.feeId} actionConfig={tableActions} />
-                          )}
-                          {item.cityId && (
-                            <TableActions actionKey={item.cityId} actionConfig={tableActions} />
-                          )}
+                          {item.userId && <TableActions actions={tableActions(item.userId)} />}
+                          {item.feeId && <TableActions actions={tableActions(item.feeId)} />}
+                          {item.cityId && <TableActions actions={tableActions(item.cityId)} />}
                         </Table.Cell>
                       ) : header == 'groups' ? (
                         <Table.Cell>

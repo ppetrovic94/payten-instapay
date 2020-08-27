@@ -32,9 +32,15 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public Page<City> getCities(int pageNumber, String searchTerm) {
-        Pageable page = PageRequest.of(pageNumber, 50, Sort.by("cityId"));
+    public Page<City> getCities(int pageNumber, String searchTerm, String sortBy, String direction) {
+        Pageable page;
         Page<City> cities = null;
+
+        if (sortBy.isEmpty()){
+            page = PageRequest.of(pageNumber, 10,Sort.Direction.ASC, "cityName");
+        } else {
+            page = PageRequest.of(pageNumber, 10, direction.equals("ascending") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
+        }
 
         if (searchTerm.isEmpty()) {
             cities = cityRepository.findAll(page);

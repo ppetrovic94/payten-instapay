@@ -10,17 +10,7 @@ export const ProtectedRoute = ({ component: Component, ...options }) => {
   return (
     <Route
       {...options}
-      render={(props) =>
-        jsessionid ? (
-          options.path == '/' ? (
-            <Redirect to="/merchants" />
-          ) : (
-            <Component {...props} />
-          )
-        ) : (
-          <Redirect to="/" />
-        )
-      }
+      render={(props) => (jsessionid ? <Component {...props} /> : <Redirect to="/" />)}
     />
   );
 };
