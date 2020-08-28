@@ -3,13 +3,13 @@ import { useHistory } from 'react-router-dom';
 import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
-import { feeFormConfig, getFeeFormConfig } from '../utils/feeForm';
+import { feeFormConfig, getFeeFormConfig, feeFormTemplate } from '../utils/feeForm';
 import './AddFee.scss';
 
 const AddFee = () => {
   const [loading, setLoading] = useState(false);
   const [feeMetadata, setFeeMetadata] = useState(null);
-  const [formFields, setFormFields] = useState({ ...feeFormConfig });
+  const [formFields, setFormFields] = useState({ ...feeFormTemplate });
   const [errors, setErrors] = useState(null);
   const history = useHistory();
 

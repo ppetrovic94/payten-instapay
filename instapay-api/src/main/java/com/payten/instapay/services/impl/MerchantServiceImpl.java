@@ -135,13 +135,13 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Override
     public String getMerchantNameById(Integer merchantId) {
-        Merchant found = merchantRepository.getByMerchantId(merchantId);
+        String merchantName = merchantRepository.getMerchantNameById(merchantId);
 
-        if (found == null) {
+        if (merchantName == null) {
             throw new RequestedResourceNotFoundException("Ne postoji trgovac sa ID-em: " + merchantId);
         }
 
-        return merchantRepository.getMerchantNameById(merchantId);
+        return merchantName;
     }
 
     @Override

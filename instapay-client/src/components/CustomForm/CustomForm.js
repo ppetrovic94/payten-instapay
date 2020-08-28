@@ -11,8 +11,16 @@ const CustomForm = ({ formConfig, formFields, setFormFields, formSubmitHandler, 
     setFormFields({ ...formFields, [e.target.name]: e.target.value });
   };
 
+  console.log(formFields, 'van');
+
   const handleDropdown = (e, { name, value }) => {
-    setFormFields({ ...formFields, [name]: value });
+    console.log(name, value, 'dropdown polje i vrednost');
+    if (name == 'terminalTypeId' && value === 1) {
+      console.log(formFields, 'usllooopooooooo');
+      setFormFields({ ...formFields, [name]: value, statusId: 200 });
+    } else {
+      setFormFields({ ...formFields, [name]: value });
+    }
   };
 
   const onSave = async () => {
@@ -42,9 +50,21 @@ const CustomForm = ({ formConfig, formFields, setFormFields, formSubmitHandler, 
       case 'CHECKBOX':
         console.log(formFields, 'checkbox fields');
         if (formFields.groupIds)
-          return <UserGroups userFields={formFields} setUserFields={setFormFields} />;
+          return (
+            <UserGroups
+              userFields={formFields}
+              setUserFields={setFormFields}
+              errorMessage={formErrors ? formErrors[key] : null}
+            />
+          );
         if (formFields.roleIds)
-          return <GroupRoles groupFields={formFields} setGroupFields={setFormFields} />;
+          return (
+            <GroupRoles
+              groupFields={formFields}
+              setGroupFields={setFormFields}
+              errorMessage={formErrors ? formErrors[key] : null}
+            />
+          );
 
       case 'TEXT':
       case 'PASSWORD':

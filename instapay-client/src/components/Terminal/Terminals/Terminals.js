@@ -8,9 +8,11 @@ import {
   terminalActionConfig,
 } from '../utils/terminalTable';
 import './Terminals.scss';
+import NotFound from '../../../security/NotFound/NotFound';
 
 const Terminals = () => {
   const [terminals, setTerminals] = useState(null);
+  const [pointOfSaleTitle, setPointOfSaleTitle] = useState('');
   const [activePage, setActivePage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
@@ -18,7 +20,16 @@ const Terminals = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    const fetchTerminals = async () => {
+    localStorage.setItem('pointOfSaleId', id);
+    const fetchPointOfSaleName = async (id) => {
+      try {
+        const response = await axios.get(`/user/pos/${id}/name`);
+        setPointOfSaleTitle(response.data);
+      } catch (err) {
+        setErrors(err.response);
+      }
+    };
+    const fetchTerminals = async (id) => {
       try {
         const response = await axios.get(`/user/pos/${id}/terminals`);
         setTerminals(response.data.content);
@@ -27,7 +38,9 @@ const Terminals = () => {
         setErrors(err.response);
       }
     };
-    fetchTerminals();
+
+    fetchPointOfSaleName(id);
+    fetchTerminals(id);
   }, [id]);
 
   const onPageChange = async (e, { activePage }) => {
@@ -76,22 +89,22 @@ const Terminals = () => {
     }
   };
 
-  return (
-    <div>
-      <div className="terminalsTable">
-        <CustomTable
-          tableTitle="Terminali"
-          tableAddItem={`/pos/${id}/terminals/add`}
-          tableHeader={terminalTableHeader}
-          tableActions={terminalActionConfig}
-          content={terminals && formatTerminalData(terminals)}
-          tableSearchHandler={onChangeSearchTerm}
-          tableActivePage={activePage}
-          tableHandlePageChange={onPageChange}
-          tableTotalPages={totalPages}
-          tableColumnSortHandler={onColumnSort}
-        />
-      </div>
+  return errors ? (
+    <NotFound message={errors.data} />
+  ) : (
+    <div className="terminalsTable">
+      <CustomTable
+        tableTitle={`${pointOfSaleTitle} - Terminali`}
+        tableAddItem={`/pos/${id}/terminals/add`}
+        tableHeader={terminalTableHeader}
+        tableActions={terminalActionConfig}
+        content={terminals && formatTerminalData(terminals)}
+        tableSearchHandler={onChangeSearchTerm}
+        tableActivePage={activePage}
+        tableHandlePageChange={onPageChange}
+        tableTotalPages={totalPages}
+        tableColumnSortHandler={onColumnSort}
+      />
     </div>
   );
 };

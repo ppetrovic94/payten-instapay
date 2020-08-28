@@ -17,9 +17,7 @@ const TerminalActions = ({ terminal, actionConfig }) => {
                   key={key}
                   content={action.label}
                   trigger={
-                    <Link
-                      className={terminal.status !== 'Active' ? 'disabledLink' : 'enabledLink'}
-                      to={{ pathname: action.redirectLink }}>
+                    <Link to={{ pathname: action.redirectLink }}>
                       <Icon color={'green'} name={action.icon} size="large" />
                     </Link>
                   }

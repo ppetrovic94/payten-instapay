@@ -26,14 +26,16 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
 
     private final PointOfSaleRepository pointOfSaleRepository;
     private final MapValidationErrorService mapValidationErrorService;
+    private final MerchantRepository merchantRepository;
     private final AcqStatusRepository acqStatusRepository;
     private final CityRepository cityRepository;
     private final PaymentMethodRepository paymentMethodRepository;
     private final ModelMapper modelMapper;
 
-    public PointOfSaleServiceImpl(PointOfSaleRepository pointOfSaleRepository, MapValidationErrorService mapValidationErrorService, AcqStatusRepository acqStatusRepository, CityRepository cityRepository, PaymentMethodRepository paymentMethodRepository, ModelMapper modelMapper) {
+    public PointOfSaleServiceImpl(PointOfSaleRepository pointOfSaleRepository, MapValidationErrorService mapValidationErrorService, MerchantRepository merchantRepository, AcqStatusRepository acqStatusRepository, CityRepository cityRepository, PaymentMethodRepository paymentMethodRepository, ModelMapper modelMapper) {
         this.pointOfSaleRepository = pointOfSaleRepository;
         this.mapValidationErrorService = mapValidationErrorService;
+        this.merchantRepository = merchantRepository;
         this.acqStatusRepository = acqStatusRepository;
         this.cityRepository = cityRepository;
         this.paymentMethodRepository = paymentMethodRepository;
@@ -45,7 +47,7 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
         Pageable page;
         Page<PointOfSale> pointOfSales = null;
 
-        if(!pointOfSaleRepository.existsByMerchantId(merchantId))
+        if(!merchantRepository.existsById(merchantId))
             throw new RequestedResourceNotFoundException("Ne postoji trgovac sa ID-em: " + merchantId);
 
         if (sortBy.isEmpty()){
@@ -72,6 +74,17 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
         }
 
         return convertToDto(found);
+    }
+
+    @Override
+    public String getPointOfSaleNameById(Integer pointOfSaleId) {
+        String pointOfSaleName = pointOfSaleRepository.getPointOfSaleNameById(pointOfSaleId);
+
+        if (pointOfSaleName == null) {
+            throw new RequestedResourceNotFoundException("Ne postoji prodajno mesto sa ID-em: " + pointOfSaleId);
+        }
+
+        return pointOfSaleName;
     }
 
     @Override

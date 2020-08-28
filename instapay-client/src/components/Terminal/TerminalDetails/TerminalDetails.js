@@ -4,10 +4,12 @@ import { useParams } from 'react-router-dom';
 import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import './TerminalDetails.scss';
+import NotFound from '../../../security/NotFound/NotFound';
 
 const TerminalDetails = () => {
   const [loading, setLoading] = useState(false);
   const [terminalDetails, setTerminalDetails] = useState(null);
+  const [notFound, setNotFound] = useState(null);
   const { id } = useParams();
 
   useEffect(() => {
@@ -19,7 +21,7 @@ const TerminalDetails = () => {
         setTerminalDetails(response.data);
         setLoading(false);
       } catch (err) {
-        console.error(err.response);
+        setNotFound(err.response);
       }
     };
 
@@ -27,10 +29,10 @@ const TerminalDetails = () => {
     setLoading(false);
   }, [id]);
 
-  console.log('render', terminalDetails && terminalDetails.userId);
-
   return loading ? (
     <CustomLoader />
+  ) : notFound ? (
+    <NotFound message={notFound.data} />
   ) : (
     terminalDetails && (
       <div className="terminalDetailsContainer">

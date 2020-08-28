@@ -5,7 +5,7 @@ import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import './UserGroups.scss';
 
-const UserGroups = ({ userFields, setUserFields }) => {
+const UserGroups = ({ userFields, setUserFields, errorMessage }) => {
   const [groups, setGroups] = useState(null);
   const [checkedGroups, setCheckedGroups] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -59,7 +59,7 @@ const UserGroups = ({ userFields, setUserFields }) => {
       <Table basic="very">
         <Table.Row>
           <Table.HeaderCell>Naziv</Table.HeaderCell>
-          <Table.HeaderCell>Opis</Table.HeaderCell>
+          <Table.HeaderCell className="userGroupDescription">Opis</Table.HeaderCell>
         </Table.Row>
         <Table.Body>
           {groups &&
@@ -80,6 +80,7 @@ const UserGroups = ({ userFields, setUserFields }) => {
             ))}
         </Table.Body>
       </Table>
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
     </div>
   );
 };

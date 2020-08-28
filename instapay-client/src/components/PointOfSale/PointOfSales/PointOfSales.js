@@ -8,6 +8,7 @@ import {
   pointOfSaleActionConfig,
 } from '../utils/pointOfSaleTable';
 import './PointOfSales.scss';
+import NotFound from '../../../security/NotFound/NotFound';
 
 const PointOfSales = () => {
   const [pointOfSales, setPointOfSales] = useState(null);
@@ -19,6 +20,7 @@ const PointOfSales = () => {
   const { id } = useParams();
 
   useEffect(() => {
+    localStorage.setItem('merchantId', id);
     const fetchMerchantName = async (id) => {
       try {
         const response = await axios.get(`/user/merchants/${id}/name`);
@@ -102,22 +104,22 @@ const PointOfSales = () => {
     }
   };
 
-  return (
-    <div>
-      <div className="pointOfSalesTable">
-        <CustomTable
-          tableTitle={merchantTitle ? `${merchantTitle} - Prodajna mesta` : 'Prodajna mesta'}
-          tableAddItem={`/merchant/${id}/pos/add`}
-          tableHeader={pointOfSaleTableHeader}
-          tableActions={pointOfSaleActionConfig}
-          content={pointOfSales && formatPointOfSalesData(pointOfSales)}
-          tableSearchHandler={onChangeSearchTerm}
-          tableActivePage={activePage}
-          tableHandlePageChange={onPageChange}
-          tableTotalPages={totalPages}
-          tableColumnSortHandler={onColumnSort}
-        />
-      </div>
+  return errors ? (
+    <NotFound message={errors.data} />
+  ) : (
+    <div className="pointOfSalesTable">
+      <CustomTable
+        tableTitle={merchantTitle ? `${merchantTitle} - Prodajna mesta` : 'Prodajna mesta'}
+        tableAddItem={`/merchant/${id}/pos/add`}
+        tableHeader={pointOfSaleTableHeader}
+        tableActions={pointOfSaleActionConfig}
+        content={pointOfSales && formatPointOfSalesData(pointOfSales)}
+        tableSearchHandler={onChangeSearchTerm}
+        tableActivePage={activePage}
+        tableHandlePageChange={onPageChange}
+        tableTotalPages={totalPages}
+        tableColumnSortHandler={onColumnSort}
+      />
     </div>
   );
 };

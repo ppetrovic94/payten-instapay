@@ -17,6 +17,7 @@ const CustomTable = ({
   tableHandlePageChange,
   tableTotalPages,
   tableColumnSortHandler,
+  onDeleteHandler,
 }) => {
   const intervalRef = useRef();
   const [direction, setDirection] = useState('ascending');
@@ -85,24 +86,23 @@ const CustomTable = ({
                     Object.keys(tableHeader).map((header, key) => {
                       return header === 'actions' && tableActions ? (
                         <Table.Cell key={key}>
-                          {item.merchantId && !item.pointOfSaleId && (
+                          {item.merchantId && (
                             <TableActions actions={tableActions(item.merchantId)} />
                           )}
                           {item.pointOfSaleId && (
-                            <TableActions
-                              actionIds={{
-                                merchantId: item.merchantId,
-                                pointOfSaleId: item.pointOfSaleId,
-                              }}
-                              actions={tableActions(item.pointOfSaleId)}
-                            />
+                            <TableActions actions={tableActions(item.pointOfSaleId)} />
                           )}
                           {item.terminalId && (
                             <TerminalActions terminal={item} actionConfig={tableActions} />
                           )}
                           {item.userId && <TableActions actions={tableActions(item.userId)} />}
                           {item.feeId && <TableActions actions={tableActions(item.feeId)} />}
-                          {item.cityId && <TableActions actions={tableActions(item.cityId)} />}
+                          {item.cityId && (
+                            <TableActions
+                              actions={tableActions()}
+                              onDeleteHandler={() => onDeleteHandler(item.cityId)}
+                            />
+                          )}
                         </Table.Cell>
                       ) : header == 'groups' ? (
                         <Table.Cell>

@@ -28,3 +28,22 @@
   background-color: #ff0230;
   width: 300px;
 }
+
+.logout {
+  width: 80px;
+  margin-right: 15px;
+}
+
+.logoutContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logoutLabel {
+  color: white;
+}
+
+.logoutIcon {
+  color: white;
+}

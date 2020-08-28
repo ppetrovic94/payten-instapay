@@ -78,6 +78,17 @@ const Cities = () => {
     }
   };
 
+  const onDelete = async (id) => {
+    setLoading(true);
+    try {
+      await axios.delete(`/user/cities/${id}/delete`);
+      fetchCities();
+      setLoading(false);
+    } catch (error) {
+      console.error(error.response);
+    }
+  };
+
   return (
     <div className="cityContainer">
       <div className="cityForm">
@@ -121,6 +132,7 @@ const Cities = () => {
             tableHandlePageChange={onPageChange}
             tableTotalPages={totalPages}
             tableColumnSortHandler={onColumnSort}
+            onDeleteHandler={onDelete}
           />
         )}
       </div>

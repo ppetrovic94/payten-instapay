@@ -5,7 +5,7 @@ import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import './GroupRoles.scss';
 
-const GroupRoles = ({ groupFields, setGroupFields }) => {
+const GroupRoles = ({ groupFields, setGroupFields, errorMessage }) => {
   const [roles, setRoles] = useState(null);
   const [checkedRoles, setCheckedRoles] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -59,7 +59,7 @@ const GroupRoles = ({ groupFields, setGroupFields }) => {
       <Table basic="very">
         <Table.Row>
           <Table.HeaderCell>Naziv</Table.HeaderCell>
-          <Table.HeaderCell>Opis</Table.HeaderCell>
+          <Table.HeaderCell className="groupRoleDescription">Opis</Table.HeaderCell>
         </Table.Row>
         <Table.Body>
           {roles &&
@@ -80,6 +80,7 @@ const GroupRoles = ({ groupFields, setGroupFields }) => {
             ))}
         </Table.Body>
       </Table>
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
     </div>
   );
 };

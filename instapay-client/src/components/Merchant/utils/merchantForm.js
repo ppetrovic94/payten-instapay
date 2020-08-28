@@ -32,7 +32,7 @@ export const merchantFormConfig = {
     title: 'Grad',
     type: 'DROPDOWN',
     options: [],
-    required: false,
+    required: true,
     disabled: false,
   },
   status: {

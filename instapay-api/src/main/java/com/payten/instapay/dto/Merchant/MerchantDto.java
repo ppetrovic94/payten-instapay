@@ -28,13 +28,15 @@ public class MerchantDto {
     @NotNull(message = "Morate izabrati trenutni status trgovca")
     private Integer statusId;
 
-    @NotNull(message = "Morate uneti MCC kod")
+    @NotNull(message = "Morate uneti MCC kod trgovca")
     private Integer mcc;
 
-    @NotEmpty(message = "Morate uneti broj racuna")
+    @NotEmpty(message = "Morate uneti broj računa trgovca")
     private String merchantAccount;
 
+    @NotEmpty(message = "Morate uneti grad trgovca")
     private Integer cityId;
+
     private String taxIdentityNumber;
     private String personalIdentityNumber;
     private Integer returnEnabled;

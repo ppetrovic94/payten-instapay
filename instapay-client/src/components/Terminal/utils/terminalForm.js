@@ -2,10 +2,10 @@ import axios from '../../../utils/API';
 
 export const terminalFormTemplate = {
   acquirerTid: '',
-  statusId: 100,
+  terminalTypeId: '',
+  statusId: null,
   paymentMethodId: '',
   setupDate: '',
-  terminalTypeId: '',
   terminalAccount: '',
 };
 
@@ -15,6 +15,14 @@ export const terminalFormConfig = {
     title: 'TID',
     type: 'TEXT',
     required: false,
+  },
+  terminalType: {
+    key: 'terminalTypeId',
+    title: 'Tip terminala',
+    type: 'DROPDOWN',
+    options: [],
+    required: true,
+    disabled: false,
   },
   status: {
     key: 'statusId',
@@ -29,17 +37,10 @@ export const terminalFormConfig = {
     title: 'Metod plaćanja',
     type: 'DROPDOWN',
     options: [],
-    required: true,
+    required: false,
     disabled: false,
   },
-  terminalType: {
-    key: 'terminalTypeId',
-    title: 'Tip terminala',
-    type: 'DROPDOWN',
-    options: [],
-    required: true,
-    disabled: false,
-  },
+
   setupDate: { key: 'setupDate', title: 'Datum postavljanja', type: 'DATE', required: true },
 
   terminalAccount: {
@@ -58,7 +59,7 @@ export const generateCredentials = async (id) => {
   }
 };
 
-export const getTerminalFormConfig = (data, isNew) => {
+export const getTerminalFormConfig = (data) => {
   return {
     ...terminalFormConfig,
     terminalType: {
@@ -81,7 +82,6 @@ export const getTerminalFormConfig = (data, isNew) => {
     },
     status: {
       ...terminalFormConfig.status,
-      disabled: isNew,
       options: data.statuses.map(({ statusId, statusName }) => {
         return {
           value: statusId,

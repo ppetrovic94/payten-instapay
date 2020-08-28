@@ -9,17 +9,28 @@ import {
   generateCredentials,
 } from '../utils/terminalForm';
 import './AddTerminal.scss';
+import NotFound from '../../../security/NotFound/NotFound';
 
 const AddTerminal = () => {
   const [loading, setLoading] = useState(false);
   const [terminalMetadata, setTerminalMetadata] = useState(null);
+  const [pointOfSaleTitle, setPointOfSaleTitle] = useState('');
   const [terminalFields, setTerminalFields] = useState({ ...terminalFormTemplate });
   const [terminalId, setTerminalId] = useState('');
   const [errors, setErrors] = useState(null);
+  const [notFound, setNotFound] = useState(null);
   const history = useHistory();
   const { id } = useParams();
 
   useEffect(() => {
+    const fetchPointOfSaleName = async (id) => {
+      try {
+        const response = await axios.get(`/user/pos/${id}/name`);
+        setPointOfSaleTitle(response.data);
+      } catch (err) {
+        setNotFound(err.response);
+      }
+    };
     const fetchTerminalMetadata = async () => {
       try {
         const response = await axios.get('/user/terminals/metadata');
@@ -28,6 +39,8 @@ const AddTerminal = () => {
         setErrors(err.response);
       }
     };
+
+    fetchPointOfSaleName(id);
     fetchTerminalMetadata();
   }, []);
 
@@ -53,14 +66,18 @@ const AddTerminal = () => {
     }
   };
 
+  console.log(terminalFields, 'custom forma add terminals');
+
   return loading ? (
     <CustomLoader />
+  ) : notFound ? (
+    <NotFound message={notFound.data} />
   ) : (
     terminalMetadata && (
       <div>
-        <h2 className="terminalFormHeader">Terminal</h2>
+        <h2 className="terminalFormHeader">{`${pointOfSaleTitle} - Dodavanje terminala`}</h2>
         <CustomForm
-          formConfig={getTerminalFormConfig(terminalMetadata, true)}
+          formConfig={getTerminalFormConfig(terminalMetadata)}
           formFields={terminalFields}
           setFormFields={setTerminalFields}
           formSubmitHandler={saveTerminal}

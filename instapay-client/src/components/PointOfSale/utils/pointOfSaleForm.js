@@ -46,14 +46,14 @@ export const pointOfSaleFormConfig = {
     key: 'pointOfSaleAccount',
     title: 'Broj računa',
     type: 'NUMBER',
-    required: true,
+    required: false,
   },
   paymentMethod: {
     key: 'paymentMethodId',
     title: 'Metod plaćanja',
     type: 'DROPDOWN',
     options: [],
-    required: true,
+    required: false,
     disabled: false,
   },
 };

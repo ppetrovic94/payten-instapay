@@ -65,6 +65,9 @@ public class UserServiceImpl implements UserService {
     public User addUser(UserDto userDto, BindingResult result) {
         Map<String, String> errorMap = mapValidationErrorService.validate(result);
 
+        if(userDto.getGroupIds().isEmpty())
+            errorMap.put("groupIds", "Korisnik mora imati dodeljenu bar jednu grupu uloga");
+
         if (errorMap != null) {
             throw new ValidationException(errorMap);
         } else {
@@ -88,6 +91,10 @@ public class UserServiceImpl implements UserService {
         }
 
         Map<String, String> errorMap = mapValidationErrorService.validate(result);
+
+        if(userDto.getGroupIds().isEmpty())
+            errorMap.put("groupIds", "Korisnik mora imati dodeljenu bar jednu grupu uloga");
+
         if (errorMap != null) {
             throw new ValidationException(errorMap);
         } else {

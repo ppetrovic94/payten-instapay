@@ -42,6 +42,12 @@ public class PointOfSaleController {
         return pointOfSaleService.findById(pointOfSaleId);
     }
 
+    @GetMapping("/pos/{pointOfSaleId}/name")
+    @ResponseStatus(value = HttpStatus.OK)
+    public String getPointOfSaleNameById(@PathVariable Integer pointOfSaleId){
+        return pointOfSaleService.getPointOfSaleNameById(pointOfSaleId);
+    }
+
     @PutMapping("/pos/{pointOfSaleId}/edit")
     @ResponseStatus(value = HttpStatus.OK)
     public PointOfSaleDto updatePointOfSale(@PathVariable Integer pointOfSaleId, @Valid @RequestBody PointOfSaleDto pointOfSale, BindingResult result) {

@@ -5,17 +5,29 @@ import { getPointOfSaleFormConfig, pointOfSaleFormTemplate } from '../utils/poin
 import CustomForm from '../../CustomForm/CustomForm';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import './EditPointOfSale.scss';
+import NotFound from '../../../security/NotFound/NotFound';
 
 const EditPointOfSale = () => {
   const [loading, setLoading] = useState(false);
   const [pointOfSaleMetadata, setPointOfSaleMetadata] = useState(null);
   const [formFields, setFormFields] = useState({ ...pointOfSaleFormTemplate });
+  const [merchantTitle, setMerchantTitle] = useState('');
   const [errors, setErrors] = useState(null);
+  const [notFound, setNotFound] = useState(null);
   let { id } = useParams();
   const history = useHistory();
 
   useEffect(() => {
     setLoading(true);
+    const fetchMerchantName = async () => {
+      const merchantId = localStorage.getItem('merchantId');
+      try {
+        const response = await axios.get(`/user/merchants/${merchantId}/name`);
+        setMerchantTitle(response.data);
+      } catch (err) {
+        setErrors(err.response);
+      }
+    };
     const fetchMerchantMetadata = async () => {
       try {
         const response = await axios.get('/user/merchants/metadata');
@@ -30,10 +42,11 @@ const EditPointOfSale = () => {
         console.log(response, 'response pos');
         setFormFields({ ...response.data });
       } catch (err) {
-        setErrors(err.response);
+        setNotFound(err.response);
       }
     };
 
+    fetchMerchantName();
     fetchMerchantMetadata();
     fetchPointOfSaleById(id);
     setLoading(false);
@@ -53,10 +66,12 @@ const EditPointOfSale = () => {
 
   return loading ? (
     <CustomLoader />
+  ) : notFound ? (
+    <NotFound message={notFound.data} />
   ) : (
     pointOfSaleMetadata && (
       <div>
-        <h2 className="pointOfSaleFormHeader">Prodajno mesto</h2>
+        <h2 className="pointOfSaleFormHeader">{`${merchantTitle} - Prodajno mesto`}</h2>
         <CustomForm
           formConfig={getPointOfSaleFormConfig(pointOfSaleMetadata)}
           formFields={formFields}

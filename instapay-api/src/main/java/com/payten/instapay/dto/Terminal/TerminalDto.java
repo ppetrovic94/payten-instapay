@@ -15,7 +15,6 @@ public class TerminalDto {
     @NotNull(message = "Morate izabrati trenutni status terminala")
     private Integer statusId;
 
-    @NotEmpty(message = "Morate izabrati metod plaćanja terminala")
     private String paymentMethodId;
 
     @NotEmpty(message = "Morate uneti datum unosa novog terminala")

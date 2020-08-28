@@ -64,6 +64,9 @@ public class GroupServiceImpl implements GroupService {
     public Group addGroup(GroupDto groupDto, BindingResult result) {
         Map<String, String> errorMap = mapValidationErrorService.validate(result);
 
+        if(groupDto.getRoleIds().isEmpty())
+            errorMap.put("roleIds", "Grupi mora biti dodeljena bar jedna uloga");
+
         if (errorMap != null) {
             throw new ValidationException(errorMap);
         } else {
@@ -88,6 +91,10 @@ public class GroupServiceImpl implements GroupService {
         }
 
         Map<String, String> errorMap = mapValidationErrorService.validate(result);
+
+        if(groupDto.getRoleIds().isEmpty())
+            errorMap.put("roleIds", "Grupi mora biti dodeljena bar jedna uloga");
+
         if (errorMap != null) {
             throw new ValidationException(errorMap);
         } else {

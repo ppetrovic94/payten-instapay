@@ -22,11 +22,9 @@ export const formatPointOfSalesData = (data) => {
       setupDate,
       pointOfSaleAccount,
       paymentMethod,
-      merchantId,
     }) => {
       return {
         pointOfSaleId,
-        merchantId,
         pointOfSaleLocalId,
         pointOfSaleName,
         pointOfSaleAddress,

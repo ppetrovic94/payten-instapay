@@ -9,18 +9,31 @@ import {
   generateCredentials,
 } from '../utils/terminalForm';
 import './EditTerminal.scss';
+import NotFound from '../../../security/NotFound/NotFound';
 
 const EditTerminal = () => {
   const [loading, setLoading] = useState(false);
   const [terminalMetadata, setTerminalMetadata] = useState(null);
+  const [pointOfSaleTitle, setPointOfSaleTitle] = useState('');
   const [terminalFields, setTerminalFields] = useState({ ...terminalFormTemplate });
   const [currentTerminal, setCurrentTerminal] = useState({});
   const [terminalId, setTerminalId] = useState('');
+  const [notFound, setNotFound] = useState(null);
   const [errors, setErrors] = useState(null);
+
   const history = useHistory();
   const { id } = useParams();
 
   useEffect(() => {
+    const fetchPointOfSaleName = async () => {
+      const posId = localStorage.getItem('pointOfSaleId');
+      try {
+        const response = await axios.get(`/user/pos/${posId}/name`);
+        setPointOfSaleTitle(response.data);
+      } catch (err) {
+        setErrors(err.response);
+      }
+    };
     const fetchTerminalMetadata = async () => {
       try {
         const response = await axios.get('/user/terminals/metadata');
@@ -36,10 +49,10 @@ const EditTerminal = () => {
         setTerminalFields({ ...response.data });
         setCurrentTerminal({ ...response.data });
       } catch (err) {
-        setErrors(err.response);
+        setNotFound(err.response);
       }
     };
-
+    fetchPointOfSaleName();
     fetchTerminalMetadata();
     fetchTerminalById(id);
   }, [id]);
@@ -73,10 +86,12 @@ const EditTerminal = () => {
 
   return loading ? (
     <CustomLoader />
+  ) : notFound ? (
+    <NotFound message={notFound.data} />
   ) : (
     terminalMetadata && (
       <div>
-        <h2 className="terminalFormHeader">Terminal</h2>
+        <h2 className="terminalFormHeader">{`${pointOfSaleTitle} - Izmena terminala`}</h2>
         <CustomForm
           formConfig={getTerminalFormConfig(terminalMetadata, false)}
           formFields={terminalFields}

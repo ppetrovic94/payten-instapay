@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from '../Header/Header';
-import { Switch } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import AddMerchant from '../Merchant/AddMerchant/AddMerchant';
 import EditMerchant from '../Merchant/EditMerchant/EditMerchant';
 import PointOfSales from '../PointOfSale/PointOfSales/PointOfSales';
@@ -22,6 +22,7 @@ import AddFee from '../Fee/AddFee/AddFee';
 import EditFee from '../Fee/EditFee/EditFee';
 import { ProtectedRoute } from '../../security/ProtectedRoute/ProtectedRoute';
 import Cities from '../City/Cities/Cities';
+import NotFound from '../../security/NotFound/NotFound';
 import './Layout.scss';
 
 const Layout = () => {
@@ -50,6 +51,7 @@ const Layout = () => {
         <ProtectedRoute path="/fees" exact component={Fees} />
         <ProtectedRoute path="/fees/add" exact component={AddFee} />
         <ProtectedRoute path="/fees/:id" exact component={EditFee} />
+        <Route component={NotFound} />
       </Switch>
     </div>
   );

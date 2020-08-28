@@ -5,11 +5,13 @@ import { getFormConfig, merchantFormTemplate } from '../utils/merchantForm';
 import CustomForm from '../../CustomForm/CustomForm';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import './EditMerchant.scss';
+import NotFound from '../../../security/NotFound/NotFound';
 
 const EditMerchant = () => {
   const [loading, setLoading] = useState(false);
   const [merchantMetadata, setMerchantMetadata] = useState(null);
   const [formFields, setFormFields] = useState({ ...merchantFormTemplate });
+  const [notFound, setNotFound] = useState(null);
   const [errors, setErrors] = useState(null);
   let { id } = useParams();
   const history = useHistory();
@@ -29,7 +31,7 @@ const EditMerchant = () => {
         const response = await axios.get(`/user/merchants/${id}`);
         setFormFields({ ...response.data });
       } catch (err) {
-        setErrors(err.response);
+        setNotFound(err.response);
       }
     };
 
@@ -52,6 +54,8 @@ const EditMerchant = () => {
 
   return loading ? (
     <CustomLoader />
+  ) : notFound ? (
+    <NotFound message={notFound.data} />
   ) : (
     merchantMetadata && (
       <div>

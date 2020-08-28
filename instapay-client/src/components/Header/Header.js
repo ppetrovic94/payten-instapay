@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { Menu, Dropdown } from 'semantic-ui-react';
+import { Menu, Dropdown, Icon } from 'semantic-ui-react';
 import axios from '../../utils/API';
 import Logo from './Logo';
 import './Header.scss';
@@ -58,24 +58,43 @@ const Header = () => {
           )}
           {roles && !!roles.find((role) => role === 'ROLE_ADMIN') && (
             <>
-              <Menu.Item name="Korisnici" active={activeItem == 'Korisnici'}>
-                <Dropdown text={'Korisnici'}>
-                  <Dropdown.Menu>
-                    <Dropdown.Item
-                      as={Link}
-                      to={'/users'}
-                      onClick={(e) => onItemClick(e, { name: 'Korisnici' })}>
-                      Lista korisnika
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      as={Link}
-                      to={'/groups'}
-                      onClick={(e) => onItemClick(e, { name: 'Korisnici' })}>
-                      Administracija grupa/uloga
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Menu.Item>
+              {!!roles.find((role) => role === 'ROLE_USER') ? (
+                <Menu.Item name="Korisnici" active={activeItem == 'Korisnici'}>
+                  <Dropdown text={'Korisnici'}>
+                    <Dropdown.Menu>
+                      <Dropdown.Item
+                        as={Link}
+                        to={'/users'}
+                        onClick={(e) => onItemClick(e, { name: 'Korisnici' })}>
+                        Lista korisnika
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        as={Link}
+                        to={'/groups'}
+                        onClick={(e) => onItemClick(e, { name: 'Korisnici' })}>
+                        Administracija grupa
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Menu.Item>
+              ) : (
+                <>
+                  <Menu.Item
+                    as={Link}
+                    to={'/users'}
+                    name={`Korisnici`}
+                    active={activeItem == 'Korisnici'}
+                    onClick={onItemClick}
+                  />
+                  <Menu.Item
+                    as={Link}
+                    to={'/groups'}
+                    name="Grupe"
+                    active={activeItem == 'Grupe'}
+                    onClick={onItemClick}
+                  />
+                </>
+              )}
             </>
           )}
           {roles && !!roles.find((role) => role === 'ROLE_ACQ') && (
@@ -92,8 +111,9 @@ const Header = () => {
         </Menu>
       </div>
       <div className="logout">
-        <Link onClick={onLogout} to="/">
-          Odjavi se
+        <Link className="logoutContainer" onClick={onLogout} to="/">
+          <Icon className="logoutIcon" name={'log out'} size="large" />
+          <p className="logoutLabel">Odjavi se</p>
         </Link>
       </div>
     </div>

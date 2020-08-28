@@ -5,11 +5,13 @@ import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
 import { userFormTemplate, userFormConfig } from '../utils/userForm';
 import './EditUser.scss';
+import NotFound from '../../../security/NotFound/NotFound';
 
 const EditUser = () => {
   const [loading, setLoading] = useState(false);
   const [formFields, setFormFields] = useState({ ...userFormTemplate });
   const [errors, setErrors] = useState(null);
+  const [notFound, setNotFound] = useState(null);
   const history = useHistory();
   const { id } = useParams();
 
@@ -19,7 +21,7 @@ const EditUser = () => {
         const response = await axios.get(`/admin/users/${id}`);
         setFormFields({ ...response.data });
       } catch (err) {
-        setErrors(err.response);
+        setNotFound(err.response);
       }
     };
     fetchUserById(id);
@@ -39,8 +41,10 @@ const EditUser = () => {
 
   return loading ? (
     <CustomLoader />
+  ) : notFound ? (
+    <NotFound message={notFound.data} />
   ) : (
-    <div>
+    <>
       <h2 className="userFormHeader">Izmena korisnika</h2>
       <CustomForm
         formConfig={userFormConfig}
@@ -49,7 +53,7 @@ const EditUser = () => {
         formSubmitHandler={updateUser}
         formErrors={errors}
       />
-    </div>
+    </>
   );
 };
 

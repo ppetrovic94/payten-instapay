@@ -14,13 +14,12 @@ export const formatCitiesData = (data) => {
   });
 };
 
-export const cityActionConfig = (id) => {
+export const cityActionConfig = () => {
   return [
     {
       type: 'DELETE',
       name: 'deleteCity',
       label: 'Ukloni',
-      redirectLink: '',
       icon: 'trash',
     },
   ];

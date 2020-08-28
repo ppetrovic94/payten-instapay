@@ -58,7 +58,7 @@ public class FeeServiceImpl implements FeeService {
         Pageable page;
         Page<FeeRule> feeRules = null;
 
-        if(!feeRuleRepository.existsByMerchant_MerchantId(merchantId))
+        if(!merchantRepository.existsById(merchantId))
             throw new RequestedResourceNotFoundException("Trgovac sa ID-em: " + merchantId + " ne postoji u bazi");
 
         if (sortBy.isEmpty()) {
@@ -139,7 +139,6 @@ public class FeeServiceImpl implements FeeService {
         if (productType == null) throw new RequestedResourceNotFoundException("Uneli ste nepostojeći tip proizvoda");
 
         Merchant merchant = merchantRepository.getByMerchantId(feeRuleDto.getMerchantId());
-        if (merchant == null) throw new RequestedResourceNotFoundException("Uneli ste nepostojećeg trgovca");
 
         if (feeRule == null) feeRule = new FeeRule();
 
@@ -159,10 +158,10 @@ public class FeeServiceImpl implements FeeService {
         feeRuleDto.setFeeReceiverId(feeRule.getFeeReceiver().getReceiverId());
         feeRuleDto.setFeeTypeId(feeRule.getFeeType().getTypeId());
         feeRuleDto.setProductTypeId(feeRule.getProductType().getTypeId());
-        feeRuleDto.setMerchantId(feeRule.getMerchant().getMerchantId());
+        feeRuleDto.setMerchantId(feeRule.getMerchant() != null ? feeRule.getMerchant().getMerchantId() : null);
         feeRuleDto.setAmount(feeRule.getAmount());
         feeRuleDto.setCondition(feeRule.getCondition());
-        feeRuleDto.setValidityDate(feeRule.getValidityDate().toString());
+        feeRuleDto.setValidityDate(feeRule.getValidityDate() != null ? feeRule.getValidityDate().toString() : null);
         return feeRuleDto;
     }
 

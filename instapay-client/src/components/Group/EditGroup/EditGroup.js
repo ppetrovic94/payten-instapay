@@ -5,11 +5,13 @@ import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
 import { groupFormTemplate, groupFormConfig } from '../utils/groupForm';
 import './EditGroup.scss';
+import NotFound from '../../../security/NotFound/NotFound';
 
 const EditGroup = () => {
   const [loading, setLoading] = useState(false);
   const [formFields, setFormFields] = useState({ ...groupFormTemplate });
   const [errors, setErrors] = useState(null);
+  const [notFound, setNotFound] = useState(null);
   const history = useHistory();
   const { id } = useParams();
 
@@ -20,7 +22,7 @@ const EditGroup = () => {
         console.log(response, 'response grupa ');
         setFormFields({ ...response.data });
       } catch (err) {
-        setErrors(err.response);
+        setNotFound(err.response);
       }
     };
     fetchGroupById(id);
@@ -42,8 +44,10 @@ const EditGroup = () => {
 
   return loading ? (
     <CustomLoader />
+  ) : notFound ? (
+    <NotFound message={notFound.data} />
   ) : (
-    <div>
+    <>
       <h2 className="groupFormHeader">Izmena grupe</h2>
       <CustomForm
         formConfig={groupFormConfig}
@@ -52,7 +56,7 @@ const EditGroup = () => {
         formSubmitHandler={updateGroup}
         formErrors={errors}
       />
-    </div>
+    </>
   );
 };
 

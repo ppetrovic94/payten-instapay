@@ -19,7 +19,7 @@ export const formatFeeData = (data) => {
         feeType: feeType ? feeType.typeName : '',
         productType: productType ? productType.typeName : '',
         condition,
-        amount,
+        amount: feeType.typeName == 'Procentualni' ? `${amount}%` : amount,
         validityDate,
       };
     },

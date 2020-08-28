@@ -5,10 +5,7 @@ import com.payten.instapay.dto.Terminal.TerminalMetadata;
 import com.payten.instapay.exceptions.handlers.RequestedResourceNotFoundException;
 import com.payten.instapay.exceptions.handlers.ValidationException;
 import com.payten.instapay.model.*;
-import com.payten.instapay.repositories.AcqStatusRepository;
-import com.payten.instapay.repositories.PaymentMethodRepository;
-import com.payten.instapay.repositories.TerminalRepository;
-import com.payten.instapay.repositories.TerminalTypeRepository;
+import com.payten.instapay.repositories.*;
 import com.payten.instapay.services.TerminalService;
 import com.payten.instapay.services.validation.MapValidationErrorService;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -27,13 +24,15 @@ import java.util.Map;
 public class TerminalServiceImpl implements TerminalService {
 
     private final TerminalRepository terminalRepository;
+    private final PointOfSaleRepository pointOfSaleRepository;
     private final PaymentMethodRepository paymentMethodRepository;
     private final MapValidationErrorService mapValidationErrorService;
     private final TerminalTypeRepository terminalTypeRepository;
     private final AcqStatusRepository acqStatusRepository;
 
-    public TerminalServiceImpl(TerminalRepository terminalRepository, PaymentMethodRepository paymentMethodRepository, MapValidationErrorService mapValidationErrorService, TerminalTypeRepository terminalTypeRepository, AcqStatusRepository acqStatusRepository) {
+    public TerminalServiceImpl(TerminalRepository terminalRepository, PointOfSaleRepository pointOfSaleRepository, PaymentMethodRepository paymentMethodRepository, MapValidationErrorService mapValidationErrorService, TerminalTypeRepository terminalTypeRepository, AcqStatusRepository acqStatusRepository) {
         this.terminalRepository = terminalRepository;
+        this.pointOfSaleRepository = pointOfSaleRepository;
         this.paymentMethodRepository = paymentMethodRepository;
         this.mapValidationErrorService = mapValidationErrorService;
         this.terminalTypeRepository = terminalTypeRepository;
@@ -45,7 +44,7 @@ public class TerminalServiceImpl implements TerminalService {
         Pageable page;
         Page<Terminal> terminals = null;
 
-        if(!terminalRepository.existsByPointOfSaleId(pointOfSaleId))
+        if(!pointOfSaleRepository.existsById(pointOfSaleId))
             throw new RequestedResourceNotFoundException("Prodajno mesto sa ID-em: " + pointOfSaleId + " ne postoji");
 
 
