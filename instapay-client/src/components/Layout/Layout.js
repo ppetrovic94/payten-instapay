@@ -23,6 +23,7 @@ import EditFee from '../Fee/EditFee/EditFee';
 import { ProtectedRoute } from '../../security/ProtectedRoute/ProtectedRoute';
 import Cities from '../City/Cities/Cities';
 import NotFound from '../../security/NotFound/NotFound';
+import Transactions from '../Transactions/Transactions';
 import './Layout.scss';
 
 const Layout = () => {
@@ -41,6 +42,7 @@ const Layout = () => {
         <ProtectedRoute path="/pos/:id/terminals/add" exact component={AddTerminal} />
         <ProtectedRoute path="/terminals/:id" exact component={EditTerminal} />
         <ProtectedRoute path="/terminals/:id/details" exact component={TerminalDetails} />
+        <ProtectedRoute path="/terminals/:id/transactions" exact component={Transactions} />
         <ProtectedRoute path="/cities" exact component={Cities} />
         <ProtectedRoute path="/users" exact component={Users} />
         <ProtectedRoute path="/users/add" exact component={AddUser} />

@@ -16,11 +16,13 @@ const Cities = () => {
   const [errors, setErrors] = useState(null);
 
   const fetchCities = async () => {
+    setLoading(true);
     try {
       const response = await axios.get('/user/cities');
       const { content: cities, totalPages } = (response && response.data) || {};
       setCities(cities);
       setTotalPages(totalPages);
+      setLoading(false);
     } catch (error) {
       setErrors(error.response);
     }
@@ -85,11 +87,14 @@ const Cities = () => {
       fetchCities();
       setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error(error.response);
     }
   };
 
-  return (
+  return loading ? (
+    <CustomLoader />
+  ) : (
     <div className="cityContainer">
       <div className="cityForm">
         <Form>
@@ -119,13 +124,11 @@ const Cities = () => {
         </Form>
       </div>
       <div className="cityTable">
-        {loading ? (
-          <CustomLoader />
-        ) : (
+        {cities && (
           <CustomTable
             tableTitle={'Gradovi'}
             tableHeader={cityTableHeader}
-            content={cities && formatCitiesData(cities)}
+            content={formatCitiesData(cities)}
             tableSearchHandler={onChangeSearchTerm}
             tableActions={cityActionConfig}
             tableActivePage={activePage}

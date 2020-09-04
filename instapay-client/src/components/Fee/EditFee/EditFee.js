@@ -26,11 +26,14 @@ const EditFee = () => {
       }
     };
     const fetchFeeById = async (id) => {
+      setLoading(true);
       try {
         const response = await axios.get(`/user/fees/${id}`);
         setFormFields({ ...response.data });
+        setLoading(false);
       } catch (err) {
         setNotFound(err.response);
+        setLoading(false);
       }
     };
 
@@ -52,22 +55,21 @@ const EditFee = () => {
 
   return loading ? (
     <CustomLoader />
+  ) : notFound ? (
+    <NotFound message={notFound.data} />
   ) : (
-    feeMetadata &&
-      (notFound ? (
-        <NotFound message={notFound.data} />
-      ) : (
-        <>
-          <h2 className="feeFormHeader">Izmena provizije</h2>
-          <CustomForm
-            formConfig={getFeeFormConfig(feeMetadata)}
-            formFields={formFields}
-            setFormFields={setFormFields}
-            formSubmitHandler={updateFee}
-            formErrors={errors}
-          />
-        </>
-      ))
+    feeMetadata && (
+      <>
+        <h2 className="feeFormHeader">Izmena provizije</h2>
+        <CustomForm
+          formConfig={getFeeFormConfig(feeMetadata)}
+          formFields={formFields}
+          setFormFields={setFormFields}
+          formSubmitHandler={updateFee}
+          formErrors={errors}
+        />
+      </>
+    )
   );
 };
 

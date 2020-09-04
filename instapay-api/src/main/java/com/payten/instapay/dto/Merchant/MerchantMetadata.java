@@ -1,6 +1,6 @@
 package com.payten.instapay.dto.Merchant;
 
-import com.payten.instapay.model.AcqStatus;
+import com.payten.instapay.model.Status;
 import com.payten.instapay.model.City;
 import com.payten.instapay.model.PaymentMethod;
 
@@ -9,7 +9,7 @@ import java.util.List;
 public class MerchantMetadata {
 
     private List<PaymentMethod> paymentMethods;
-    private List<AcqStatus> statuses;
+    private List<Status> statuses;
     private List<City> cities;
 
     public MerchantMetadata(){}
@@ -22,11 +22,11 @@ public class MerchantMetadata {
         this.paymentMethods = paymentMethods;
     }
 
-    public List<AcqStatus> getStatuses() {
+    public List<Status> getStatuses() {
         return statuses;
     }
 
-    public void setStatuses(List<AcqStatus> statuses) {
+    public void setStatuses(List<Status> statuses) {
         this.statuses = statuses;
     }
 

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Table } from 'semantic-ui-react';
-import _ from 'lodash';
 import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import './GroupRoles.scss';
@@ -32,7 +31,7 @@ const GroupRoles = ({ groupFields, setGroupFields, errorMessage }) => {
       roles.forEach((item) => {
         temp = {
           ...temp,
-          [item.roleId]: !!groupFields.roleIds.find((el) => item.roleId == el) || false,
+          [item.roleId]: !!groupFields.roleIds.find((el) => item.roleId === el) || false,
         };
       });
     }
@@ -47,7 +46,7 @@ const GroupRoles = ({ groupFields, setGroupFields, errorMessage }) => {
     } else {
       setGroupFields({
         ...groupFields,
-        roleIds: groupFields.roleIds.filter((elem) => elem != e.target.value),
+        roleIds: groupFields.roleIds.filter((elem) => elem !== e.target.value),
       });
     }
   };

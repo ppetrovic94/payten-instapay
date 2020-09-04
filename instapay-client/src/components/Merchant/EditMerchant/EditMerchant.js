@@ -17,7 +17,6 @@ const EditMerchant = () => {
   const history = useHistory();
 
   useEffect(() => {
-    setLoading(true);
     const fetchMerchantMetadata = async () => {
       try {
         const response = await axios.get('/user/merchants/metadata');
@@ -27,17 +26,19 @@ const EditMerchant = () => {
       }
     };
     const fetchMerchantById = async (id) => {
+      setLoading(true);
       try {
         const response = await axios.get(`/user/merchants/${id}`);
         setFormFields({ ...response.data });
+        setLoading(false);
       } catch (err) {
         setNotFound(err.response);
+        setLoading(false);
       }
     };
 
     fetchMerchantMetadata();
     fetchMerchantById(id);
-    setLoading(false);
   }, [id]);
 
   const editMerchant = async (updatedMerchant) => {
@@ -57,7 +58,8 @@ const EditMerchant = () => {
   ) : notFound ? (
     <NotFound message={notFound.data} />
   ) : (
-    merchantMetadata && (
+    merchantMetadata &&
+    formFields && (
       <div>
         <h2 className="merchantFormHeader">Trgovac</h2>
         <CustomForm

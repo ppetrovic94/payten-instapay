@@ -15,11 +15,14 @@ const AddMerchant = () => {
 
   useEffect(() => {
     const fetchMerchantMetadata = async () => {
+      setLoading(true);
       try {
         const response = await axios.get('/user/merchants/metadata');
         setMerchantMetadata(response.data);
+        setLoading(false);
       } catch (err) {
         setErrors(err.response);
+        setLoading(false);
       }
     };
     fetchMerchantMetadata();
@@ -43,7 +46,7 @@ const AddMerchant = () => {
   ) : (
     merchantMetadata && (
       <div>
-        <h2 className="merchantFormHeader">Trgovac</h2>
+        <h2 className="merchantFormHeader">Dodavanje trgovca</h2>
         <CustomForm
           formConfig={getFormConfig(merchantMetadata)}
           formFields={formFields}

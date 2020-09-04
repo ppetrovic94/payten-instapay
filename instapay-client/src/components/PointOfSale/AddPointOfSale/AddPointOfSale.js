@@ -27,11 +27,14 @@ const AddPointOfSale = () => {
       }
     };
     const fetchMerchantMetadata = async () => {
+      setLoading(true);
       try {
         const response = await axios.get('/user/merchants/metadata');
         setPointOfSaleMetadata(response.data);
+        setLoading(false);
       } catch (err) {
         setErrors(err.response);
+        setLoading(false);
       }
     };
     fetchMerchantName(id);

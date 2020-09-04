@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Form } from 'semantic-ui-react';
 import { Button, Dropdown } from 'semantic-ui-react';
 import _ from 'lodash';
@@ -6,20 +6,34 @@ import UserGroups from '../User/UserGroups/UserGroups';
 import './CustomForm.scss';
 import GroupRoles from '../Group/GroupRoles/GroupRoles';
 
-const CustomForm = ({ formConfig, formFields, setFormFields, formSubmitHandler, formErrors }) => {
+const CustomForm = ({
+  formConfig,
+  formFields,
+  setFormFields,
+  formSubmitHandler,
+  formErrors,
+  formWarnings,
+  setFormWarnings,
+}) => {
   const onChange = (e) => {
     setFormFields({ ...formFields, [e.target.name]: e.target.value });
   };
 
-  console.log(formFields, 'van');
-
   const handleDropdown = (e, { name, value }) => {
-    console.log(name, value, 'dropdown polje i vrednost');
-    if (name == 'terminalTypeId' && value === 1) {
-      console.log(formFields, 'usllooopooooooo');
+    if (name === 'terminalTypeId' && value === 1) {
       setFormFields({ ...formFields, [name]: value, statusId: 200 });
     } else {
       setFormFields({ ...formFields, [name]: value });
+    }
+
+    if (formWarnings) {
+      if (formWarnings.field === name && formFields['terminalTypeId'] === 1 && value !== 200) {
+        setFormWarnings({ ...formWarnings, active: true });
+      } else {
+        if (formWarnings.active) {
+          setFormWarnings({ ...formWarnings, active: false });
+        }
+      }
     }
   };
 
@@ -45,6 +59,9 @@ const CustomForm = ({ formConfig, formFields, setFormFields, formSubmitHandler, 
               disabled={disabled}
             />
             {formErrors && <p style={{ color: 'red' }}>{formErrors[key]}</p>}
+            {formWarnings && formWarnings.active && formWarnings.field === key && (
+              <p style={{ color: 'blue' }}>{formWarnings.message}</p>
+            )}
           </>
         );
       case 'CHECKBOX':
@@ -65,6 +82,7 @@ const CustomForm = ({ formConfig, formFields, setFormFields, formSubmitHandler, 
               errorMessage={formErrors ? formErrors[key] : null}
             />
           );
+        break;
 
       case 'TEXT':
       case 'PASSWORD':
@@ -97,7 +115,7 @@ const CustomForm = ({ formConfig, formFields, setFormFields, formSubmitHandler, 
             ) : (
               <label
                 className={
-                  value.title == 'Grupe' || value.title == 'Uloge' ? 'groupField' : 'singleField'
+                  value.title === 'Grupe' || value.title === 'Uloge' ? 'groupField' : 'singleField'
                 }>
                 {value.title}
               </label>

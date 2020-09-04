@@ -17,12 +17,15 @@ const EditGroup = () => {
 
   useEffect(() => {
     const fetchGroupById = async (id) => {
+      setLoading(true);
       try {
         const response = await axios.get(`/admin/groups/${id}`);
         console.log(response, 'response grupa ');
         setFormFields({ ...response.data });
+        setLoading(false);
       } catch (err) {
         setNotFound(err.response);
+        setLoading(false);
       }
     };
     fetchGroupById(id);

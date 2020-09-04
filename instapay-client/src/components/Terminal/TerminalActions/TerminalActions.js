@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Popup, Icon } from 'semantic-ui-react';
+import { Popup, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import './TerminalActions.scss';
 
@@ -10,8 +10,8 @@ const TerminalActions = ({ terminal, actionConfig }) => {
     <div className="actionContainer">
       {terminalActions &&
         terminalActions.map((action, key) => {
-          if (action.type == 'ANDROID_DETAILS') {
-            if (terminal.terminalType == 'Android') {
+          if (action.type === 'GET_ANDROID_DETAILS') {
+            if (terminal.terminalType === 'Android') {
               return (
                 <Popup
                   key={key}
@@ -30,7 +30,7 @@ const TerminalActions = ({ terminal, actionConfig }) => {
                 key={key}
                 content={action.label}
                 trigger={
-                  <Link as={Button} to={{ pathname: action.redirectLink }}>
+                  <Link to={{ pathname: action.redirectLink }}>
                     <Icon name={action.icon} size="large" />
                   </Link>
                 }

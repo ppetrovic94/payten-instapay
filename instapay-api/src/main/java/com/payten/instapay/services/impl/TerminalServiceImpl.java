@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,15 +29,15 @@ public class TerminalServiceImpl implements TerminalService {
     private final PaymentMethodRepository paymentMethodRepository;
     private final MapValidationErrorService mapValidationErrorService;
     private final TerminalTypeRepository terminalTypeRepository;
-    private final AcqStatusRepository acqStatusRepository;
+    private final StatusRepository statusRepository;
 
-    public TerminalServiceImpl(TerminalRepository terminalRepository, PointOfSaleRepository pointOfSaleRepository, PaymentMethodRepository paymentMethodRepository, MapValidationErrorService mapValidationErrorService, TerminalTypeRepository terminalTypeRepository, AcqStatusRepository acqStatusRepository) {
+    public TerminalServiceImpl(TerminalRepository terminalRepository, PointOfSaleRepository pointOfSaleRepository, PaymentMethodRepository paymentMethodRepository, MapValidationErrorService mapValidationErrorService, TerminalTypeRepository terminalTypeRepository, StatusRepository statusRepository) {
         this.terminalRepository = terminalRepository;
         this.pointOfSaleRepository = pointOfSaleRepository;
         this.paymentMethodRepository = paymentMethodRepository;
         this.mapValidationErrorService = mapValidationErrorService;
         this.terminalTypeRepository = terminalTypeRepository;
-        this.acqStatusRepository = acqStatusRepository;
+        this.statusRepository = statusRepository;
     }
 
     @Override
@@ -65,7 +66,18 @@ public class TerminalServiceImpl implements TerminalService {
     }
 
     @Override
-    public TerminalDto findById(Integer terminalId) {
+    public Terminal findById(Integer terminalId) {
+        Terminal found = terminalRepository.getByTerminalId(terminalId);
+
+        if (found == null) {
+            throw new RequestedResourceNotFoundException("Terminal sa ID-em: " + terminalId + " ne postoji");
+        }
+
+        return found;
+    }
+
+    @Override
+    public TerminalDto findDtoById(Integer terminalId) {
         Terminal found = terminalRepository.getByTerminalId(terminalId);
 
         if (found == null) {
@@ -124,7 +136,7 @@ public class TerminalServiceImpl implements TerminalService {
         TerminalMetadata terminalMetadata = new TerminalMetadata();
 
         List<PaymentMethod> paymentMethods = paymentMethodRepository.findAll();
-        List<AcqStatus> statuses = acqStatusRepository.findAll();
+        List<Status> statuses = statusRepository.findAll();
         List<TerminalType> terminalTypes = terminalTypeRepository.findAll();
 
         terminalMetadata.setPaymentMethods(paymentMethods);
@@ -133,6 +145,18 @@ public class TerminalServiceImpl implements TerminalService {
 
         return terminalMetadata;
     }
+
+    @Override
+    public String getAcquirerTidById(Integer terminalId) {
+        String acquirerTid = terminalRepository.getAcquirerTidById(terminalId);
+
+        if (acquirerTid == null) {
+            throw new RequestedResourceNotFoundException("Ne postoji terminal sa ID-em: " + terminalId);
+        }
+
+        return acquirerTid;
+    }
+
 
     @Override
     public void deleteTerminal(Integer terminalId) {
@@ -146,24 +170,21 @@ public class TerminalServiceImpl implements TerminalService {
     }
 
     @Override
-    public void generateCredentials(Integer terminalId) {
-        Terminal found = terminalRepository.getByTerminalId(terminalId);
-
-        if (found == null) {
-            throw new RequestedResourceNotFoundException("Terminal sa ID-em: " + terminalId + " ne postoji");
+    @Transactional
+    public void generateCredentials(Integer terminalId, boolean regenerate) {
+        if (regenerate) {
+            terminalRepository.updateTerminalStatusToInactive(terminalId, statusRepository.getStatusByStatusName("Inactive"));
         }
-
         terminalRepository.generateCredentials(terminalId);
     }
 
+
     private Terminal convertToEntity(TerminalDto terminalDto, Terminal terminal){
 
-        AcqStatus status = acqStatusRepository.getAcqStatusByStatusId(terminalDto.getStatusId());
+        Status status = statusRepository.getStatusByStatusId(terminalDto.getStatusId());
         if (status == null) { throw new RequestedResourceNotFoundException("Ne postoji status sa ID-em " + terminalDto.getStatusId()); }
 
         PaymentMethod paymentMethod = paymentMethodRepository.getByPaymentMethodId(terminalDto.getPaymentMethodId());
-        if (paymentMethod == null) { throw new RequestedResourceNotFoundException("Ne postoji metod plaćanja sa ID-em " + terminalDto.getPaymentMethodId()); }
-
         TerminalType terminalType = terminalTypeRepository.getByTerminalTypeId(terminalDto.getTerminalTypeId());
 
         if(terminal == null) {

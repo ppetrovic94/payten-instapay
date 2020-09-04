@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="ACQ_status")
-public class AcqStatus {
+public class Status {
 
     @Id
     @Column(name="STATUS_ID")
@@ -16,7 +16,7 @@ public class AcqStatus {
     @Column(name="STATUS_NAME")
     private String statusName;
 
-    public AcqStatus() {
+    public Status() {
     }
 
     public Integer getStatusId() {

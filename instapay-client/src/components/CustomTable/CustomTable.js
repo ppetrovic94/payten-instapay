@@ -1,10 +1,11 @@
 import React, { useRef, useState } from 'react';
-import { Table, Input, Button, Pagination } from 'semantic-ui-react';
+import { Table, Input, Button, Pagination, Breadcrumb } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import TableActions from '../TableActions/TableActions';
 import './CustomTable.scss';
 import TerminalActions from '../Terminal/TerminalActions/TerminalActions';
+import TransactionActions from '../Transactions/TransactionActions/TransactionActions';
 
 const CustomTable = ({
   tableTitle,
@@ -18,6 +19,7 @@ const CustomTable = ({
   tableTotalPages,
   tableColumnSortHandler,
   onDeleteHandler,
+  navbarSections,
 }) => {
   const intervalRef = useRef();
   const [direction, setDirection] = useState('ascending');
@@ -30,7 +32,7 @@ const CustomTable = ({
   };
 
   const handleClickedColumn = (clickedColumn) => {
-    setDirection(direction == 'ascending' ? 'descending' : 'ascending');
+    setDirection(direction === 'ascending' ? 'descending' : 'ascending');
     setColumn(clickedColumn);
     tableColumnSortHandler(clickedColumn, direction);
   };
@@ -39,7 +41,16 @@ const CustomTable = ({
     <div className="tableDetails">
       <div className="tableHeader">
         <div className="tableTitle">
-          <h3>{tableTitle ? tableTitle : ''}</h3>
+          {tableTitle ? (
+            <h3>{tableTitle}</h3>
+          ) : (
+            <Breadcrumb
+              className="tableNavbar"
+              icon="right angle"
+              sections={navbarSections}
+              size="large"
+            />
+          )}
         </div>
         <div className="tableHeaderWrapper">
           {tableAddItem && (
@@ -49,14 +60,16 @@ const CustomTable = ({
               </Button>
             </div>
           )}
-          <div className="tableSearch">
-            <Input
-              icon={{ name: 'search', circular: true, link: true }}
-              placeholder="Pretraži..."
-              type="text"
-              onChange={handleTextInputChange}
-            />
-          </div>
+          {tableSearchHandler && (
+            <div className="tableSearch">
+              <Input
+                icon={{ name: 'search', circular: true, link: true }}
+                placeholder="Pretraži..."
+                type="text"
+                onChange={handleTextInputChange}
+              />
+            </div>
+          )}
         </div>
       </div>
       <div className="tableContent">
@@ -70,7 +83,7 @@ const CustomTable = ({
                   ) : (
                     <Table.HeaderCell
                       key={key}
-                      sorted={column == key ? direction : null}
+                      sorted={column === key ? direction : null}
                       onClick={() => handleClickedColumn(key)}>
                       {value}
                     </Table.HeaderCell>
@@ -78,9 +91,9 @@ const CustomTable = ({
                 })}
             </Table.Row>
           </Table.Header>
-          <Table.Body>
-            {content &&
-              content.map((item, key) => (
+          {content && !!content.length && (
+            <Table.Body>
+              {content.map((item, key) => (
                 <Table.Row key={key}>
                   {tableHeader &&
                     Object.keys(tableHeader).map((header, key) => {
@@ -95,16 +108,32 @@ const CustomTable = ({
                           {item.terminalId && (
                             <TerminalActions terminal={item} actionConfig={tableActions} />
                           )}
-                          {item.userId && <TableActions actions={tableActions(item.userId)} />}
-                          {item.feeId && <TableActions actions={tableActions(item.feeId)} />}
+                          {item.userId && (
+                            <TableActions
+                              actions={tableActions(item.userId)}
+                              onDeleteHandler={() => onDeleteHandler(item.userId)}
+                            />
+                          )}
+                          {item.feeId && (
+                            <TableActions
+                              actions={tableActions(item.feeId)}
+                              onDeleteHandler={() => onDeleteHandler(item.feeId)}
+                            />
+                          )}
                           {item.cityId && (
                             <TableActions
                               actions={tableActions()}
                               onDeleteHandler={() => onDeleteHandler(item.cityId)}
                             />
                           )}
+                          {item.endToEndId && (
+                            <TransactionActions
+                              actions={tableActions(item.endToEndId)}
+                              endToEndId={item.endToEndId}
+                            />
+                          )}
                         </Table.Cell>
-                      ) : header == 'groups' ? (
+                      ) : header === 'groups' ? (
                         <Table.Cell>
                           <div className="groupWrapper">
                             {item[header].map((groupName) => {
@@ -118,17 +147,23 @@ const CustomTable = ({
                     })}
                 </Table.Row>
               ))}
-          </Table.Body>
+            </Table.Body>
+          )}
         </Table>
       </div>
-      <div className="tablePageing">
-        <Pagination
-          siblingRange={null}
-          activePage={tableActivePage}
-          onPageChange={tableHandlePageChange}
-          totalPages={tableTotalPages}
-        />
-      </div>
+      {(!content || !content.length) && (
+        <div className="tableNoContent">Tabela ne sadrži podatke</div>
+      )}
+      {tableActivePage && (
+        <div className="tablePageing">
+          <Pagination
+            siblingRange={null}
+            activePage={tableActivePage}
+            onPageChange={tableHandlePageChange}
+            totalPages={tableTotalPages}
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -24,10 +24,9 @@ const LoginForm = () => {
     try {
       const res = await axios.post('/login', loginRequest);
       onLogin({ roles: getRoles(res.data) });
-      //history.push('/merchants');
       redirectBasedOnRole(res.data);
     } catch (err) {
-      console.log('error', err.response.data);
+      console.log('error', err.response);
       setError(err.response.data);
     }
   };
@@ -38,9 +37,9 @@ const LoginForm = () => {
 
   const redirectBasedOnRole = (authorities) => {
     const roles = getRoles(authorities);
-    if (roles[0] == 'ROLE_USER') {
+    if (roles[0] === 'ROLE_USER') {
       history.push('/merchants');
-    } else if (roles[0] == 'ROLE_ADMIN') {
+    } else if (roles[0] === 'ROLE_ADMIN') {
       history.push('/users');
     }
   };
@@ -72,9 +71,7 @@ const LoginForm = () => {
           </Form.Field>
           {error && <p style={{ color: 'red' }}>{error}</p>}
           <div className="submitButton">
-            <Button color={'#ff0230'} type="submit">
-              Prijavi se
-            </Button>
+            <Button type="submit">Prijavi se</Button>
           </div>
         </Form>
       </div>

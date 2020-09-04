@@ -9,10 +9,12 @@ import {
 } from '../utils/terminalTable';
 import './Terminals.scss';
 import NotFound from '../../../security/NotFound/NotFound';
+import CustomLoader from '../../CustomLoader/CustomLoader';
 
 const Terminals = () => {
+  const [loading, setLoading] = useState(false);
   const [terminals, setTerminals] = useState(null);
-  const [pointOfSaleTitle, setPointOfSaleTitle] = useState('');
+  const [sections, setSections] = useState([]);
   const [activePage, setActivePage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
@@ -21,25 +23,42 @@ const Terminals = () => {
 
   useEffect(() => {
     localStorage.setItem('pointOfSaleId', id);
-    const fetchPointOfSaleName = async (id) => {
+
+    const fetchNavbarData = async (id) => {
+      const merchantId = localStorage.getItem('merchantId');
       try {
-        const response = await axios.get(`/user/pos/${id}/name`);
-        setPointOfSaleTitle(response.data);
+        const posName = await axios.get(`/user/pos/${id}/name`);
+        const merchantName = await axios.get(`/user/merchants/${merchantId}/name`);
+        setSections([
+          {
+            key: 'merchantName',
+            content: merchantName.data,
+            href: `/merchant/${merchantId}/pos`,
+          },
+          {
+            key: 'pointOfSaleName',
+            content: posName.data,
+          },
+          { key: 'terminals', content: 'Terminali' },
+        ]);
       } catch (err) {
         setErrors(err.response);
       }
     };
     const fetchTerminals = async (id) => {
+      setLoading(true);
       try {
         const response = await axios.get(`/user/pos/${id}/terminals`);
         setTerminals(response.data.content);
         setTotalPages(response.data.totalPages);
+        setLoading(false);
       } catch (err) {
         setErrors(err.response);
+        setLoading(false);
       }
     };
 
-    fetchPointOfSaleName(id);
+    fetchNavbarData(id);
     fetchTerminals(id);
   }, [id]);
 
@@ -91,21 +110,25 @@ const Terminals = () => {
 
   return errors ? (
     <NotFound message={errors.data} />
+  ) : loading ? (
+    <CustomLoader />
   ) : (
-    <div className="terminalsTable">
-      <CustomTable
-        tableTitle={`${pointOfSaleTitle} - Terminali`}
-        tableAddItem={`/pos/${id}/terminals/add`}
-        tableHeader={terminalTableHeader}
-        tableActions={terminalActionConfig}
-        content={terminals && formatTerminalData(terminals)}
-        tableSearchHandler={onChangeSearchTerm}
-        tableActivePage={activePage}
-        tableHandlePageChange={onPageChange}
-        tableTotalPages={totalPages}
-        tableColumnSortHandler={onColumnSort}
-      />
-    </div>
+    terminals && (
+      <div className="terminalsTable">
+        <CustomTable
+          tableAddItem={`/pos/${id}/terminals/add`}
+          tableHeader={terminalTableHeader}
+          tableActions={terminalActionConfig}
+          content={formatTerminalData(terminals)}
+          tableSearchHandler={onChangeSearchTerm}
+          tableActivePage={activePage}
+          tableHandlePageChange={onPageChange}
+          tableTotalPages={totalPages}
+          tableColumnSortHandler={onColumnSort}
+          navbarSections={sections}
+        />
+      </div>
+    )
   );
 };
 

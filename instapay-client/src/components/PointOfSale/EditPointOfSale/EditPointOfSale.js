@@ -18,7 +18,6 @@ const EditPointOfSale = () => {
   const history = useHistory();
 
   useEffect(() => {
-    setLoading(true);
     const fetchMerchantName = async () => {
       const merchantId = localStorage.getItem('merchantId');
       try {
@@ -37,19 +36,21 @@ const EditPointOfSale = () => {
       }
     };
     const fetchPointOfSaleById = async (id) => {
+      setLoading(true);
       try {
         const response = await axios.get(`/user/pos/${id}`);
         console.log(response, 'response pos');
         setFormFields({ ...response.data });
+        setLoading(false);
       } catch (err) {
         setNotFound(err.response);
+        setLoading(false);
       }
     };
 
     fetchMerchantName();
     fetchMerchantMetadata();
     fetchPointOfSaleById(id);
-    setLoading(false);
   }, [id]);
 
   const editPointOfSale = async (updatedPointOfSale) => {

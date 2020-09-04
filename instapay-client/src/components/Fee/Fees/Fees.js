@@ -5,8 +5,10 @@ import CustomTable from '../../CustomTable/CustomTable';
 import { feeTableHeader, formatFeeData, feeActionConfig } from '../utils/feeTable';
 import './Fees.scss';
 import NotFound from '../../../security/NotFound/NotFound';
+import CustomLoader from '../../CustomLoader/CustomLoader';
 
 const Fees = () => {
+  const [loading, setLoading] = useState(false);
   const [fees, setFees] = useState(null);
   const [merchantName, setMerchantName] = useState(null);
   const [activePage, setActivePage] = useState(1);
@@ -16,31 +18,6 @@ const Fees = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    const fetchFeesByMerchantId = async (merchantId) => {
-      try {
-        const response = await axios.get(`/user/merchants/${merchantId}/fees`);
-        setFees(response.data.content);
-        setTotalPages(response.data.totalPages);
-        if (response.data.content[0]) {
-          setMerchantName(response.data.content[0].merchant.merchantName);
-        } else {
-          const res = await axios.get(`/user/merchants/${merchantId}/name`);
-          setMerchantName(res.data);
-        }
-      } catch (err) {
-        setErrors(err.response);
-      }
-    };
-    const fetchFees = async () => {
-      try {
-        const response = await axios.get(`/user/fees`);
-        setFees(response.data.content);
-        setTotalPages(response.data.totalPages);
-      } catch (err) {
-        setErrors(err.response);
-      }
-    };
-
     if (id) {
       fetchFeesByMerchantId(id);
     } else {
@@ -52,6 +29,54 @@ const Fees = () => {
       setErrors(null);
     };
   }, [id]);
+
+  const fetchFeesByMerchantId = async (merchantId) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`/user/merchants/${merchantId}/fees`);
+      setFees(response.data.content);
+      setTotalPages(response.data.totalPages);
+      if (response.data.content[0]) {
+        setMerchantName(response.data.content[0].merchant.merchantName);
+      } else {
+        const res = await axios.get(`/user/merchants/${merchantId}/name`);
+        setMerchantName(res.data);
+      }
+      setLoading(false);
+    } catch (err) {
+      setErrors(err.response);
+      setLoading(false);
+    }
+  };
+  const fetchFees = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`/user/fees`);
+      setFees(response.data.content);
+      setTotalPages(response.data.totalPages);
+      setLoading(false);
+    } catch (err) {
+      setErrors(err.response);
+      setLoading(false);
+    }
+  };
+
+  const onDeleteFee = async (feeRuleId) => {
+    setLoading(true);
+    try {
+      await axios.delete(`/user/fees/${feeRuleId}/delete`);
+      setLoading(false);
+
+      if (id) {
+        fetchFeesByMerchantId(id);
+      } else {
+        fetchFees();
+      }
+    } catch (error) {
+      console.error(error.response);
+      setLoading(false);
+    }
+  };
 
   const onPageChange = async (e, { activePage }) => {
     setActivePage(activePage);
@@ -85,8 +110,6 @@ const Fees = () => {
   };
 
   const onColumnSort = async (column, direction) => {
-    console.log('onColumnSort');
-    console.log('---- column clicked', column, direction);
     let sortedFees;
     switch (column) {
       case 'merchant':
@@ -164,21 +187,26 @@ const Fees = () => {
 
   return errors ? (
     <NotFound message={errors.data} />
+  ) : loading ? (
+    <CustomLoader />
   ) : (
-    <div className="feesTable">
-      <CustomTable
-        tableTitle={merchantName ? `${merchantName} - Provizije` : 'Provizije'}
-        tableAddItem={'/fees/add'}
-        tableHeader={feeTableHeader}
-        content={fees && formatFeeData(fees)}
-        tableSearchHandler={onChangeSearchTerm}
-        tableActions={feeActionConfig}
-        tableActivePage={activePage}
-        tableHandlePageChange={onPageChange}
-        tableTotalPages={totalPages}
-        tableColumnSortHandler={onColumnSort}
-      />
-    </div>
+    fees && (
+      <div className="feesTable">
+        <CustomTable
+          tableTitle={merchantName ? `${merchantName} - Provizije` : 'Provizije'}
+          tableAddItem={'/fees/add'}
+          tableHeader={feeTableHeader}
+          content={formatFeeData(fees)}
+          tableSearchHandler={onChangeSearchTerm}
+          tableActions={feeActionConfig}
+          tableActivePage={activePage}
+          tableHandlePageChange={onPageChange}
+          tableTotalPages={totalPages}
+          tableColumnSortHandler={onColumnSort}
+          onDeleteHandler={onDeleteFee}
+        />
+      </div>
+    )
   );
 };
 

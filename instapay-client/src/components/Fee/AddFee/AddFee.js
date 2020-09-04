@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
-import { feeFormConfig, getFeeFormConfig, feeFormTemplate } from '../utils/feeForm';
+import { getFeeFormConfig, feeFormTemplate } from '../utils/feeForm';
 import './AddFee.scss';
 
 const AddFee = () => {
@@ -15,11 +15,14 @@ const AddFee = () => {
 
   useEffect(() => {
     const fetchFeeMetadata = async () => {
+      setLoading(true);
       try {
         const response = await axios.get('/user/fees/metadata');
         setFeeMetadata(response.data);
+        setLoading(false);
       } catch (err) {
         setErrors(err.response);
+        setLoading(false);
       }
     };
     fetchFeeMetadata();

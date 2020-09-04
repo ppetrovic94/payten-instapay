@@ -22,7 +22,7 @@ const AuthDataProvider = (props) => {
       // Do something with response error
       console.log('error status', error.response.status);
       //setAuthData({ ...authData, isAuthenticated: false });
-      if (error.response.status == 403) {
+      if (error.response.status === 403) {
         document.cookie = 'JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         history.push('/');
       }

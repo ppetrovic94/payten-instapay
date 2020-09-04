@@ -37,21 +37,21 @@ const Header = () => {
                 as={Link}
                 to={'/merchants'}
                 name="Trgovci"
-                active={activeItem == 'Trgovci'}
+                active={activeItem === 'Trgovci'}
                 onClick={onItemClick}
               />
               <Menu.Item
                 as={Link}
                 to={'/cities'}
                 name={`Gradovi`}
-                active={activeItem == 'Gradovi'}
+                active={activeItem === 'Gradovi'}
                 onClick={onItemClick}
               />
               <Menu.Item
                 as={Link}
                 to={'/fees'}
                 name="Provizije"
-                active={activeItem == 'Provizije'}
+                active={activeItem === 'Provizije'}
                 onClick={onItemClick}
               />
             </>
@@ -59,7 +59,7 @@ const Header = () => {
           {roles && !!roles.find((role) => role === 'ROLE_ADMIN') && (
             <>
               {!!roles.find((role) => role === 'ROLE_USER') ? (
-                <Menu.Item name="Korisnici" active={activeItem == 'Korisnici'}>
+                <Menu.Item name="Korisnici" active={activeItem === 'Korisnici'}>
                   <Dropdown text={'Korisnici'}>
                     <Dropdown.Menu>
                       <Dropdown.Item
@@ -83,14 +83,14 @@ const Header = () => {
                     as={Link}
                     to={'/users'}
                     name={`Korisnici`}
-                    active={activeItem == 'Korisnici'}
+                    active={activeItem === 'Korisnici'}
                     onClick={onItemClick}
                   />
                   <Menu.Item
                     as={Link}
                     to={'/groups'}
                     name="Grupe"
-                    active={activeItem == 'Grupe'}
+                    active={activeItem === 'Grupe'}
                     onClick={onItemClick}
                   />
                 </>
@@ -103,7 +103,7 @@ const Header = () => {
                 as={Link}
                 to={'/reports'}
                 name="Izveštaji"
-                active={activeItem == 'Izveštaji'}
+                active={activeItem === 'Izveštaji'}
                 onClick={onItemClick}
               />
             </>

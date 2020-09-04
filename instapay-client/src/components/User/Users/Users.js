@@ -3,8 +3,10 @@ import axios from '../../../utils/API';
 import CustomTable from '../../CustomTable/CustomTable';
 import { userTableHeader, formatUserData, userActionConfig } from '../utils/userTable';
 import './Users.scss';
+import CustomLoader from '../../CustomLoader/CustomLoader';
 
 const Users = () => {
+  const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState(null);
   const [activePage, setActivePage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -12,17 +14,33 @@ const Users = () => {
   const [errors, setErrors] = useState(null);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get(`/admin/users`);
-        setUsers(response.data.content);
-        setTotalPages(response.data.totalPages);
-      } catch (err) {
-        setErrors(err.response);
-      }
-    };
     fetchUsers();
   }, []);
+
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`/admin/users`);
+      setUsers(response.data.content);
+      setTotalPages(response.data.totalPages);
+      setLoading(false);
+    } catch (err) {
+      setErrors(err.response);
+      setLoading(false);
+    }
+  };
+
+  const onDeleteUser = async (userId) => {
+    setLoading(true);
+    try {
+      await axios.delete(`/admin/users/${userId}/delete`);
+      setLoading(false);
+      fetchUsers();
+    } catch (error) {
+      console.error(error.response);
+      setLoading(false);
+    }
+  };
 
   const onPageChange = async (e, { activePage }) => {
     setActivePage(activePage);
@@ -56,23 +74,26 @@ const Users = () => {
     setUsers(sortedUsers.data.content);
   };
 
-  return (
-    <div>
+  return loading ? (
+    <CustomLoader />
+  ) : (
+    users && (
       <div className="usersTable">
         <CustomTable
           tableTitle="Korisnici"
           tableAddItem={'/users/add'}
           tableHeader={userTableHeader}
-          content={users && formatUserData(users)}
+          content={formatUserData(users)}
           tableSearchHandler={onChangeSearchTerm}
           tableActions={userActionConfig}
           tableActivePage={activePage}
           tableHandlePageChange={onPageChange}
           tableTotalPages={totalPages}
           tableColumnSortHandler={onColumnSort}
+          onDeleteHandler={onDeleteUser}
         />
       </div>
-    </div>
+    )
   );
 };
 

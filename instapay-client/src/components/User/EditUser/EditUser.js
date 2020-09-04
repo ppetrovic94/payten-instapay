@@ -17,11 +17,14 @@ const EditUser = () => {
 
   useEffect(() => {
     const fetchUserById = async (id) => {
+      setLoading(true);
       try {
         const response = await axios.get(`/admin/users/${id}`);
         setFormFields({ ...response.data });
+        setLoading(false);
       } catch (err) {
         setNotFound(err.response);
+        setLoading(false);
       }
     };
     fetchUserById(id);

@@ -1,10 +1,12 @@
 package com.payten.instapay.services.impl;
 
 import com.payten.instapay.dto.Group.GroupDto;
+import com.payten.instapay.exceptions.handlers.BadRequestException;
 import com.payten.instapay.exceptions.handlers.RequestedResourceNotFoundException;
 import com.payten.instapay.exceptions.handlers.ValidationException;
 import com.payten.instapay.model.Group;
 import com.payten.instapay.model.Role;
+import com.payten.instapay.model.User;
 import com.payten.instapay.repositories.GroupRepository;
 import com.payten.instapay.repositories.RoleRepository;
 import com.payten.instapay.services.GroupService;
@@ -115,6 +117,13 @@ public class GroupServiceImpl implements GroupService {
 
         if (found == null) {
             throw new RequestedResourceNotFoundException("Grupa sa ID-em: " + groupId + " ne postoji");
+        }
+
+        if (!found.getUsers().isEmpty()){
+            StringBuilder usersString = new StringBuilder();
+            for (User user : found.getUsers())
+                usersString.append(user.getUsername()).append(", ");
+            throw new BadRequestException("Grupu " + found.getGroupName() + " koriste korisnici: " + usersString);
         }
 
         groupRepository.delete(found);

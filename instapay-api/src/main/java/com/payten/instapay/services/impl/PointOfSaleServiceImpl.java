@@ -27,16 +27,16 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
     private final PointOfSaleRepository pointOfSaleRepository;
     private final MapValidationErrorService mapValidationErrorService;
     private final MerchantRepository merchantRepository;
-    private final AcqStatusRepository acqStatusRepository;
+    private final StatusRepository statusRepository;
     private final CityRepository cityRepository;
     private final PaymentMethodRepository paymentMethodRepository;
     private final ModelMapper modelMapper;
 
-    public PointOfSaleServiceImpl(PointOfSaleRepository pointOfSaleRepository, MapValidationErrorService mapValidationErrorService, MerchantRepository merchantRepository, AcqStatusRepository acqStatusRepository, CityRepository cityRepository, PaymentMethodRepository paymentMethodRepository, ModelMapper modelMapper) {
+    public PointOfSaleServiceImpl(PointOfSaleRepository pointOfSaleRepository, MapValidationErrorService mapValidationErrorService, MerchantRepository merchantRepository, StatusRepository statusRepository, CityRepository cityRepository, PaymentMethodRepository paymentMethodRepository, ModelMapper modelMapper) {
         this.pointOfSaleRepository = pointOfSaleRepository;
         this.mapValidationErrorService = mapValidationErrorService;
         this.merchantRepository = merchantRepository;
-        this.acqStatusRepository = acqStatusRepository;
+        this.statusRepository = statusRepository;
         this.cityRepository = cityRepository;
         this.paymentMethodRepository = paymentMethodRepository;
         this.modelMapper = modelMapper;
@@ -145,7 +145,7 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
 
     private PointOfSale convertToEntity(PointOfSaleDto pointOfSaleDto, PointOfSale pointOfSale) {
 
-        AcqStatus status = acqStatusRepository.getAcqStatusByStatusId(pointOfSaleDto.getStatusId());
+        Status status = statusRepository.getStatusByStatusId(pointOfSaleDto.getStatusId());
         if (status == null) { throw new RequestedResourceNotFoundException("Ne postoji status sa ID-em " + pointOfSaleDto.getStatusId()); }
 
         PaymentMethod paymentMethod = paymentMethodRepository.getByPaymentMethodId(pointOfSaleDto.getPaymentMethodId());

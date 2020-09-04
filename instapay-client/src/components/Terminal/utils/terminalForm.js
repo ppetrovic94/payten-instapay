@@ -1,5 +1,3 @@
-import axios from '../../../utils/API';
-
 export const terminalFormTemplate = {
   acquirerTid: '',
   terminalTypeId: '',
@@ -14,7 +12,7 @@ export const terminalFormConfig = {
     key: 'acquirerTid',
     title: 'TID',
     type: 'TEXT',
-    required: false,
+    required: true,
   },
   terminalType: {
     key: 'terminalTypeId',
@@ -49,14 +47,6 @@ export const terminalFormConfig = {
     type: 'NUMBER',
     required: false,
   },
-};
-
-export const generateCredentials = async (id) => {
-  try {
-    await axios.get(`/user/terminals/${id}/generateCredentials`);
-  } catch (err) {
-    console.error(err.response);
-  }
 };
 
 export const getTerminalFormConfig = (data) => {

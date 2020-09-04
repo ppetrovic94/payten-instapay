@@ -3,11 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
-import {
-  terminalFormTemplate,
-  getTerminalFormConfig,
-  generateCredentials,
-} from '../utils/terminalForm';
+import { terminalFormTemplate, getTerminalFormConfig } from '../utils/terminalForm';
 import './AddTerminal.scss';
 import NotFound from '../../../security/NotFound/NotFound';
 
@@ -16,8 +12,13 @@ const AddTerminal = () => {
   const [terminalMetadata, setTerminalMetadata] = useState(null);
   const [pointOfSaleTitle, setPointOfSaleTitle] = useState('');
   const [terminalFields, setTerminalFields] = useState({ ...terminalFormTemplate });
-  const [terminalId, setTerminalId] = useState('');
+  const [terminalId, setTerminalId] = useState(null);
   const [errors, setErrors] = useState(null);
+  const [warnings, setWarnings] = useState({
+    active: false,
+    field: 'statusId',
+    message: `Da bi se novi ANDROID terminal aktivirao, mora da bude u statusu 'Inactive'`,
+  });
   const [notFound, setNotFound] = useState(null);
   const history = useHistory();
   const { id } = useParams();
@@ -44,14 +45,27 @@ const AddTerminal = () => {
     fetchTerminalMetadata();
   }, []);
 
-  useEffect(() => {
-    console.log(terminalId, 'USEEFFECT ZA TERMINALID');
-    if (terminalId && terminalFields.terminalTypeId == '1') {
-      console.log('terminalId', terminalId);
-      console.log('USO JE DA GENERISE');
-      generateCredentials(terminalId);
+  const generateCredentials = async (terminalId) => {
+    setLoading(true);
+    try {
+      await axios.get(`/user/terminals/${terminalId}/generateCredentials`);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      console.error(err.response);
     }
-    setLoading(false);
+  };
+
+  useEffect(() => {
+    if (terminalId) {
+      if (terminalFields.terminalTypeId === 1) {
+        generateCredentials(terminalId);
+        history.push(`/terminals/${terminalId}/details`);
+      } else {
+        history.goBack();
+      }
+      setLoading(false);
+    }
   }, [terminalId]);
 
   const saveTerminal = async () => {
@@ -59,14 +73,11 @@ const AddTerminal = () => {
     try {
       const addedTerminal = await axios.post(`/user/pos/${id}/terminals/add`, terminalFields);
       setTerminalId(addedTerminal.data.terminalId);
-      history.push(`/pos/${id}/terminals`);
     } catch (err) {
       setLoading(false);
       setErrors(err.response.data);
     }
   };
-
-  console.log(terminalFields, 'custom forma add terminals');
 
   return loading ? (
     <CustomLoader />
@@ -82,6 +93,8 @@ const AddTerminal = () => {
           setFormFields={setTerminalFields}
           formSubmitHandler={saveTerminal}
           formErrors={errors}
+          formWarnings={warnings}
+          setFormWarnings={setWarnings}
         />
       </div>
     )

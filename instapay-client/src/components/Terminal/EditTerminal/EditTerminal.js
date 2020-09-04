@@ -3,11 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
-import {
-  terminalFormTemplate,
-  getTerminalFormConfig,
-  generateCredentials,
-} from '../utils/terminalForm';
+import { terminalFormTemplate, getTerminalFormConfig } from '../utils/terminalForm';
 import './EditTerminal.scss';
 import NotFound from '../../../security/NotFound/NotFound';
 
@@ -16,8 +12,6 @@ const EditTerminal = () => {
   const [terminalMetadata, setTerminalMetadata] = useState(null);
   const [pointOfSaleTitle, setPointOfSaleTitle] = useState('');
   const [terminalFields, setTerminalFields] = useState({ ...terminalFormTemplate });
-  const [currentTerminal, setCurrentTerminal] = useState({});
-  const [terminalId, setTerminalId] = useState('');
   const [notFound, setNotFound] = useState(null);
   const [errors, setErrors] = useState(null);
 
@@ -47,7 +41,6 @@ const EditTerminal = () => {
       try {
         const response = await axios.get(`/user/terminals/${id}`);
         setTerminalFields({ ...response.data });
-        setCurrentTerminal({ ...response.data });
       } catch (err) {
         setNotFound(err.response);
       }
@@ -57,26 +50,10 @@ const EditTerminal = () => {
     fetchTerminalById(id);
   }, [id]);
 
-  useEffect(() => {
-    if (
-      terminalId &&
-      currentTerminal.statusId !== terminalFields.statusId &&
-      terminalFields.terminalTypeId == '1' &&
-      terminalFields.statusId == '100'
-    ) {
-      console.log('terminalId', terminalId);
-      console.log('USO JE DA GENERISE');
-      generateCredentials(terminalId);
-    }
-    setLoading(false);
-  }, [terminalId]);
-
   const editTerminal = async () => {
     setLoading(true);
     try {
-      const updatedTerminal = await axios.put(`/user/terminals/${id}/edit`, terminalFields);
-
-      setTerminalId(updatedTerminal.data.terminalId);
+      await axios.put(`/user/terminals/${id}/edit`, terminalFields);
       history.goBack();
     } catch (err) {
       setLoading(false);

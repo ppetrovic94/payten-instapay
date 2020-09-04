@@ -21,7 +21,7 @@ public class Terminal {
 
     @OneToOne
     @JoinColumn(name = "TERMINAL_STATUS")
-    private AcqStatus status;
+    private Status status;
 
     @Column(name = "POINT_OF_SALE_ID")
     private Integer pointOfSaleId;
@@ -63,11 +63,11 @@ public class Terminal {
         this.setupDate = setupDate;
     }
 
-    public AcqStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(AcqStatus status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

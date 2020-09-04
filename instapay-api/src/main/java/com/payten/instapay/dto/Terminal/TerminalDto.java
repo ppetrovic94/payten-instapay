@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 
 public class TerminalDto {
 
-    @Size(min = 0, max = 8, message = "Dužina za TID mora biti manja od 8 karaktera")
+    @Size(min = 8, max = 8, message = "Dužina za TID mora biti tačno 8 karaktera")
     private String acquirerTid;
 
     @NotNull(message = "Morate izabrati trenutni status terminala")

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Table } from 'semantic-ui-react';
-import _ from 'lodash';
 import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import './UserGroups.scss';
@@ -32,7 +31,7 @@ const UserGroups = ({ userFields, setUserFields, errorMessage }) => {
       groups.forEach((item) => {
         temp = {
           ...temp,
-          [item.groupId]: !!userFields.groupIds.find((el) => item.groupId == el) || false,
+          [item.groupId]: !!userFields.groupIds.find((el) => item.groupId === el) || false,
         };
       });
     }
@@ -47,7 +46,7 @@ const UserGroups = ({ userFields, setUserFields, errorMessage }) => {
     } else {
       setUserFields({
         ...userFields,
-        groupIds: userFields.groupIds.filter((elem) => elem != e.target.value),
+        groupIds: userFields.groupIds.filter((elem) => elem !== e.target.value),
       });
     }
   };

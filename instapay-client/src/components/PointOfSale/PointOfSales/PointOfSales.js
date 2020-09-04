@@ -9,14 +9,17 @@ import {
 } from '../utils/pointOfSaleTable';
 import './PointOfSales.scss';
 import NotFound from '../../../security/NotFound/NotFound';
+import CustomLoader from '../../CustomLoader/CustomLoader';
 
 const PointOfSales = () => {
+  const [loading, setLoading] = useState(false);
   const [pointOfSales, setPointOfSales] = useState(null);
+  const [sections, setSections] = useState([]);
   const [errors, setErrors] = useState(null);
   const [activePage, setActivePage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
-  const [merchantTitle, setMerchantTitle] = useState(null);
+  // const [merchantTitle, setMerchantTitle] = useState(null);
   const { id } = useParams();
 
   useEffect(() => {
@@ -24,17 +27,23 @@ const PointOfSales = () => {
     const fetchMerchantName = async (id) => {
       try {
         const response = await axios.get(`/user/merchants/${id}/name`);
-        setMerchantTitle(response.data);
+        setSections([
+          { key: 'merchantName', content: response.data },
+          { key: 'pointOfSales', content: 'Prodajna mesta' },
+        ]);
       } catch (err) {
         setErrors(err.response);
       }
     };
     const fetchPointOfSales = async (id) => {
+      setLoading(true);
       try {
         const response = await axios.get(`/user/merchant/${id}/pos`);
         setPointOfSales(response.data.content);
         setTotalPages(response.data.totalPages);
+        setLoading(false);
       } catch (err) {
+        setLoading(false);
         setErrors(err.response);
       }
     };
@@ -106,21 +115,25 @@ const PointOfSales = () => {
 
   return errors ? (
     <NotFound message={errors.data} />
+  ) : loading ? (
+    <CustomLoader />
   ) : (
-    <div className="pointOfSalesTable">
-      <CustomTable
-        tableTitle={merchantTitle ? `${merchantTitle} - Prodajna mesta` : 'Prodajna mesta'}
-        tableAddItem={`/merchant/${id}/pos/add`}
-        tableHeader={pointOfSaleTableHeader}
-        tableActions={pointOfSaleActionConfig}
-        content={pointOfSales && formatPointOfSalesData(pointOfSales)}
-        tableSearchHandler={onChangeSearchTerm}
-        tableActivePage={activePage}
-        tableHandlePageChange={onPageChange}
-        tableTotalPages={totalPages}
-        tableColumnSortHandler={onColumnSort}
-      />
-    </div>
+    pointOfSales && (
+      <div className="pointOfSalesTable">
+        <CustomTable
+          tableAddItem={`/merchant/${id}/pos/add`}
+          tableHeader={pointOfSaleTableHeader}
+          tableActions={pointOfSaleActionConfig}
+          content={formatPointOfSalesData(pointOfSales)}
+          tableSearchHandler={onChangeSearchTerm}
+          tableActivePage={activePage}
+          tableHandlePageChange={onPageChange}
+          tableTotalPages={totalPages}
+          tableColumnSortHandler={onColumnSort}
+          navbarSections={sections}
+        />
+      </div>
+    )
   );
 };
 

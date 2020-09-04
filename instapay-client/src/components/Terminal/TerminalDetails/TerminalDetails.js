@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Image, Card } from 'semantic-ui-react';
 import { useParams } from 'react-router-dom';
+import { pdf } from '@react-pdf/renderer';
 import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
-import './TerminalDetails.scss';
 import NotFound from '../../../security/NotFound/NotFound';
+import EmailCard from '../../EmailCard/EmailCard';
+import CredentialsCard from '../../Cards/CredentialsCard/CredentialsCard';
+import TerminalCredentialsPdf from './TerminalCredentialsPdf';
+import './TerminalDetails.scss';
 
 const TerminalDetails = () => {
   const [loading, setLoading] = useState(false);
@@ -12,22 +15,55 @@ const TerminalDetails = () => {
   const [notFound, setNotFound] = useState(null);
   const { id } = useParams();
 
-  useEffect(() => {
+  const fetchTerminalById = async (id) => {
     setLoading(true);
+    try {
+      const response = await axios.get(`/user/terminals/${id}/details`);
+      setTerminalDetails(response.data);
+      setLoading(false);
+    } catch (err) {
+      setNotFound(err.response);
+      setLoading(false);
+    }
+  };
 
-    const fetchTerminalById = async (id) => {
-      try {
-        const response = await axios.get(`/user/terminals/${id}`);
-        setTerminalDetails(response.data);
-        setLoading(false);
-      } catch (err) {
-        setNotFound(err.response);
-      }
-    };
-
+  useEffect(() => {
     fetchTerminalById(id);
-    setLoading(false);
   }, [id]);
+
+  const regenerateCredentials = async (terminalId) => {
+    setLoading(true);
+    try {
+      await axios.get(`/user/terminals/${terminalId}/generateCredentials?regenerate=true`);
+    } catch (err) {
+      setLoading(false);
+      console.error(err.response);
+    }
+  };
+
+  const sendOnMail = async (receiverMail) => {
+    var reader = new FileReader();
+    pdf(
+      <TerminalCredentialsPdf
+        acquirerTid={terminalDetails.acquirerTid}
+        userId={terminalDetails.userId}
+        activationCode={terminalDetails.activationCode}
+      />,
+    )
+      .toBlob()
+      .then((blob) => {
+        reader.onload = function () {
+          var base64result = reader.result.split(',')[1];
+          const sendFile = async () => {
+            await axios.get(
+              `/user/terminals/credentials/send?sendTo=${receiverMail}&terminalId=${terminalDetails.acquirerTid}&pdfFileBase64=${base64result}`,
+            );
+          };
+          sendFile();
+        };
+        reader.readAsDataURL(blob);
+      });
+  };
 
   return loading ? (
     <CustomLoader />
@@ -37,61 +73,16 @@ const TerminalDetails = () => {
     terminalDetails && (
       <div className="terminalDetailsContainer">
         <div className="terminalDetailsTitle">
-          <h2>Terminal</h2>
+          <h2>Kredencijali za ANDROID</h2>
         </div>
-        <Card
-          style={{
-            width: '400px',
-          }}
-          color="red">
-          <h3 className="terminalDetailsUserId">User ID (scan)</h3>
-
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <Image
-              src={`http://localhost:8080/api/user/terminals/qrcode/${terminalDetails.userId}`}
-              style={{
-                width: '200px',
-              }}
-              wrapped
-            />
-          </div>
-          <Card.Content>
-            <div className="terminalDetailsCardContent">
-              <h3>TID:</h3>
-              <p className="terminalDetailsData">{terminalDetails.acquirerTid}</p>
-            </div>
-            <div className="terminalDetailsCardContent">
-              <h3>Status:</h3>
-              <p className="terminalDetailsData">{terminalDetails.statusId}</p>
-            </div>
-            <div className="terminalDetailsCardContent">
-              <h3>Način plaćanja:</h3>
-              <p className="terminalDetailsData">
-                {terminalDetails.paymentMethod === 'P'
-                  ? 'Present'
-                  : terminalDetails.paymentMethod === 'S'
-                  ? 'Scan'
-                  : terminalDetails.paymentMethod}
-              </p>
-            </div>
-            <div className="terminalDetailsCardContent">
-              <h3>Tip terminala:</h3>
-              <p className="terminalDetailsData">{terminalDetails.terminalTypeId}</p>
-            </div>
-            <div className="terminalDetailsCardContent">
-              <h3>Aktivacioni kod:</h3>
-              <p className="terminalDetailsData">{terminalDetails.activationCode}</p>
-            </div>
-            <div className="terminalDetailsCardContent">
-              <h3>Datum:</h3>
-              <p className="terminalDetailsData">{terminalDetails.setupDate}</p>
-            </div>
-            <div className="terminalDetailsCardContent">
-              <h3>Račun:</h3>
-              <p className="terminalDetailsData">{terminalDetails.terminalAccount}</p>
-            </div>
-          </Card.Content>
-        </Card>
+        <div className="terminalDetailsCards">
+          <CredentialsCard
+            details={terminalDetails}
+            regenerateCredentials={regenerateCredentials}
+            fetchTerminalById={fetchTerminalById}
+          />
+          <EmailCard onSendHandler={sendOnMail} details={terminalDetails} />
+        </div>
       </div>
     )
   );

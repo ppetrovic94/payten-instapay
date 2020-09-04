@@ -47,7 +47,14 @@ export const terminalActionConfig = (id) => {
       icon: 'edit',
     },
     {
-      type: 'ANDROID_DETAILS',
+      type: 'GET_TRANSACTIONS',
+      name: 'transactions',
+      label: 'Transakcije',
+      redirectLink: `/terminals/${id}/transactions`,
+      icon: 'exchange',
+    },
+    {
+      type: 'GET_ANDROID_DETAILS',
       name: 'androidDetails',
       label: 'Kredencijali za ANDROID',
       redirectLink: `/terminals/${id}/details`,

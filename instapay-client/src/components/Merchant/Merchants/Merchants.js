@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../../../utils/API';
 import CustomTable from '../../CustomTable/CustomTable';
+import CustomLoader from '../../CustomLoader/CustomLoader';
 import {
   merchantTableHeader,
   formatMerchantData,
@@ -10,6 +11,7 @@ import './Merchants.scss';
 
 const Merchants = () => {
   const [merchants, setMerchants] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [activePage, setActivePage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
@@ -17,12 +19,14 @@ const Merchants = () => {
 
   useEffect(() => {
     const fetchMerchants = async () => {
+      setLoading(true);
       try {
         const response = await axios.get('/user/merchants?pagenum=0');
         console.log(response);
         const { content: merchants, totalPages } = (response && response.data) || {};
         setMerchants(merchants);
         setTotalPages(totalPages);
+        setLoading(false);
       } catch (err) {
         setErrors(err.response);
       }
@@ -92,15 +96,17 @@ const Merchants = () => {
     }
   };
 
-  return (
-    <div>
+  return loading ? (
+    <CustomLoader />
+  ) : (
+    merchants && (
       <div className="merchantsTable">
         <CustomTable
           tableTitle="Lista trgovaca"
           tableAddItem="/merchants/add"
           tableHeader={merchantTableHeader}
           tableActions={merchantActionConfig}
-          content={merchants && formatMerchantData(merchants)}
+          content={formatMerchantData(merchants)}
           tableSearchHandler={onChangeSearchTerm}
           tableActivePage={activePage}
           tableHandlePageChange={onPageChange}
@@ -108,7 +114,7 @@ const Merchants = () => {
           tableColumnSortHandler={onColumnSort}
         />
       </div>
-    </div>
+    )
   );
 };
 
