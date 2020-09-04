@@ -1,26 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
 import { groupFormTemplate, groupFormConfig } from '../utils/groupForm';
 import './EditGroup.scss';
+import NotFound from '../../../security/NotFound/NotFound';
 
 const EditGroup = () => {
   const [loading, setLoading] = useState(false);
   const [formFields, setFormFields] = useState({ ...groupFormTemplate });
   const [errors, setErrors] = useState(null);
+  const [notFound, setNotFound] = useState(null);
   const history = useHistory();
   const { id } = useParams();
 
   useEffect(() => {
     const fetchGroupById = async (id) => {
+      setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:8080/admin/groups/${id}`);
-        console.log(response, 'response grupa ');
+        const response = await axios.get(`/admin/groups/${id}`);
+
         setFormFields({ ...response.data });
+        setLoading(false);
       } catch (err) {
-        setErrors(err.response);
+        setNotFound(err.response);
+        setLoading(false);
       }
     };
     fetchGroupById(id);
@@ -29,7 +34,7 @@ const EditGroup = () => {
   const updateGroup = async (updatedGroup) => {
     setLoading(true);
     try {
-      await axios.put(`http://localhost:8080/admin/groups/${id}/update`, updatedGroup);
+      await axios.put(`/admin/groups/${id}/update`, updatedGroup);
       setLoading(false);
       history.push('/groups');
     } catch (err) {
@@ -38,12 +43,12 @@ const EditGroup = () => {
     }
   };
 
-  console.log(formFields, 'formaa trenutno');
-
   return loading ? (
     <CustomLoader />
+  ) : notFound ? (
+    <NotFound message={notFound.data} />
   ) : (
-    <div>
+    <>
       <h2 className="groupFormHeader">Izmena grupe</h2>
       <CustomForm
         formConfig={groupFormConfig}
@@ -52,7 +57,7 @@ const EditGroup = () => {
         formSubmitHandler={updateGroup}
         formErrors={errors}
       />
-    </div>
+    </>
   );
 };
 

@@ -21,10 +21,8 @@ public class PointOfSaleDto {
     @NotNull(message = "Morate uneti datum unosa novog prodajnog mesta")
     private String setupDate;
 
-    @NotEmpty(message = "Morate izabrati metod plaćanja prodajnog mesta")
     private String paymentMethodId;
 
-    @NotEmpty(message = "Morate uneti broj računa prodajnog mesta")
     private String pointOfSaleAccount;
 
     private String pointOfSaleMcc;

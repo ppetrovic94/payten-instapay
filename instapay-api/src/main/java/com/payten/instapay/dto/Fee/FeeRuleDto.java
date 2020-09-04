@@ -59,7 +59,7 @@ public class FeeRuleDto {
     public Date getValidityDate(){
         Date parsedDate = null;
         try {
-            java.util.Date formatedDate = new SimpleDateFormat("yyyy-MM-dd").parse(validityDate);
+            java.util.Date formatedDate = new SimpleDateFormat("yyyy-MM-dd").parse(validityDate != null ? validityDate : "");
             parsedDate = new Date(formatedDate.getTime());
             return parsedDate;
         } catch(ParseException e){

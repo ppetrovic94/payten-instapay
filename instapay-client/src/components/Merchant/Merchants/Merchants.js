@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../../../utils/API';
 import CustomTable from '../../CustomTable/CustomTable';
+import CustomLoader from '../../CustomLoader/CustomLoader';
 import {
   merchantTableHeader,
   formatMerchantData,
@@ -10,6 +11,7 @@ import './Merchants.scss';
 
 const Merchants = () => {
   const [merchants, setMerchants] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [activePage, setActivePage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
@@ -17,12 +19,14 @@ const Merchants = () => {
 
   useEffect(() => {
     const fetchMerchants = async () => {
+      setLoading(true);
       try {
-        const response = await axios.get('http://localhost:8080/user/merchants?pagenum=0');
-        console.log(response);
+        const response = await axios.get('/user/merchants?pagenum=0');
+
         const { content: merchants, totalPages } = (response && response.data) || {};
         setMerchants(merchants);
         setTotalPages(totalPages);
+        setLoading(false);
       } catch (err) {
         setErrors(err.response);
       }
@@ -35,31 +39,28 @@ const Merchants = () => {
     let response = null;
     if (searchTerm) {
       response = await axios.get(
-        `http://localhost:8080/user/merchants?searchTerm=${searchTerm}&pagenum=${activePage - 1}`,
+        `/user/merchants?searchTerm=${searchTerm}&pagenum=${activePage - 1}`,
       );
-      console.log('res', response);
     } else {
-      response = await axios.get(`http://localhost:8080/user/merchants?pagenum=${activePage - 1}`);
+      response = await axios.get(`/user/merchants?pagenum=${activePage - 1}`);
     }
 
     setMerchants(response.data.content);
   };
 
   const onChangeSearchTerm = async (term) => {
-    const filtered = await axios.get(`http://localhost:8080/user/merchants?searchTerm=${term}`);
+    const filtered = await axios.get(`/user/merchants?searchTerm=${term}`);
     setSearchTerm(term);
     setTotalPages(filtered.data.totalPages);
     setMerchants(filtered.data.content);
   };
 
   const onColumnSort = async (column, direction) => {
-    console.log('onColumnSort');
-    console.log('---- column clicked', column, direction);
     let sortedMerchants;
     switch (column) {
       case 'city':
         sortedMerchants = await axios.get(
-          `http://localhost:8080/user/merchants?sortBy=city.cityName&searchTerm=${
+          `/user/merchants?sortBy=city.cityName&searchTerm=${
             searchTerm ? searchTerm : ''
           }&direction=${direction}`,
         );
@@ -67,7 +68,7 @@ const Merchants = () => {
         break;
       case 'status':
         sortedMerchants = await axios.get(
-          `http://localhost:8080/user/merchants?sortBy=status.statusName&searchTerm=${
+          `/user/merchants?sortBy=status.statusName&searchTerm=${
             searchTerm ? searchTerm : ''
           }&direction=${direction}`,
         );
@@ -75,7 +76,7 @@ const Merchants = () => {
         break;
       case 'paymentMethod':
         sortedMerchants = await axios.get(
-          `http://localhost:8080/user/merchants?sortBy=paymentMethod.paymentMethodName&searchTerm=${
+          `/user/merchants?sortBy=paymentMethod.paymentMethodName&searchTerm=${
             searchTerm ? searchTerm : ''
           }&direction=${direction}`,
         );
@@ -83,7 +84,7 @@ const Merchants = () => {
         break;
       default:
         sortedMerchants = await axios.get(
-          `http://localhost:8080/user/merchants?sortBy=${column}&searchTerm=${
+          `/user/merchants?sortBy=${column}&searchTerm=${
             searchTerm ? searchTerm : ''
           }&direction=${direction}`,
         );
@@ -92,16 +93,17 @@ const Merchants = () => {
     }
   };
 
-  return (
-    <div>
-      {/* <h2 className="merchantsTitle">Trgovci</h2> */}
+  return loading ? (
+    <CustomLoader />
+  ) : (
+    merchants && (
       <div className="merchantsTable">
         <CustomTable
           tableTitle="Lista trgovaca"
-          tableAddItem="/addMerchant"
+          tableAddItem="/merchants/add"
           tableHeader={merchantTableHeader}
           tableActions={merchantActionConfig}
-          content={merchants && formatMerchantData(merchants)}
+          content={formatMerchantData(merchants)}
           tableSearchHandler={onChangeSearchTerm}
           tableActivePage={activePage}
           tableHandlePageChange={onPageChange}
@@ -109,7 +111,7 @@ const Merchants = () => {
           tableColumnSortHandler={onColumnSort}
         />
       </div>
-    </div>
+    )
   );
 };
 

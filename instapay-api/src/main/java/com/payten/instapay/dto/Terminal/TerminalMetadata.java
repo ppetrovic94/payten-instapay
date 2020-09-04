@@ -1,6 +1,6 @@
 package com.payten.instapay.dto.Terminal;
 
-import com.payten.instapay.model.AcqStatus;
+import com.payten.instapay.model.Status;
 import com.payten.instapay.model.PaymentMethod;
 import com.payten.instapay.model.TerminalType;
 
@@ -9,7 +9,7 @@ import java.util.List;
 public class TerminalMetadata {
 
     private List<PaymentMethod> paymentMethods;
-    private List<AcqStatus> statuses;
+    private List<Status> statuses;
     private List<TerminalType> terminalTypes;
 
     public TerminalMetadata(){}
@@ -22,11 +22,11 @@ public class TerminalMetadata {
         this.paymentMethods = paymentMethods;
     }
 
-    public List<AcqStatus> getStatuses() {
+    public List<Status> getStatuses() {
         return statuses;
     }
 
-    public void setStatuses(List<AcqStatus> statuses) {
+    public void setStatuses(List<Status> statuses) {
         this.statuses = statuses;
     }
 

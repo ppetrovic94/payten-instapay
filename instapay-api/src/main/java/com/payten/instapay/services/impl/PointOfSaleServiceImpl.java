@@ -1,14 +1,10 @@
 package com.payten.instapay.services.impl;
 
-import com.payten.instapay.dto.Merchant.MerchantDto;
 import com.payten.instapay.dto.PointOfSale.PointOfSaleDto;
 import com.payten.instapay.exceptions.handlers.RequestedResourceNotFoundException;
 import com.payten.instapay.exceptions.handlers.ValidationException;
 import com.payten.instapay.model.*;
-import com.payten.instapay.repositories.AcqStatusRepository;
-import com.payten.instapay.repositories.CityRepository;
-import com.payten.instapay.repositories.PaymentMethodRepository;
-import com.payten.instapay.repositories.PointOfSaleRepository;
+import com.payten.instapay.repositories.*;
 import com.payten.instapay.services.PointOfSaleService;
 import com.payten.instapay.services.validation.MapValidationErrorService;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -30,31 +26,42 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
 
     private final PointOfSaleRepository pointOfSaleRepository;
     private final MapValidationErrorService mapValidationErrorService;
-    private final AcqStatusRepository acqStatusRepository;
+    private final MerchantRepository merchantRepository;
+    private final StatusRepository statusRepository;
     private final CityRepository cityRepository;
     private final PaymentMethodRepository paymentMethodRepository;
     private final ModelMapper modelMapper;
 
-    public PointOfSaleServiceImpl(PointOfSaleRepository pointOfSaleRepository, MapValidationErrorService mapValidationErrorService, AcqStatusRepository acqStatusRepository, CityRepository cityRepository, PaymentMethodRepository paymentMethodRepository, ModelMapper modelMapper) {
+    public PointOfSaleServiceImpl(PointOfSaleRepository pointOfSaleRepository, MapValidationErrorService mapValidationErrorService, MerchantRepository merchantRepository, StatusRepository statusRepository, CityRepository cityRepository, PaymentMethodRepository paymentMethodRepository, ModelMapper modelMapper) {
         this.pointOfSaleRepository = pointOfSaleRepository;
         this.mapValidationErrorService = mapValidationErrorService;
-        this.acqStatusRepository = acqStatusRepository;
+        this.merchantRepository = merchantRepository;
+        this.statusRepository = statusRepository;
         this.cityRepository = cityRepository;
         this.paymentMethodRepository = paymentMethodRepository;
         this.modelMapper = modelMapper;
     }
 
     @Override
-    public Page<PointOfSale> findAllPointOfSalesForMerchantPaginated(Integer merchantId, int pageNum, String searchTerm) {
-        Pageable page = PageRequest.of(pageNum, 25, Sort.by("merchantId"));
+    public Page<PointOfSale> findAllPointOfSalesForMerchantPaginated(Integer merchantId, int pageNum, String searchTerm, String sortBy, String direction) {
+        Pageable page;
         Page<PointOfSale> pointOfSales = null;
+
+        if(!merchantRepository.existsById(merchantId))
+            throw new RequestedResourceNotFoundException("Ne postoji trgovac sa ID-em: " + merchantId);
+
+        if (sortBy.isEmpty()){
+            page = PageRequest.of(pageNum, 10,Sort.Direction.DESC, "setupDate");
+        } else {
+            page = PageRequest.of(pageNum, 10, direction.equals("ascending") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
+        }
 
         if (searchTerm.isEmpty()) {
             pointOfSales = pointOfSaleRepository.findAllByMerchantId(merchantId, page);
             return pointOfSales;
         }
 
-        pointOfSales = searchByTerm(searchTerm, page);
+        pointOfSales = searchByTerm(merchantId, searchTerm, page);
         return pointOfSales;
     }
 
@@ -67,6 +74,17 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
         }
 
         return convertToDto(found);
+    }
+
+    @Override
+    public String getPointOfSaleNameById(Integer pointOfSaleId) {
+        String pointOfSaleName = pointOfSaleRepository.getPointOfSaleNameById(pointOfSaleId);
+
+        if (pointOfSaleName == null) {
+            throw new RequestedResourceNotFoundException("Ne postoji prodajno mesto sa ID-em: " + pointOfSaleId);
+        }
+
+        return pointOfSaleName;
     }
 
     @Override
@@ -127,7 +145,7 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
 
     private PointOfSale convertToEntity(PointOfSaleDto pointOfSaleDto, PointOfSale pointOfSale) {
 
-        AcqStatus status = acqStatusRepository.getAcqStatusByStatusId(pointOfSaleDto.getStatusId());
+        Status status = statusRepository.getStatusByStatusId(pointOfSaleDto.getStatusId());
         if (status == null) { throw new RequestedResourceNotFoundException("Ne postoji status sa ID-em " + pointOfSaleDto.getStatusId()); }
 
         PaymentMethod paymentMethod = paymentMethodRepository.getByPaymentMethodId(pointOfSaleDto.getPaymentMethodId());
@@ -188,19 +206,19 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
         return null;
     }
 
-    private Page<PointOfSale> searchByTerm(String term, Pageable page){
+    private Page<PointOfSale> searchByTerm(Integer merchantId, String term, Pageable page){
         Page<PointOfSale> filtered;
 
         if (NumberUtils.isParsable(term)) {
-            filtered = pointOfSaleRepository.findByPointOfSaleAccountContaining(term, page);
+            filtered = pointOfSaleRepository.findByMerchantIdAndPointOfSaleAccountContaining(merchantId, term, page);
             if (!filtered.getContent().isEmpty()) return filtered;
         }
 
-        filtered = pointOfSaleRepository.findByPointOfSaleNameContaining(term, page);
+        filtered = pointOfSaleRepository.findByMerchantIdAndPointOfSaleNameContaining(merchantId, term, page);
         if (!filtered.getContent().isEmpty()) return filtered;
-        filtered = pointOfSaleRepository.findByPointOfSaleLocalIdContaining(term, page);
+        filtered = pointOfSaleRepository.findByMerchantIdAndPointOfSaleLocalIdContaining(merchantId, term, page);
         if (!filtered.getContent().isEmpty()) return filtered;
-        filtered = pointOfSaleRepository.findByCity_cityNameContaining(term, page);
+        filtered = pointOfSaleRepository.findByMerchantIdAndCity_cityNameContaining(merchantId, term, page);
         if (!filtered.getContent().isEmpty()) return filtered;
 
         return filtered;

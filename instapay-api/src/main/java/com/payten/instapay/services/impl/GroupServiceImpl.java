@@ -1,10 +1,12 @@
 package com.payten.instapay.services.impl;
 
 import com.payten.instapay.dto.Group.GroupDto;
+import com.payten.instapay.exceptions.handlers.BadRequestException;
 import com.payten.instapay.exceptions.handlers.RequestedResourceNotFoundException;
 import com.payten.instapay.exceptions.handlers.ValidationException;
 import com.payten.instapay.model.Group;
 import com.payten.instapay.model.Role;
+import com.payten.instapay.model.User;
 import com.payten.instapay.repositories.GroupRepository;
 import com.payten.instapay.repositories.RoleRepository;
 import com.payten.instapay.services.GroupService;
@@ -32,9 +34,15 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Page<Group> getGroups(int pageNumber, String searchTerm) {
-        Pageable page = PageRequest.of(pageNumber, 25, Sort.by("groupName"));
-        Page<Group> groups = null;
+    public Page<Group> getGroups(int pageNumber, String searchTerm, String sortBy, String direction) {
+        Pageable page;
+        Page<Group> groups;
+
+        if (sortBy.isEmpty()){
+            page = PageRequest.of(pageNumber, 10,Sort.Direction.ASC, "groupName");
+        } else {
+            page = PageRequest.of(pageNumber, 10, direction.equals("ascending") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
+        }
 
         if (searchTerm.isEmpty()) {
             groups = groupRepository.findAll(page);
@@ -57,6 +65,9 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public Group addGroup(GroupDto groupDto, BindingResult result) {
         Map<String, String> errorMap = mapValidationErrorService.validate(result);
+
+        if(groupDto.getRoleIds().isEmpty())
+            errorMap.put("roleIds", "Grupi mora biti dodeljena bar jedna uloga");
 
         if (errorMap != null) {
             throw new ValidationException(errorMap);
@@ -82,6 +93,10 @@ public class GroupServiceImpl implements GroupService {
         }
 
         Map<String, String> errorMap = mapValidationErrorService.validate(result);
+
+        if(groupDto.getRoleIds().isEmpty())
+            errorMap.put("roleIds", "Grupi mora biti dodeljena bar jedna uloga");
+
         if (errorMap != null) {
             throw new ValidationException(errorMap);
         } else {
@@ -102,6 +117,13 @@ public class GroupServiceImpl implements GroupService {
 
         if (found == null) {
             throw new RequestedResourceNotFoundException("Grupa sa ID-em: " + groupId + " ne postoji");
+        }
+
+        if (!found.getUsers().isEmpty()){
+            StringBuilder usersString = new StringBuilder();
+            for (User user : found.getUsers())
+                usersString.append(user.getUsername()).append(", ");
+            throw new BadRequestException("Grupu " + found.getGroupName() + " koriste korisnici: " + usersString);
         }
 
         groupRepository.delete(found);

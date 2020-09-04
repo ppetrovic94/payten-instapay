@@ -1,34 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
 import { feeFormConfig, getFeeFormConfig } from '../utils/feeForm';
 import './EditFee.scss';
+import NotFound from '../../../security/NotFound/NotFound';
 
 const EditFee = () => {
   const [loading, setLoading] = useState(false);
   const [feeMetadata, setFeeMetadata] = useState(null);
   const [formFields, setFormFields] = useState({ ...feeFormConfig });
   const [errors, setErrors] = useState(null);
+  const [notFound, setNotFound] = useState(null);
   const history = useHistory();
   const { id } = useParams();
 
   useEffect(() => {
     const fetchFeeMetadata = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/user/fees/metadata');
+        const response = await axios.get('/user/fees/metadata');
         setFeeMetadata(response.data);
       } catch (err) {
         setErrors(err.response);
       }
     };
     const fetchFeeById = async (id) => {
+      setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:8080/api/user/fees/${id}`);
+        const response = await axios.get(`/user/fees/${id}`);
         setFormFields({ ...response.data });
+        setLoading(false);
       } catch (err) {
-        setErrors(err.response);
+        setNotFound(err.response);
+        setLoading(false);
       }
     };
 
@@ -39,7 +44,7 @@ const EditFee = () => {
   const updateFee = async (updatedFee) => {
     setLoading(true);
     try {
-      await axios.put(`http://localhost:8080/api/user/fees/${id}/update`, updatedFee);
+      await axios.put(`/user/fees/${id}/update`, updatedFee);
       setLoading(false);
       history.goBack();
     } catch (err) {
@@ -50,9 +55,11 @@ const EditFee = () => {
 
   return loading ? (
     <CustomLoader />
+  ) : notFound ? (
+    <NotFound message={notFound.data} />
   ) : (
     feeMetadata && (
-      <div>
+      <>
         <h2 className="feeFormHeader">Izmena provizije</h2>
         <CustomForm
           formConfig={getFeeFormConfig(feeMetadata)}
@@ -61,7 +68,7 @@ const EditFee = () => {
           formSubmitHandler={updateFee}
           formErrors={errors}
         />
-      </div>
+      </>
     )
   );
 };

@@ -1,25 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
 import { userFormTemplate, userFormConfig } from '../utils/userForm';
 import './EditUser.scss';
+import NotFound from '../../../security/NotFound/NotFound';
 
 const EditUser = () => {
   const [loading, setLoading] = useState(false);
   const [formFields, setFormFields] = useState({ ...userFormTemplate });
   const [errors, setErrors] = useState(null);
+  const [notFound, setNotFound] = useState(null);
   const history = useHistory();
   const { id } = useParams();
 
   useEffect(() => {
     const fetchUserById = async (id) => {
+      setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:8080/admin/users/${id}`);
+        const response = await axios.get(`/admin/users/${id}`);
         setFormFields({ ...response.data });
+        setLoading(false);
       } catch (err) {
-        setErrors(err.response);
+        setNotFound(err.response);
+        setLoading(false);
       }
     };
     fetchUserById(id);
@@ -28,7 +33,7 @@ const EditUser = () => {
   const updateUser = async (user) => {
     setLoading(true);
     try {
-      await axios.put(`http://localhost:8080/admin/users/${id}/edit`, user);
+      await axios.put(`/admin/users/${id}/edit`, user);
       setLoading(false);
       history.push('/users');
     } catch (err) {
@@ -39,8 +44,10 @@ const EditUser = () => {
 
   return loading ? (
     <CustomLoader />
+  ) : notFound ? (
+    <NotFound message={notFound.data} />
   ) : (
-    <div>
+    <>
       <h2 className="userFormHeader">Izmena korisnika</h2>
       <CustomForm
         formConfig={userFormConfig}
@@ -49,7 +56,7 @@ const EditUser = () => {
         formSubmitHandler={updateUser}
         formErrors={errors}
       />
-    </div>
+    </>
   );
 };
 

@@ -1,1 +1,19 @@
+.loginContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-color: #312f2f;
+}
 
+.loginForm {
+  width: 20%;
+  padding-top: 50px;
+}
+
+.submitButton {
+  display: flex;
+  justify-content: center;
+  padding-top: 15px;
+}

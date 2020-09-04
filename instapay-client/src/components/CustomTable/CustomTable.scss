@@ -14,6 +14,11 @@
   justify-content: space-between;
 }
 
+.tableNavbar {
+  color: black;
+  font-weight: 500;
+}
+
 .tableHeaderWrapper {
   display: flex;
 }
@@ -26,4 +31,13 @@
 .tablePageing {
   display: flex;
   justify-content: flex-end;
+}
+
+.tableNoContent {
+  font-size: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #c7c1c1;
+  height: 500px;
 }

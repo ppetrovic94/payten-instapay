@@ -1,5 +1,5 @@
 export const pointOfSaleTableHeader = {
-  pointOfSaleLocalId: 'ID Prodajnog Mesta',
+  pointOfSaleLocalId: 'ID prodajnog Mesta',
   pointOfSaleName: 'Naziv prodajnog mesta',
   pointOfSaleAddress: 'Adresa',
   city: 'Grad',

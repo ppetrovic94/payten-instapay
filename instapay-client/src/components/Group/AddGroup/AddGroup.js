@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
 import { groupFormTemplate, groupFormConfig } from '../utils/groupForm';
@@ -15,7 +15,7 @@ const AddGroup = () => {
   const saveGroup = async () => {
     setLoading(true);
     try {
-      await axios.post(`http://localhost:8080/admin/groups/add`, formFields);
+      await axios.post(`/admin/groups/add`, formFields);
       setLoading(false);
       history.push('/groups');
     } catch (err) {

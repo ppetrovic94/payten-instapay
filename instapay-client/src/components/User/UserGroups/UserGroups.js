@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Table } from 'semantic-ui-react';
-import _ from 'lodash';
+import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import './UserGroups.scss';
 
-const UserGroups = ({ userFields, setUserFields }) => {
+const UserGroups = ({ userFields, setUserFields, errorMessage }) => {
   const [groups, setGroups] = useState(null);
   const [checkedGroups, setCheckedGroups] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -15,7 +14,7 @@ const UserGroups = ({ userFields, setUserFields }) => {
     setLoading(true);
     const fetchGroups = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/admin/users/groups');
+        const response = await axios.get('/admin/users/groups');
         setGroups(response.data);
         setLoading(false);
       } catch (err) {
@@ -32,7 +31,7 @@ const UserGroups = ({ userFields, setUserFields }) => {
       groups.forEach((item) => {
         temp = {
           ...temp,
-          [item.groupId]: !!userFields.groupIds.find((el) => item.groupId == el) || false,
+          [item.groupId]: !!userFields.groupIds.find((el) => item.groupId === el) || false,
         };
       });
     }
@@ -47,7 +46,7 @@ const UserGroups = ({ userFields, setUserFields }) => {
     } else {
       setUserFields({
         ...userFields,
-        groupIds: userFields.groupIds.filter((elem) => elem != e.target.value),
+        groupIds: userFields.groupIds.filter((elem) => elem !== e.target.value),
       });
     }
   };
@@ -59,7 +58,7 @@ const UserGroups = ({ userFields, setUserFields }) => {
       <Table basic="very">
         <Table.Row>
           <Table.HeaderCell>Naziv</Table.HeaderCell>
-          <Table.HeaderCell>Opis</Table.HeaderCell>
+          <Table.HeaderCell className="userGroupDescription">Opis</Table.HeaderCell>
         </Table.Row>
         <Table.Body>
           {groups &&
@@ -80,6 +79,7 @@ const UserGroups = ({ userFields, setUserFields }) => {
             ))}
         </Table.Body>
       </Table>
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
     </div>
   );
 };

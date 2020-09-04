@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Table } from 'semantic-ui-react';
-import _ from 'lodash';
+import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import './GroupRoles.scss';
 
-const GroupRoles = ({ groupFields, setGroupFields }) => {
+const GroupRoles = ({ groupFields, setGroupFields, errorMessage }) => {
   const [roles, setRoles] = useState(null);
   const [checkedRoles, setCheckedRoles] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -15,7 +14,7 @@ const GroupRoles = ({ groupFields, setGroupFields }) => {
     setLoading(true);
     const fetchRoles = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/admin/roles');
+        const response = await axios.get('/admin/roles');
         setRoles(response.data);
         setLoading(false);
       } catch (err) {
@@ -32,7 +31,7 @@ const GroupRoles = ({ groupFields, setGroupFields }) => {
       roles.forEach((item) => {
         temp = {
           ...temp,
-          [item.roleId]: !!groupFields.roleIds.find((el) => item.roleId == el) || false,
+          [item.roleId]: !!groupFields.roleIds.find((el) => item.roleId === el) || false,
         };
       });
     }
@@ -47,7 +46,7 @@ const GroupRoles = ({ groupFields, setGroupFields }) => {
     } else {
       setGroupFields({
         ...groupFields,
-        roleIds: groupFields.roleIds.filter((elem) => elem != e.target.value),
+        roleIds: groupFields.roleIds.filter((elem) => elem !== e.target.value),
       });
     }
   };
@@ -59,7 +58,7 @@ const GroupRoles = ({ groupFields, setGroupFields }) => {
       <Table basic="very">
         <Table.Row>
           <Table.HeaderCell>Naziv</Table.HeaderCell>
-          <Table.HeaderCell>Opis</Table.HeaderCell>
+          <Table.HeaderCell className="groupRoleDescription">Opis</Table.HeaderCell>
         </Table.Row>
         <Table.Body>
           {roles &&
@@ -80,6 +79,7 @@ const GroupRoles = ({ groupFields, setGroupFields }) => {
             ))}
         </Table.Body>
       </Table>
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
     </div>
   );
 };

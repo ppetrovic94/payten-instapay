@@ -57,7 +57,7 @@ public class Merchant implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "MERCHANT_STATUS")
-    private AcqStatus status;
+    private Status status;
 
     @OneToOne
     @JoinColumn(name = "MERCHANT_CITY_ID")
@@ -122,11 +122,11 @@ public class Merchant implements Serializable {
         this.merchantAccount = merchantAccount;
     }
 
-    public AcqStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(AcqStatus status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
