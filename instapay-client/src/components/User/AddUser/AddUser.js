@@ -24,8 +24,6 @@ const AddUser = () => {
     }
   };
 
-  console.log(formFields, 'trenutna forma');
-
   return loading ? (
     <CustomLoader />
   ) : (

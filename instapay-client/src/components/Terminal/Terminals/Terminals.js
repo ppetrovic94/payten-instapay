@@ -69,7 +69,6 @@ const Terminals = () => {
       response = await axios.get(
         `/user/pos/${id}/terminals?searchTerm=${searchTerm}&pagenum=${activePage - 1}`,
       );
-      console.log('res', response);
     } else {
       response = await axios.get(`/user/pos/${id}/terminals?pagenum=${activePage - 1}`);
     }
@@ -85,8 +84,6 @@ const Terminals = () => {
   };
 
   const onColumnSort = async (column, direction) => {
-    console.log('onColumnSort');
-    console.log('---- column clicked', column, direction);
     let sortedTerminals;
     switch (column) {
       case 'status':

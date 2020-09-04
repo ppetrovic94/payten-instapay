@@ -20,7 +20,7 @@ const Header = () => {
       document.cookie = 'JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
       history.push('/');
     } catch (error) {
-      console.log(error, 'logout err');
+      console.error(error, 'logout err');
     }
   };
 

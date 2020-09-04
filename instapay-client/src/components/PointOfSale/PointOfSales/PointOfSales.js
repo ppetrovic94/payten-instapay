@@ -58,7 +58,6 @@ const PointOfSales = () => {
       response = await axios.get(
         `/user/merchant/${id}/pos?searchTerm=${searchTerm}&pagenum=${activePage - 1}`,
       );
-      console.log('res', response);
     } else {
       response = await axios.get(`/user/merchant/${id}/pos?pagenum=${activePage - 1}`);
     }
@@ -74,8 +73,6 @@ const PointOfSales = () => {
   };
 
   const onColumnSort = async (column, direction) => {
-    console.log('onColumnSort');
-    console.log('---- column clicked', column, direction);
     let sortedPointOfSales;
     switch (column) {
       case 'city':

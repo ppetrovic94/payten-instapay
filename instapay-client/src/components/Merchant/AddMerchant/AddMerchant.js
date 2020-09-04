@@ -35,7 +35,6 @@ const AddMerchant = () => {
       setLoading(false);
       history.push('/merchants');
     } catch (err) {
-      console.log(err);
       setLoading(false);
       setErrors(err.response.data);
     }

@@ -47,7 +47,6 @@ const Users = () => {
     let response = null;
     if (searchTerm) {
       response = await axios.get(`/admin/users?searchTerm=${searchTerm}&pagenum=${activePage - 1}`);
-      console.log('res', response);
     } else {
       response = await axios.get(`/admin/users?pagenum=${activePage - 1}`);
     }
@@ -63,9 +62,6 @@ const Users = () => {
   };
 
   const onColumnSort = async (column, direction) => {
-    console.log('onColumnSort');
-    console.log('---- column clicked', column, direction);
-
     const sortedUsers = await axios.get(
       `/admin/users?sortBy=${column}&searchTerm=${
         searchTerm ? searchTerm : ''

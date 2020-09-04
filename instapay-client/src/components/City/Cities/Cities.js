@@ -52,9 +52,6 @@ const Cities = () => {
   };
 
   const onColumnSort = async (column, direction) => {
-    console.log('onColumnSort');
-    console.log('---- column clicked', column, direction);
-
     const sortedCities = await axios.get(
       `/user/cities?sortBy=${column}&searchTerm=${
         searchTerm ? searchTerm : ''

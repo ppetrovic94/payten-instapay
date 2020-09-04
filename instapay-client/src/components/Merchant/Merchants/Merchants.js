@@ -22,7 +22,7 @@ const Merchants = () => {
       setLoading(true);
       try {
         const response = await axios.get('/user/merchants?pagenum=0');
-        console.log(response);
+
         const { content: merchants, totalPages } = (response && response.data) || {};
         setMerchants(merchants);
         setTotalPages(totalPages);
@@ -41,7 +41,6 @@ const Merchants = () => {
       response = await axios.get(
         `/user/merchants?searchTerm=${searchTerm}&pagenum=${activePage - 1}`,
       );
-      console.log('res', response);
     } else {
       response = await axios.get(`/user/merchants?pagenum=${activePage - 1}`);
     }
@@ -57,8 +56,6 @@ const Merchants = () => {
   };
 
   const onColumnSort = async (column, direction) => {
-    console.log('onColumnSort');
-    console.log('---- column clicked', column, direction);
     let sortedMerchants;
     switch (column) {
       case 'city':

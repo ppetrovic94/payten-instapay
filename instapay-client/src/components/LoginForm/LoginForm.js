@@ -17,7 +17,6 @@ const LoginForm = () => {
 
   const onChange = (e) => {
     setLoginRequest({ ...loginRequest, [e.target.name]: e.target.value });
-    console.log(loginRequest, 'login request');
   };
 
   const onSubmit = async () => {
@@ -26,7 +25,6 @@ const LoginForm = () => {
       onLogin({ roles: getRoles(res.data) });
       redirectBasedOnRole(res.data);
     } catch (err) {
-      console.log('error', err.response);
       setError(err.response.data);
     }
   };

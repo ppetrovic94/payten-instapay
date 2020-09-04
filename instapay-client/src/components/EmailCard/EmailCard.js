@@ -8,7 +8,6 @@ const EmailCard = ({ onSendHandler, details }) => {
   const [merchantEmail, setMerchantEmail] = useState(null);
 
   const onChangeEmail = (e) => {
-    console.log(merchantEmail);
     setMerchantEmail(e.target.value);
   };
 

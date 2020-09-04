@@ -14,14 +14,12 @@ const AuthDataProvider = (props) => {
     function (response) {
       // Any status code that lie within the range of 2xx cause this function to trigger
       // Do something with response data
-      console.log('response status', response);
+
       return response;
     },
     function (error) {
       // Any status codes that falls outside the range of 2xx cause this function to trigge
       // Do something with response error
-      console.log('error status', error.response.status);
-      //setAuthData({ ...authData, isAuthenticated: false });
       if (error.response.status === 403) {
         document.cookie = 'JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         history.push('/');

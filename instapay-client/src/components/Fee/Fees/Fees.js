@@ -87,7 +87,6 @@ const Fees = () => {
             `/user/merchants/${id}/fees?searchTerm=${searchTerm}&pagenum=${activePage - 1}`,
           )
         : await axios.get(`/user/fees?searchTerm=${searchTerm}&pagenum=${activePage - 1}`);
-      console.log('res', response);
     } else {
       response = id
         ? await axios.get(`/user/merchants/${id}/fees?pagenum=${activePage - 1}`)

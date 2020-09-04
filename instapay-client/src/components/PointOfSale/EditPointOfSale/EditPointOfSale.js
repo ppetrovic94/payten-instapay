@@ -39,7 +39,7 @@ const EditPointOfSale = () => {
       setLoading(true);
       try {
         const response = await axios.get(`/user/pos/${id}`);
-        console.log(response, 'response pos');
+
         setFormFields({ ...response.data });
         setLoading(false);
       } catch (err) {

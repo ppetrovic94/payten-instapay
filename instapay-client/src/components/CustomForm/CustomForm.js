@@ -44,8 +44,6 @@ const CustomForm = ({
   const renderField = ({ key, title, type, options, disabled }) => {
     switch (type) {
       case 'DROPDOWN':
-        console.log(options, 'opcije');
-        console.log(formFields[key], 'formFields[key]');
         return (
           <>
             <Dropdown
@@ -65,7 +63,6 @@ const CustomForm = ({
           </>
         );
       case 'CHECKBOX':
-        console.log(formFields, 'checkbox fields');
         if (formFields.groupIds)
           return (
             <UserGroups

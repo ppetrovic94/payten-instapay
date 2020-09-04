@@ -18,7 +18,7 @@ const TransactionActions = ({ endToEndId, actions }) => {
       setDetails(response.data);
       setLoading(false);
     } catch (error) {
-      console.log(error.response);
+      console.error(error.response);
       setLoading(false);
     }
   };

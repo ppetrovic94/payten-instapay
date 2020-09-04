@@ -20,7 +20,7 @@ const EditGroup = () => {
       setLoading(true);
       try {
         const response = await axios.get(`/admin/groups/${id}`);
-        console.log(response, 'response grupa ');
+
         setFormFields({ ...response.data });
         setLoading(false);
       } catch (err) {
@@ -42,8 +42,6 @@ const EditGroup = () => {
       setErrors(err.response.data);
     }
   };
-
-  console.log(formFields, 'formaa trenutno');
 
   return loading ? (
     <CustomLoader />
