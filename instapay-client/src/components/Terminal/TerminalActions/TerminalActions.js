@@ -44,7 +44,7 @@ const TerminalActions = ({ terminal, actionConfig }) => {
 
 TerminalActions.propTypes = {
   terminal: PropTypes.object,
-  actionConfig: PropTypes.array,
+  actionConfig: PropTypes.func,
 };
 
 export default TerminalActions;

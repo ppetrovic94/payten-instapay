@@ -172,7 +172,7 @@ const CustomTable = ({
 CustomTable.propTypes = {
   tableTitle: PropTypes.string,
   tableHeader: PropTypes.object,
-  tableActions: PropTypes.object,
+  tableActions: PropTypes.func,
   content: PropTypes.array,
   tableSearchHandler: PropTypes.func,
   tableAddItem: PropTypes.string,

@@ -37,7 +37,7 @@ const GroupRoles = ({ groupFields, setGroupFields, errorMessage }) => {
       });
     }
 
-    setCheckedRoles((checkedRole) => ({ ...checkedRoles, ...temp }));
+    setCheckedRoles({ ...checkedRoles, ...temp });
   }, [groupFields, roles]);
 
   const onCheckboxClick = (e) => {

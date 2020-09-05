@@ -17,5 +17,5 @@ export const ProtectedRoute = ({ component: Component, ...options }) => {
 };
 
 ProtectedRoute.propTypes = {
-  component: PropTypes.element,
+  component: PropTypes.elementType,
 };

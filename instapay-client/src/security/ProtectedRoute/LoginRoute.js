@@ -16,5 +16,5 @@ export const LoginRoute = ({ component: Component, ...options }) => {
 };
 
 LoginRoute.propTypes = {
-  component: PropTypes.element,
+  component: PropTypes.elementType,
 };

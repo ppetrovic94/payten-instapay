@@ -8,10 +8,12 @@ import EmailCard from '../../EmailCard/EmailCard';
 import CredentialsCard from '../../Cards/CredentialsCard/CredentialsCard';
 import TerminalCredentialsPdf from './TerminalCredentialsPdf';
 import './TerminalDetails.scss';
+import { Breadcrumb } from 'semantic-ui-react';
 
 const TerminalDetails = () => {
   const [loading, setLoading] = useState(false);
   const [terminalDetails, setTerminalDetails] = useState(null);
+  const [sections, setSections] = useState(null);
   const [notFound, setNotFound] = useState(null);
   const { id } = useParams();
 
@@ -27,8 +29,39 @@ const TerminalDetails = () => {
     }
   };
 
+  const fetchNavbarData = async () => {
+    const merchantId = localStorage.getItem('merchantId');
+    const posId = localStorage.getItem('pointOfSaleId');
+
+    try {
+      const posName = await axios.get(`/user/pos/${posId}/name`);
+      const merchantName = await axios.get(`/user/merchants/${merchantId}/name`);
+      const terminalName = await axios.get(`/user/terminals/${id}/acquirerTid`);
+      setSections([
+        {
+          key: 'merchantName',
+          content: merchantName.data,
+          href: `/merchant/${merchantId}/pos`,
+        },
+        {
+          key: 'pointOfSaleName',
+          content: posName.data,
+          href: `/pos/${posId}/terminals`,
+        },
+        {
+          key: 'terminalName',
+          content: terminalName.data,
+        },
+        { key: 'credentials', content: 'Kredencijali' },
+      ]);
+    } catch (err) {
+      console.error(err.response);
+    }
+  };
+
   useEffect(() => {
     fetchTerminalById(id);
+    fetchNavbarData();
   }, [id]);
 
   const regenerateCredentials = async (terminalId) => {
@@ -70,10 +103,16 @@ const TerminalDetails = () => {
   ) : notFound ? (
     <NotFound message={notFound.data} />
   ) : (
-    terminalDetails && (
+    terminalDetails &&
+    sections && (
       <div className="terminalDetailsContainer">
         <div className="terminalDetailsTitle">
-          <h2>Kredencijali za ANDROID</h2>
+          <Breadcrumb
+            className="detailsNavbar"
+            icon="right angle"
+            sections={sections}
+            size="large"
+          />
         </div>
         <div className="terminalDetailsCards">
           <CredentialsCard

@@ -19,8 +19,8 @@ const CustomModal = ({
       trigger={triggerElement && triggerElement()}
       onClose={() => setOpen(false)}
       onOpen={() => {
-        onOpenHandler && onOpenHandler();
         setOpen(true);
+        onOpenHandler && onOpenHandler();
       }}>
       <Modal.Content scrolling>
         <Content />
@@ -45,7 +45,7 @@ const CustomModal = ({
 };
 
 CustomModal.propTypes = {
-  content: PropTypes.element,
+  content: PropTypes.elementType,
   yesNoButtons: PropTypes.bool,
   onAcceptHandler: PropTypes.func,
   triggerElement: PropTypes.func,
