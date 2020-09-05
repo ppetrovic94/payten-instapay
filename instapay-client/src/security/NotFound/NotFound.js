@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './NotFound.scss';
 
 const NotFound = ({ message }) => {
@@ -7,6 +8,10 @@ const NotFound = ({ message }) => {
       <h2>{message ? message : 'Ups, otisli ste na nepostojeću stranu'}</h2>
     </div>
   );
+};
+
+NotFound.propTypes = {
+  message: PropTypes.string,
 };
 
 export default NotFound;

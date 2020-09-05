@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { Table } from 'semantic-ui-react';
 import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
@@ -82,6 +83,12 @@ const GroupRoles = ({ groupFields, setGroupFields, errorMessage }) => {
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
     </div>
   );
+};
+
+GroupRoles.propTypes = {
+  groupFields: PropTypes.object,
+  setGroupFields: PropTypes.func,
+  errorMessage: PropTypes.string,
 };
 
 export default GroupRoles;

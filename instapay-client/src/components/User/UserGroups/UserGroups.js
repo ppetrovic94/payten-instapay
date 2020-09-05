@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { Table } from 'semantic-ui-react';
 import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
@@ -82,6 +83,12 @@ const UserGroups = ({ userFields, setUserFields, errorMessage }) => {
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
     </div>
   );
+};
+
+UserGroups.propTypes = {
+  userFields: PropTypes.object,
+  setUserFields: PropTypes.func,
+  errorMessage: PropTypes.string,
 };
 
 export default UserGroups;

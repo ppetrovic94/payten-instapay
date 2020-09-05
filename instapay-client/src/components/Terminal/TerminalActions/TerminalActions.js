@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Popup, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import './TerminalActions.scss';
@@ -39,6 +40,11 @@ const TerminalActions = ({ terminal, actionConfig }) => {
         })}
     </div>
   );
+};
+
+TerminalActions.propTypes = {
+  terminal: PropTypes.object,
+  actionConfig: PropTypes.array,
 };
 
 export default TerminalActions;

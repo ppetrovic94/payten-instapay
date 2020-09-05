@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Popup, Icon } from 'semantic-ui-react';
 import axios from '../../../utils/API';
 import CustomModal from '../../CustomModal/CustomModal';
@@ -60,6 +61,11 @@ const TransactionActions = ({ endToEndId, actions }) => {
         })}
     </div>
   );
+};
+
+TransactionActions.propTypes = {
+  endToEndId: PropTypes.string,
+  actions: PropTypes.array,
 };
 
 export default TransactionActions;

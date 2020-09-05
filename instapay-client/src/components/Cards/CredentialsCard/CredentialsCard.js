@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Card, Button, Image } from 'semantic-ui-react';
 import CustomModal from '../../CustomModal/CustomModal';
 import './CredentialsCard.scss';
@@ -57,6 +58,12 @@ const CredentialsCard = ({ details, regenerateCredentials, fetchTerminalById }) 
       </Card.Content>
     </Card>
   );
+};
+
+CredentialsCard.propTypes = {
+  details: PropTypes.object,
+  regenerateCredentials: PropTypes.func,
+  fetchTerminalById: PropTypes.func,
 };
 
 export default CredentialsCard;

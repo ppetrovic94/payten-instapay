@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Button, Icon, Modal } from 'semantic-ui-react';
 
 const CustomModal = ({
@@ -41,6 +42,14 @@ const CustomModal = ({
       )}
     </Modal>
   );
+};
+
+CustomModal.propTypes = {
+  content: PropTypes.element,
+  yesNoButtons: PropTypes.bool,
+  onAcceptHandler: PropTypes.func,
+  triggerElement: PropTypes.func,
+  onOpenHandler: PropTypes.func,
 };
 
 export default CustomModal;

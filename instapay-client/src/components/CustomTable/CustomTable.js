@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import { Table, Input, Button, Pagination, Breadcrumb } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
@@ -136,8 +137,8 @@ const CustomTable = ({
                       ) : header === 'groups' ? (
                         <Table.Cell>
                           <div className="groupWrapper">
-                            {item[header].map((groupName) => {
-                              return <p>{`${groupName} `}</p>;
+                            {item[header].map((groupName, key) => {
+                              return <p key={key}>{`${groupName} `}</p>;
                             })}
                           </div>
                         </Table.Cell>
@@ -166,6 +167,21 @@ const CustomTable = ({
       )}
     </div>
   );
+};
+
+CustomTable.propTypes = {
+  tableTitle: PropTypes.string,
+  tableHeader: PropTypes.object,
+  tableActions: PropTypes.object,
+  content: PropTypes.array,
+  tableSearchHandler: PropTypes.func,
+  tableAddItem: PropTypes.string,
+  tableActivePage: PropTypes.number,
+  tableHandlePageChange: PropTypes.func,
+  tableTotalPages: PropTypes.number,
+  tableColumnSortHandler: PropTypes.func,
+  onDeleteHandler: PropTypes.func,
+  navbarSections: PropTypes.array,
 };
 
 export default CustomTable;

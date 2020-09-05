@@ -123,7 +123,7 @@ const Cities = () => {
       <div className="cityTable">
         {cities && (
           <CustomTable
-            tableTitle={'Gradovi'}
+            tableTitle="Gradovi"
             tableHeader={cityTableHeader}
             content={formatCitiesData(cities)}
             tableSearchHandler={onChangeSearchTerm}

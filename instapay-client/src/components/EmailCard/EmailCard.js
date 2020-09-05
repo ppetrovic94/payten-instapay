@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Card, Button, Form } from 'semantic-ui-react';
 import './EmailCard.scss';
 import TerminalCredentialsPdf from '../Terminal/TerminalDetails/TerminalCredentialsPdf';
@@ -49,7 +50,7 @@ const EmailCard = ({ onSendHandler, details }) => {
               />
             }
             fileName={`kredencijali-${details.acquirerTid}`}>
-            {({ blob, url, loading, error }) =>
+            {({ loading }) =>
               loading ? 'Loading document...' : <Button color="instagram">Skini PDF</Button>
             }
           </PDFDownloadLink>
@@ -57,6 +58,11 @@ const EmailCard = ({ onSendHandler, details }) => {
       </Card.Content>
     </Card>
   );
+};
+
+EmailCard.propTypes = {
+  onSendHandler: PropTypes.func,
+  details: PropTypes.object,
 };
 
 export default EmailCard;
