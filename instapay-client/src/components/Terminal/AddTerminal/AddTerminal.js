@@ -17,7 +17,7 @@ const AddTerminal = () => {
   const [warnings, setWarnings] = useState({
     active: false,
     field: 'statusId',
-    message: `Da bi se novi ANDROID terminal aktivirao, mora da bude u statusu 'Inactive'`,
+    message: 'Da bi se novi ANDROID terminal aktivirao, mora da bude u statusu Inactive',
   });
   const [notFound, setNotFound] = useState(null);
   const history = useHistory();

@@ -31,7 +31,7 @@ const AddFee = () => {
   const saveFee = async () => {
     setLoading(true);
     try {
-      await axios.post(`/user/fees/add`, formFields);
+      await axios.post('/user/fees/add', formFields);
       setLoading(false);
       history.goBack();
     } catch (err) {

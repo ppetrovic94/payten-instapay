@@ -15,7 +15,7 @@ const AddUser = () => {
   const saveUser = async () => {
     setLoading(true);
     try {
-      await axios.post(`/admin/users/add`, formFields);
+      await axios.post('/admin/users/add', formFields);
       setLoading(false);
       history.push('/users');
     } catch (err) {

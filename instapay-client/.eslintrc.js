@@ -5,7 +5,7 @@ module.exports = {
     es6: true,
     jest: true,
   },
-  extends: ['eslint:recommended', 'plugin:react/recommended'],
+  extends: ['eslint:recommended', 'plugin:react/recommended', 'plugin:prettier/recommended'],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -17,7 +17,7 @@ module.exports = {
   rules: {
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
-    'linebreak-style': ['error', 'unix'],
+    'linebreak-style': ['error', 'windows'],
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'error',
     'no-console': ['error', { allow: ['warn', 'error'] }],

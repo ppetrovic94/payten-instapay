@@ -20,7 +20,7 @@ const Users = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`/admin/users`);
+      const response = await axios.get('/admin/users');
       setUsers(response.data.content);
       setTotalPages(response.data.totalPages);
       setLoading(false);

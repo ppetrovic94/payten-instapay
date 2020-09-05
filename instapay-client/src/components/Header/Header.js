@@ -42,8 +42,8 @@ const Header = () => {
               />
               <Menu.Item
                 as={Link}
-                to={'/cities'}
-                name={`Gradovi`}
+                to="/cities"
+                name="Gradovi"
                 active={activeItem === 'Gradovi'}
                 onClick={onItemClick}
               />
@@ -58,7 +58,7 @@ const Header = () => {
           )}
           {roles && !!roles.find((role) => role === 'ROLE_ADMIN') && (
             <>
-              {!!roles.find((role) => role === 'ROLE_USER') ? (
+              {roles.find((role) => role === 'ROLE_USER') ? (
                 <Menu.Item name="Korisnici" active={activeItem === 'Korisnici'}>
                   <Dropdown text={'Korisnici'}>
                     <Dropdown.Menu>
@@ -82,7 +82,7 @@ const Header = () => {
                   <Menu.Item
                     as={Link}
                     to={'/users'}
-                    name={`Korisnici`}
+                    name={'Korisnici'}
                     active={activeItem === 'Korisnici'}
                     onClick={onItemClick}
                   />

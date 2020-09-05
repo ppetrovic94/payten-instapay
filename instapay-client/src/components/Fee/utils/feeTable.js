@@ -39,7 +39,7 @@ export const feeActionConfig = (id) => {
       type: 'DELETE',
       name: 'deleteFee',
       label: 'Ukloni',
-      redirectLink: ``,
+      redirectLink: '',
       icon: 'trash',
     },
   ];

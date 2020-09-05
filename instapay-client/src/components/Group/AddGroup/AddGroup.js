@@ -15,7 +15,7 @@ const AddGroup = () => {
   const saveGroup = async () => {
     setLoading(true);
     try {
-      await axios.post(`/admin/groups/add`, formFields);
+      await axios.post('/admin/groups/add', formFields);
       setLoading(false);
       history.push('/groups');
     } catch (err) {

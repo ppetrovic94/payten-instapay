@@ -25,7 +25,7 @@ const Groups = () => {
   const fetchGroups = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`/admin/groups`);
+      const response = await axios.get('/admin/groups');
       setGroups(response.data.content);
       setTotalPages(response.data.totalPages);
       setLoading(false);
@@ -130,7 +130,7 @@ const Groups = () => {
                       <Table.Cell>{group.description}</Table.Cell>
                       {roles &&
                         roles.map((role) => {
-                          return !!group.roles.find(
+                          return group.roles.find(
                             (groupRole) => role.roleId === groupRole.roleId,
                           ) ? (
                             <Table.Cell textAlign="center">

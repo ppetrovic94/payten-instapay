@@ -67,7 +67,7 @@ const Cities = () => {
   const onSubmit = async () => {
     setLoading(true);
     try {
-      await axios.post(`/user/cities/add`, cityForm);
+      await axios.post('/user/cities/add', cityForm);
       fetchCities();
       setErrors(null);
       setLoading(false);

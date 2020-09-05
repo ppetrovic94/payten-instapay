@@ -51,7 +51,7 @@ const Fees = () => {
   const fetchFees = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`/user/fees`);
+      const response = await axios.get('/user/fees');
       setFees(response.data.content);
       setTotalPages(response.data.totalPages);
       setLoading(false);
