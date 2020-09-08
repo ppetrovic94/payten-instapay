@@ -135,12 +135,16 @@ const CustomTable = ({
                           )}
                         </Table.Cell>
                       ) : header === 'groups' ? (
-                        <Table.Cell>
+                        <Table.Cell key={key}>
                           <div className="groupWrapper">
                             {item[header].map((groupName, key) => {
                               return <p key={key}>{`${groupName} `}</p>;
                             })}
                           </div>
+                        </Table.Cell>
+                      ) : header === 'status' ? (
+                        <Table.Cell key={key} className={`tableStatus-${item[header]}`}>
+                          {item[header]}
                         </Table.Cell>
                       ) : (
                         <Table.Cell key={key}>{item[header]}</Table.Cell>

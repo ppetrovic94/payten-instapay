@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
@@ -34,9 +35,11 @@ const EditUser = () => {
     setLoading(true);
     try {
       await axios.put(`/admin/users/${id}/edit`, user);
+      toast.success(`Uspešno ste ažurirali korisnika ${user.username}`);
       setLoading(false);
       history.push('/users');
     } catch (err) {
+      toast.error(`Došlo je do greške pri ažuriranju korisnika ${user.username}`);
       setLoading(false);
       setErrors(err.response.data);
     }

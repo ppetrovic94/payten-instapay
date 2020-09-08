@@ -119,6 +119,7 @@ const Transactions = () => {
             />
 
             <Button
+              color="instagram"
               className="getTransactionsButton"
               disabled={disabled}
               onClick={onGetTransactions}>

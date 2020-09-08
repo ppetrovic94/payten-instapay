@@ -31,7 +31,7 @@ export const formatTerminalData = (data) => {
         terminalType,
         setupDate,
         paymentMethod:
-          paymentMethod === 'P' ? 'Present' : paymentMethod === 'S' ? 'Scan' : paymentMethod,
+          paymentMethod === 'P' ? 'Present' : paymentMethod === 'S' ? 'Scan' : paymentMethod === '',
       };
     },
   );

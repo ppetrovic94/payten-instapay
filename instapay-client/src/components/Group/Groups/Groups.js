@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Table, Icon, Pagination, Input, Button } from 'semantic-ui-react';
+import { toast } from 'react-toastify';
 import axios from '../../../utils/API';
 import TableActions from '../../TableActions/TableActions';
 import { Link } from 'react-router-dom';
@@ -43,9 +44,11 @@ const Groups = () => {
     setLoading(true);
     try {
       await axios.delete(`/admin/groups/${groupId}/delete`);
+      toast.success('Uspešno ste obrisali grupu uloga');
       setLoading(false);
       fetchGroups();
     } catch (error) {
+      toast.error(error.response.data);
       console.error(error.response);
       setLoading(false);
     }
@@ -129,15 +132,15 @@ const Groups = () => {
                       <Table.Cell>{group.groupName}</Table.Cell>
                       <Table.Cell>{group.description}</Table.Cell>
                       {roles &&
-                        roles.map((role) => {
+                        roles.map((role, key) => {
                           return group.roles.find(
                             (groupRole) => role.roleId === groupRole.roleId,
                           ) ? (
-                            <Table.Cell textAlign="center">
+                            <Table.Cell key={key} textAlign="center">
                               <Icon color="green" name="checkmark" size="large" />
                             </Table.Cell>
                           ) : (
-                            <Table.Cell></Table.Cell>
+                            <Table.Cell key={key}></Table.Cell>
                           );
                         })}
                       <Table.Cell>

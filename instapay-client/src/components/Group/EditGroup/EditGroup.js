@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
@@ -35,9 +36,11 @@ const EditGroup = () => {
     setLoading(true);
     try {
       await axios.put(`/admin/groups/${id}/update`, updatedGroup);
+      toast.success(`Uspešno ste ažurirali grupu ${updatedGroup.groupName}`);
       setLoading(false);
       history.push('/groups');
     } catch (err) {
+      toast.error('Došlo je do greške pri ažuriranju grupe');
       setLoading(false);
       setErrors(err.response.data);
     }

@@ -106,8 +106,8 @@ const CustomForm = ({
   return (
     <div className="formWrapper">
       <Form>
-        {_.map(formConfig, (value) => (
-          <Form.Field>
+        {_.map(formConfig, (value, key) => (
+          <Form.Field key={key}>
             {value.required ? (
               <label className="requiredField">{value.title}</label>
             ) : (

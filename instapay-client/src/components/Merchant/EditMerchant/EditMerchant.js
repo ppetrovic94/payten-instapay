@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import axios from '../../../utils/API';
 import { getFormConfig, merchantFormTemplate } from '../utils/merchantForm';
 import CustomForm from '../../CustomForm/CustomForm';
@@ -45,9 +46,11 @@ const EditMerchant = () => {
     setLoading(true);
     try {
       await axios.put(`/user/merchant/${id}/edit`, updatedMerchant);
+      toast.success(`Uspešno ste ažurirali trgovca ${updatedMerchant.merchantName}`);
       setLoading(false);
-      history.push('/');
+      history.goBack();
     } catch (err) {
+      toast.error(`Došlo je do greške pri ažuriranju trgovca ${updatedMerchant.merchantName}`);
       setLoading(false);
       setErrors(err.response.data);
     }
@@ -61,7 +64,7 @@ const EditMerchant = () => {
     merchantMetadata &&
     formFields && (
       <div>
-        <h2 className="merchantFormHeader">Trgovac</h2>
+        <h2 className="merchantFormHeader">Ažuriranje trgovca</h2>
         <CustomForm
           formConfig={getFormConfig(merchantMetadata)}
           formFields={formFields}

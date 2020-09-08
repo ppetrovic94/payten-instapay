@@ -47,7 +47,7 @@ const GroupRoles = ({ groupFields, setGroupFields, errorMessage }) => {
     } else {
       setGroupFields({
         ...groupFields,
-        roleIds: groupFields.roleIds.filter((elem) => elem !== e.target.value),
+        roleIds: groupFields.roleIds.filter((elem) => elem != e.target.value),
       });
     }
   };
@@ -73,7 +73,7 @@ const GroupRoles = ({ groupFields, setGroupFields, errorMessage }) => {
                     id={role.roleId}
                     onChange={onCheckboxClick}
                     value={role.roleId}
-                    checked={checkedRoles[role.roleId]}
+                    defaultChecked={checkedRoles[role.roleId]}
                   />
                 </Table.Cell>
               </Table.Row>

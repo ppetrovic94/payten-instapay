@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
@@ -32,9 +33,11 @@ const AddFee = () => {
     setLoading(true);
     try {
       await axios.post('/user/fees/add', formFields);
+      toast.success('Uspešno ste dodali proviziju');
       setLoading(false);
       history.goBack();
     } catch (err) {
+      toast.error('Došlo je do greške pri dodavanju provizije');
       setLoading(false);
       setErrors(err.response.data);
     }

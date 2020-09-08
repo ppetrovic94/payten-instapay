@@ -29,7 +29,7 @@ export const pointOfSaleFormConfig = {
     title: 'Grad',
     type: 'DROPDOWN',
     options: [],
-    required: false,
+    required: true,
     disabled: false,
   },
   status: {

@@ -47,7 +47,9 @@ const UserGroups = ({ userFields, setUserFields, errorMessage }) => {
     } else {
       setUserFields({
         ...userFields,
-        groupIds: userFields.groupIds.filter((elem) => elem !== e.target.value),
+        groupIds: userFields.groupIds.filter((elem) => {
+          return elem != e.target.value;
+        }),
       });
     }
   };
@@ -73,7 +75,7 @@ const UserGroups = ({ userFields, setUserFields, errorMessage }) => {
                     id={group.groupId}
                     onChange={onCheckboxClick}
                     value={group.groupId}
-                    checked={checkedGroups[group.groupId]}
+                    defaultChecked={checkedGroups[group.groupId]}
                   />
                 </Table.Cell>
               </Table.Row>

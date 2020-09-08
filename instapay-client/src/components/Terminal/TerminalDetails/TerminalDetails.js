@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { pdf } from '@react-pdf/renderer';
+import { toast } from 'react-toastify';
 import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import NotFound from '../../../security/NotFound/NotFound';
-import EmailCard from '../../EmailCard/EmailCard';
 import CredentialsCard from '../../Cards/CredentialsCard/CredentialsCard';
 import TerminalCredentialsPdf from './TerminalCredentialsPdf';
 import './TerminalDetails.scss';
 import { Breadcrumb } from 'semantic-ui-react';
+import EmailCard from '../../Cards/EmailCard/EmailCard';
 
 const TerminalDetails = () => {
   const [loading, setLoading] = useState(false);
   const [terminalDetails, setTerminalDetails] = useState(null);
+  const [merchantEmail, setMerchantEmail] = useState('');
   const [sections, setSections] = useState(null);
   const [notFound, setNotFound] = useState(null);
   const { id } = useParams();
@@ -26,6 +28,16 @@ const TerminalDetails = () => {
     } catch (err) {
       setNotFound(err.response);
       setLoading(false);
+    }
+  };
+
+  const fetchEmailByMerchantId = async () => {
+    const merchantId = localStorage.getItem('merchantId');
+    try {
+      const res = await axios.get(`/user/merchants/${merchantId}/email`);
+      setMerchantEmail(res.data);
+    } catch (error) {
+      console.error(error.response);
     }
   };
 
@@ -62,13 +74,16 @@ const TerminalDetails = () => {
   useEffect(() => {
     fetchTerminalById(id);
     fetchNavbarData();
+    fetchEmailByMerchantId();
   }, [id]);
 
   const regenerateCredentials = async (terminalId) => {
     setLoading(true);
     try {
       await axios.get(`/user/terminals/${terminalId}/generateCredentials?regenerate=true`);
+      toast.success('Uspešno ste generisali nove kredencijale');
     } catch (err) {
+      toast.error('Došlo je do greške pri generisanju novih kredencijala');
       setLoading(false);
       console.error(err.response);
     }
@@ -88,9 +103,17 @@ const TerminalDetails = () => {
         reader.onload = function () {
           var base64result = reader.result.split(',')[1];
           const sendFile = async () => {
-            await axios.get(
-              `/user/terminals/credentials/send?sendTo=${receiverMail}&terminalId=${terminalDetails.acquirerTid}&pdfFileBase64=${base64result}`,
-            );
+            setLoading(true);
+            try {
+              await axios.get(
+                `/user/terminals/credentials/send?sendTo=${receiverMail}&terminalId=${terminalDetails.acquirerTid}&pdfFileBase64=${base64result}`,
+              );
+              toast.success(`Uspešno ste poslali kredencijale na ${receiverMail}`);
+              setLoading(false);
+            } catch (error) {
+              toast.error(`Došlo je do greške pri slanju kredencijala na ${receiverMail}`);
+              setLoading(false);
+            }
           };
           sendFile();
         };
@@ -120,7 +143,11 @@ const TerminalDetails = () => {
             regenerateCredentials={regenerateCredentials}
             fetchTerminalById={fetchTerminalById}
           />
-          <EmailCard onSendHandler={sendOnMail} details={terminalDetails} />
+          <EmailCard
+            onSendHandler={sendOnMail}
+            details={terminalDetails}
+            merchantEmail={merchantEmail}
+          />
         </div>
       </div>
     )

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
@@ -16,9 +17,11 @@ const AddUser = () => {
     setLoading(true);
     try {
       await axios.post('/admin/users/add', formFields);
+      toast.success(`Uspešno ste dodali novog korisnika ${formFields.username}`);
       setLoading(false);
       history.push('/users');
     } catch (err) {
+      toast.error('Došlo je do greške pri dodavanju novog korisnika');
       setLoading(false);
       setErrors(err.response.data);
     }
