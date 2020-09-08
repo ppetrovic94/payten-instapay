@@ -18,4 +18,5 @@ public interface MerchantService {
     MerchantMetadata getMerchantMetadata();
     MerchantDto editMerchant(Integer id, MerchantDto merchant, BindingResult result);
     String getMerchantNameById(Integer merchantId);
+    String getMerchantEmailById(Integer merchantId);
 }

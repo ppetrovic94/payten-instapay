@@ -20,6 +20,9 @@ public class Merchant implements Serializable {
     @Column(name = "MERCHANT_ADDRESS")
     private String merchantAddress;
 
+    @Column(name = "E_MAIL")
+    private String merchantEmail;
+
     @Basic
     @Column(name = "MERCHANT_SETUP_DATE")
     private Date setupDate;
@@ -192,5 +195,13 @@ public class Merchant implements Serializable {
 
     public void setMerchantId(Integer merchantId) {
         this.merchantId = merchantId;
+    }
+
+    public String getMerchantEmail() {
+        return merchantEmail;
+    }
+
+    public void setMerchantEmail(String merchantEmail) {
+        this.merchantEmail = merchantEmail;
     }
 }
