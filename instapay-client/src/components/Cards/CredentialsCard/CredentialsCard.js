@@ -24,7 +24,7 @@ const CredentialsCard = ({ details, regenerateCredentials, fetchTerminalById }) 
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <Image
-          src={`http://localhost:8080/api/user/terminals/qrcode/${details.userId}`}
+          src={`/ips/api/user/terminals/qrcode/${details.userId}`}
           style={{
             width: '200px',
           }}
