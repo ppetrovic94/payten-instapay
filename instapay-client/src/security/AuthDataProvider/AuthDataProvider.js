@@ -16,7 +16,7 @@ const AuthDataProvider = (props) => {
     },
     function (error) {
       if (error.response.status === 403) {
-        document.cookie = 'JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/ips;';
+        document.cookie = `JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/ips; domain=${document.cookie.hostname};`;
         history.push('/ips');
       }
 
