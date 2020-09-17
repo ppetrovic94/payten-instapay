@@ -34,12 +34,12 @@ const Transactions = () => {
           {
             key: 'merchantName',
             content: merchantName.data,
-            href: `/merchant/${merchantId}/pos`,
+            href: `/ips/merchant/${merchantId}/pos`,
           },
           {
             key: 'pointOfSaleName',
             content: posName.data,
-            href: `/pos/${posId}/terminals`,
+            href: `/ips/pos/${posId}/terminals`,
           },
           {
             key: 'terminalName',

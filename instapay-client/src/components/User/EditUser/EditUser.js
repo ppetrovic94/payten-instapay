@@ -37,7 +37,7 @@ const EditUser = () => {
       await axios.put(`/admin/users/${id}/edit`, user);
       toast.success(`Uspešno ste ažurirali korisnika ${user.username}`);
       setLoading(false);
-      history.push('/users');
+      history.push('/ips/users');
     } catch (err) {
       toast.error(`Došlo je do greške pri ažuriranju korisnika ${user.username}`);
       setLoading(false);

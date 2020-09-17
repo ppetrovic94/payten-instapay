@@ -27,10 +27,6 @@ const EmailCard = ({ onSendHandler, details, merchantEmail }) => {
     }
   };
 
-  const onEmailSend = () => {
-    onSendHandler(merchantEmail);
-  };
-
   const sendEmailModalContent = () => (
     <h3>{`Da li ste sigurni da želite da pošaljete kredencijale (PDF) na adresi ${email} ?`}</h3>
   );
@@ -60,8 +56,8 @@ const EmailCard = ({ onSendHandler, details, merchantEmail }) => {
           <CustomModal
             content={sendEmailModalContent}
             yesNoButtons
-            onAcceptHandler={async () => {
-              await onEmailSend();
+            onAcceptHandler={() => {
+              onSendHandler(email);
             }}
             triggerElement={() => (
               <Button disabled={disabled} className="sendButton" color="teal">

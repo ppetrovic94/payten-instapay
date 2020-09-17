@@ -100,7 +100,7 @@ const Merchants = () => {
       <div className="merchantsTable">
         <CustomTable
           tableTitle="Lista trgovaca"
-          tableAddItem="/merchants/add"
+          tableAddItem="/ips/merchants/add"
           tableHeader={merchantTableHeader}
           tableActions={merchantActionConfig}
           content={formatMerchantData(merchants)}

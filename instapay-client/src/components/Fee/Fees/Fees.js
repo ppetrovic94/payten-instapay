@@ -16,6 +16,7 @@ const Fees = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [errors, setErrors] = useState(null);
+  const [notFound, setNotFound] = useState(null);
   const { id } = useParams();
 
   useEffect(() => {
@@ -41,7 +42,7 @@ const Fees = () => {
           {
             key: 'merchantName',
             content: response.data.content[0].merchant.merchantName,
-            href: `/merchant/${merchantId}/pos`,
+            href: `/ips/merchant/${merchantId}/pos`,
           },
           {
             key: 'fees',
@@ -55,7 +56,7 @@ const Fees = () => {
           {
             key: 'merchantName',
             content: res.data,
-            href: `/merchant/${merchantId}/pos`,
+            href: `/ips/merchant/${merchantId}/pos`,
           },
           {
             key: 'fees',
@@ -65,7 +66,7 @@ const Fees = () => {
       }
       setLoading(false);
     } catch (err) {
-      setErrors(err.response);
+      setNotFound(err.response);
       setLoading(false);
     }
   };
@@ -206,7 +207,7 @@ const Fees = () => {
     }
   };
 
-  return errors ? (
+  return notFound ? (
     <NotFound message={errors.data} />
   ) : loading ? (
     <CustomLoader />
@@ -215,7 +216,7 @@ const Fees = () => {
       <div className="feesTable">
         <CustomTable
           tableTitle={id ? null : 'Provizije'}
-          tableAddItem={'/fees/add'}
+          tableAddItem={'/ips/fees/add'}
           tableHeader={feeTableHeader}
           content={formatFeeData(fees)}
           tableSearchHandler={onChangeSearchTerm}

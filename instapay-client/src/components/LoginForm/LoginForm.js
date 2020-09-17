@@ -36,9 +36,13 @@ const LoginForm = () => {
   const redirectBasedOnRole = (authorities) => {
     const roles = getRoles(authorities);
     if (roles[0] === 'ROLE_USER') {
-      history.push('/merchants');
+      history.push('/ips/merchants');
     } else if (roles[0] === 'ROLE_ADMIN') {
-      history.push('/users');
+      history.push('/ips/users');
+    } else if (roles[0] === 'ROLE_ACQ' && roles.length == 1) {
+      setError('Uloga ROLE_ACQ nije podržana u ovoj verziji aplikacije');
+    } else {
+      history.push('/ips/merchants');
     }
   };
 

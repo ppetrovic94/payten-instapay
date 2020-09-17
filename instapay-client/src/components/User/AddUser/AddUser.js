@@ -19,7 +19,7 @@ const AddUser = () => {
       await axios.post('/admin/users/add', formFields);
       toast.success(`Uspešno ste dodali novog korisnika ${formFields.username}`);
       setLoading(false);
-      history.push('/users');
+      history.push('/ips/users');
     } catch (err) {
       toast.error('Došlo je do greške pri dodavanju novog korisnika');
       setLoading(false);

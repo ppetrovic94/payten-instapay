@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.WebAttributes;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -61,10 +62,13 @@ public class LoginController {
 
     @GetMapping("/api/logout")
     @ResponseStatus(HttpStatus.OK)
-    public void logout(HttpServletRequest req){
+    public void logout(HttpServletRequest req, HttpServletResponse res){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         HttpSession session = req.getSession(false);
         session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
-        SecurityContextHolder.getContext().setAuthentication(null);
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(req, res, auth);
+        }
     }
 
     @GetMapping("/api/currentroles")

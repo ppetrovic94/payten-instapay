@@ -35,7 +35,7 @@ const AddMerchant = () => {
       await axios.post('/user/merchants/add', formFields);
       toast.success(`Uspešno ste dodali trgovca ${formFields.merchantName}`);
       setLoading(false);
-      history.push('/merchants');
+      history.push('/ips/merchants');
     } catch (err) {
       toast.error('Došlo je do greške pri dodavanju trgovca');
       setLoading(false);

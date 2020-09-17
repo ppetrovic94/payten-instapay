@@ -91,7 +91,7 @@ const Groups = () => {
             <h3 className="groupTitle">Grupe</h3>
             <div className="groupTableHeaderWrapper">
               <div>
-                <Button as={Link} to={'/groups/add'} color="black">
+                <Button as={Link} to={'/ips/groups/add'} color="black">
                   Dodaj
                 </Button>
               </div>

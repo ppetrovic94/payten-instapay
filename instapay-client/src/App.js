@@ -14,7 +14,7 @@ const App = () => {
       <Router>
         <AuthDataProvider>
           <Switch>
-            <LoginRoute path="/" exact component={LoginForm} />
+            <LoginRoute path="/ips" exact component={LoginForm} />
             <Route component={Layout} />
           </Switch>
         </AuthDataProvider>

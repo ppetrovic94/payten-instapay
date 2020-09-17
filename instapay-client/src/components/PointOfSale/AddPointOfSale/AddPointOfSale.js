@@ -48,7 +48,7 @@ const AddPointOfSale = () => {
       await axios.post(`/user/merchant/${id}/pos/add`, pointOfSale);
       toast.success(`Uspešno ste dodali prodajno mesto ${pointOfSale.pointOfSaleName}`);
       setLoading(false);
-      history.push(`/merchant/${id}/pos`);
+      history.push(`/ips/merchant/${id}/pos`);
     } catch (err) {
       toast.error('Došlo je do greške pri dodavanju prodajnog mesta');
       setLoading(false);

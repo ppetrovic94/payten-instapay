@@ -80,7 +80,7 @@ const Users = () => {
       <div className="usersTable">
         <CustomTable
           tableTitle="Korisnici"
-          tableAddItem={'/users/add'}
+          tableAddItem={'/ips/users/add'}
           tableHeader={userTableHeader}
           content={formatUserData(users)}
           tableSearchHandler={onChangeSearchTerm}

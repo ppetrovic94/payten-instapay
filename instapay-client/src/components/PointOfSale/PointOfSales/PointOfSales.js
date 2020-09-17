@@ -118,7 +118,7 @@ const PointOfSales = () => {
     pointOfSales && (
       <div className="pointOfSalesTable">
         <CustomTable
-          tableAddItem={`/merchant/${id}/pos/add`}
+          tableAddItem={`/ips/merchant/${id}/pos/add`}
           tableHeader={pointOfSaleTableHeader}
           tableActions={pointOfSaleActionConfig}
           content={formatPointOfSalesData(pointOfSales)}

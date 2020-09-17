@@ -12,27 +12,18 @@ const AuthDataProvider = (props) => {
 
   axios.interceptors.response.use(
     function (response) {
-      // Any status code that lie within the range of 2xx cause this function to trigger
-      // Do something with response data
-
       return response;
     },
     function (error) {
-      // Any status codes that falls outside the range of 2xx cause this function to trigge
-      // Do something with response error
       if (error.response.status === 403) {
-        document.cookie = 'JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        history.push('/');
+        document.cookie = `JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/ips/; domain=${document.location.hostname}`;
+        history.push('/ips');
       }
 
       return Promise.reject(error);
     },
   );
 
-  /* The first time the component is rendered, it tries to
-   * fetch the auth data from a source, like a cookie or
-   * the localStorage.
-   */
   useEffect(() => {
     const fetchCurrentUserRoles = async () => {
       try {

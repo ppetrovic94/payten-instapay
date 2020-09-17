@@ -32,7 +32,7 @@ export const feeActionConfig = (id) => {
       type: 'UPDATE',
       name: 'editFee',
       label: 'Izmeni',
-      redirectLink: `/fees/${id}`,
+      redirectLink: `/ips/fees/${id}`,
       icon: 'edit',
     },
     {

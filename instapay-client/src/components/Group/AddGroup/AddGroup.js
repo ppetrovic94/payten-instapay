@@ -19,7 +19,7 @@ const AddGroup = () => {
       await axios.post('/admin/groups/add', formFields);
       toast.success(`Uspešno ste dodali grupu ${formFields.groupName}`);
       setLoading(false);
-      history.push('/groups');
+      history.push('/ips/groups');
     } catch (err) {
       toast.error('Došlo je do greške pri dodavanju grupe');
       setLoading(false);

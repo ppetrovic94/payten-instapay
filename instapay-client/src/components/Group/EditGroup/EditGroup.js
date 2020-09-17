@@ -38,7 +38,7 @@ const EditGroup = () => {
       await axios.put(`/admin/groups/${id}/update`, updatedGroup);
       toast.success(`Uspešno ste ažurirali grupu ${updatedGroup.groupName}`);
       setLoading(false);
-      history.push('/groups');
+      history.push('/ips/groups');
     } catch (err) {
       toast.error('Došlo je do greške pri ažuriranju grupe');
       setLoading(false);
