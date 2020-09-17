@@ -31,7 +31,7 @@ export const formatTerminalData = (data) => {
         terminalType,
         setupDate,
         paymentMethod:
-          paymentMethod === 'P' ? 'Present' : paymentMethod === 'S' ? 'Scan' : paymentMethod,
+          paymentMethod === 'P' ? 'Present' : paymentMethod === 'S' ? 'Scan' : paymentMethod === '',
       };
     },
   );
@@ -43,21 +43,21 @@ export const terminalActionConfig = (id) => {
       type: 'UPDATE',
       name: 'editTerminal',
       label: 'Izmeni',
-      redirectLink: `/terminals/${id}`,
+      redirectLink: `/ips/terminals/${id}`,
       icon: 'edit',
     },
     {
       type: 'GET_TRANSACTIONS',
       name: 'transactions',
       label: 'Transakcije',
-      redirectLink: `/terminals/${id}/transactions`,
+      redirectLink: `/ips/terminals/${id}/transactions`,
       icon: 'exchange',
     },
     {
       type: 'GET_ANDROID_DETAILS',
       name: 'androidDetails',
       label: 'Kredencijali za ANDROID',
-      redirectLink: `/terminals/${id}/details`,
+      redirectLink: `/ips/terminals/${id}/details`,
       icon: 'android',
     },
   ];

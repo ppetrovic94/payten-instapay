@@ -49,7 +49,7 @@ export const terminalActionConfig = (endToEndId) => {
       type: 'GET_TRANSACTION_DETAILS',
       name: 'transactionDetails',
       label: 'Detalji transakcije',
-      redirectLink: `/terminals/transactions/${endToEndId}`,
+      redirectLink: `/ips/terminals/transactions/${endToEndId}`,
       icon: 'list layout',
     },
   ];

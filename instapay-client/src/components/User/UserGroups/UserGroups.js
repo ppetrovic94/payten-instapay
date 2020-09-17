@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { Table } from 'semantic-ui-react';
 import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
@@ -46,7 +47,9 @@ const UserGroups = ({ userFields, setUserFields, errorMessage }) => {
     } else {
       setUserFields({
         ...userFields,
-        groupIds: userFields.groupIds.filter((elem) => elem !== e.target.value),
+        groupIds: userFields.groupIds.filter((elem) => {
+          return elem != e.target.value;
+        }),
       });
     }
   };
@@ -72,7 +75,7 @@ const UserGroups = ({ userFields, setUserFields, errorMessage }) => {
                     id={group.groupId}
                     onChange={onCheckboxClick}
                     value={group.groupId}
-                    checked={checkedGroups[group.groupId]}
+                    defaultChecked={checkedGroups[group.groupId]}
                   />
                 </Table.Cell>
               </Table.Row>
@@ -82,6 +85,12 @@ const UserGroups = ({ userFields, setUserFields, errorMessage }) => {
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
     </div>
   );
+};
+
+UserGroups.propTypes = {
+  userFields: PropTypes.object,
+  setUserFields: PropTypes.func,
+  errorMessage: PropTypes.string,
 };
 
 export default UserGroups;

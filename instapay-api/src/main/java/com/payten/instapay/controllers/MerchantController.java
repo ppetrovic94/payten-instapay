@@ -53,6 +53,12 @@ public class MerchantController {
         return merchantService.getMerchantNameById(merchantId);
     }
 
+    @GetMapping("/merchants/{merchantId}/email")
+    @ResponseStatus(value = HttpStatus.OK)
+    public String getMerchantEmailById(@PathVariable Integer merchantId){
+        return merchantService.getMerchantEmailById(merchantId);
+    }
+
     @GetMapping("/merchants/all")
     @ResponseStatus(value = HttpStatus.OK)
     public List<Merchant> getMerchants(){

@@ -4,3 +4,7 @@
   justify-content: center;
   align-items: center;
 }
+
+.ui.loader:after {
+  border-color: #767676 transparent transparent !important;
+}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import axios from '../../../utils/API';
 import CustomTable from '../../CustomTable/CustomTable';
 import { feeTableHeader, formatFeeData, feeActionConfig } from '../utils/feeTable';
@@ -10,11 +11,12 @@ import CustomLoader from '../../CustomLoader/CustomLoader';
 const Fees = () => {
   const [loading, setLoading] = useState(false);
   const [fees, setFees] = useState(null);
-  const [merchantName, setMerchantName] = useState(null);
+  const [sections, setSections] = useState([]);
   const [activePage, setActivePage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [errors, setErrors] = useState(null);
+  const [notFound, setNotFound] = useState(null);
   const { id } = useParams();
 
   useEffect(() => {
@@ -25,7 +27,6 @@ const Fees = () => {
     }
     return () => {
       setFees(null);
-      setMerchantName(null);
       setErrors(null);
     };
   }, [id]);
@@ -37,14 +38,35 @@ const Fees = () => {
       setFees(response.data.content);
       setTotalPages(response.data.totalPages);
       if (response.data.content[0]) {
-        setMerchantName(response.data.content[0].merchant.merchantName);
+        setSections([
+          {
+            key: 'merchantName',
+            content: response.data.content[0].merchant.merchantName,
+            href: `/ips/merchant/${merchantId}/pos`,
+          },
+          {
+            key: 'fees',
+            content: 'Provizije',
+          },
+        ]);
       } else {
         const res = await axios.get(`/user/merchants/${merchantId}/name`);
-        setMerchantName(res.data);
+
+        setSections([
+          {
+            key: 'merchantName',
+            content: res.data,
+            href: `/ips/merchant/${merchantId}/pos`,
+          },
+          {
+            key: 'fees',
+            content: 'Provizije',
+          },
+        ]);
       }
       setLoading(false);
     } catch (err) {
-      setErrors(err.response);
+      setNotFound(err.response);
       setLoading(false);
     }
   };
@@ -65,14 +87,15 @@ const Fees = () => {
     setLoading(true);
     try {
       await axios.delete(`/user/fees/${feeRuleId}/delete`);
+      toast.success('Uspešno ste obrisali proviziju');
       setLoading(false);
-
       if (id) {
         fetchFeesByMerchantId(id);
       } else {
         fetchFees();
       }
     } catch (error) {
+      toast.error('Došlo je do greške pri brisanju provizije');
       console.error(error.response);
       setLoading(false);
     }
@@ -184,7 +207,7 @@ const Fees = () => {
     }
   };
 
-  return errors ? (
+  return notFound ? (
     <NotFound message={errors.data} />
   ) : loading ? (
     <CustomLoader />
@@ -192,8 +215,8 @@ const Fees = () => {
     fees && (
       <div className="feesTable">
         <CustomTable
-          tableTitle={merchantName ? `${merchantName} - Provizije` : 'Provizije'}
-          tableAddItem={'/fees/add'}
+          tableTitle={id ? null : 'Provizije'}
+          tableAddItem={'/ips/fees/add'}
           tableHeader={feeTableHeader}
           content={formatFeeData(fees)}
           tableSearchHandler={onChangeSearchTerm}
@@ -203,6 +226,7 @@ const Fees = () => {
           tableTotalPages={totalPages}
           tableColumnSortHandler={onColumnSort}
           onDeleteHandler={onDeleteFee}
+          navbarSections={sections}
         />
       </div>
     )

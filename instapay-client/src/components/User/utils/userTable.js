@@ -32,7 +32,7 @@ export const userActionConfig = (id) => {
       type: 'UPDATE',
       name: 'updateUser',
       label: 'Izmeni',
-      redirectLink: `/users/${id}`,
+      redirectLink: `/ips/users/${id}`,
       icon: 'edit',
     },
     {

@@ -145,6 +145,17 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
+    public String getMerchantEmailById(Integer merchantId) {
+        String merchantEmail = merchantRepository.getMerchantEmailById(merchantId);
+
+        if (merchantEmail == null) {
+            throw new RequestedResourceNotFoundException("Trgovac sa IDem: " + merchantId + " nema unetu adresu elektronske pošte");
+        }
+
+        return merchantEmail;
+    }
+
+    @Override
     public void deleteMerchant(Integer id) {
         Merchant found = merchantRepository.getByMerchantId(id);
 

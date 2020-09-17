@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import { Table, Input, Button, Pagination, Breadcrumb } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
@@ -134,12 +135,16 @@ const CustomTable = ({
                           )}
                         </Table.Cell>
                       ) : header === 'groups' ? (
-                        <Table.Cell>
+                        <Table.Cell key={key}>
                           <div className="groupWrapper">
-                            {item[header].map((groupName) => {
-                              return <p>{`${groupName} `}</p>;
+                            {item[header].map((groupName, key) => {
+                              return <p key={key}>{`${groupName} `}</p>;
                             })}
                           </div>
+                        </Table.Cell>
+                      ) : header === 'status' ? (
+                        <Table.Cell key={key} className={`tableStatus-${item[header]}`}>
+                          {item[header]}
                         </Table.Cell>
                       ) : (
                         <Table.Cell key={key}>{item[header]}</Table.Cell>
@@ -166,6 +171,21 @@ const CustomTable = ({
       )}
     </div>
   );
+};
+
+CustomTable.propTypes = {
+  tableTitle: PropTypes.string,
+  tableHeader: PropTypes.object,
+  tableActions: PropTypes.func,
+  content: PropTypes.array,
+  tableSearchHandler: PropTypes.func,
+  tableAddItem: PropTypes.string,
+  tableActivePage: PropTypes.number,
+  tableHandlePageChange: PropTypes.func,
+  tableTotalPages: PropTypes.number,
+  tableColumnSortHandler: PropTypes.func,
+  onDeleteHandler: PropTypes.func,
+  navbarSections: PropTypes.array,
 };
 
 export default CustomTable;

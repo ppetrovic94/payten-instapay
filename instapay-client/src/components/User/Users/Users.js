@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import axios from '../../../utils/API';
 import CustomTable from '../../CustomTable/CustomTable';
 import { userTableHeader, formatUserData, userActionConfig } from '../utils/userTable';
@@ -34,9 +35,11 @@ const Users = () => {
     setLoading(true);
     try {
       await axios.delete(`/admin/users/${userId}/delete`);
+      toast.success('Uspešno ste obrisali korisnika');
       setLoading(false);
       fetchUsers();
     } catch (error) {
+      toast.success('Došlo je do greške pri brisanju korisnika');
       console.error(error.response);
       setLoading(false);
     }
@@ -77,7 +80,7 @@ const Users = () => {
       <div className="usersTable">
         <CustomTable
           tableTitle="Korisnici"
-          tableAddItem={'/users/add'}
+          tableAddItem={'/ips/users/add'}
           tableHeader={userTableHeader}
           content={formatUserData(users)}
           tableSearchHandler={onChangeSearchTerm}

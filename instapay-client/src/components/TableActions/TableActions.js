@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Popup, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import './TableActions.scss';
@@ -36,6 +37,11 @@ const TableActions = ({ actions, onDeleteHandler }) => {
         })}
     </div>
   );
+};
+
+TableActions.propTypes = {
+  actions: PropTypes.array,
+  onDeleteHandler: PropTypes.func,
 };
 
 export default TableActions;

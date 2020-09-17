@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Page, Document, View, Text, Image, StyleSheet } from '@react-pdf/renderer';
 
 const styles = StyleSheet.create({
@@ -44,5 +45,11 @@ const TerminalCredentialsPdf = ({ acquirerTid, activationCode, userId }) => (
     </Page>
   </Document>
 );
+
+TerminalCredentialsPdf.propTypes = {
+  acquirerTid: PropTypes.string,
+  activationCode: PropTypes.string,
+  userId: PropTypes.string,
+};
 
 export default TerminalCredentialsPdf;

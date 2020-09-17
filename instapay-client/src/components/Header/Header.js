@@ -17,8 +17,8 @@ const Header = () => {
   const onLogout = async () => {
     try {
       await axios.get('/logout');
-      document.cookie = 'JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-      history.push('/');
+      document.cookie = 'JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/ips;';
+      history.push('/ips');
     } catch (error) {
       console.error(error, 'logout err');
     }
@@ -35,21 +35,21 @@ const Header = () => {
             <>
               <Menu.Item
                 as={Link}
-                to={'/merchants'}
+                to={'/ips/merchants'}
                 name="Trgovci"
                 active={activeItem === 'Trgovci'}
                 onClick={onItemClick}
               />
               <Menu.Item
                 as={Link}
-                to="/cities"
+                to="/ips/cities"
                 name="Gradovi"
                 active={activeItem === 'Gradovi'}
                 onClick={onItemClick}
               />
               <Menu.Item
                 as={Link}
-                to={'/fees'}
+                to={'/ips/fees'}
                 name="Provizije"
                 active={activeItem === 'Provizije'}
                 onClick={onItemClick}
@@ -64,13 +64,13 @@ const Header = () => {
                     <Dropdown.Menu>
                       <Dropdown.Item
                         as={Link}
-                        to={'/users'}
+                        to={'/ips/users'}
                         onClick={(e) => onItemClick(e, { name: 'Korisnici' })}>
                         Lista korisnika
                       </Dropdown.Item>
                       <Dropdown.Item
                         as={Link}
-                        to={'/groups'}
+                        to={'/ips/groups'}
                         onClick={(e) => onItemClick(e, { name: 'Korisnici' })}>
                         Administracija grupa
                       </Dropdown.Item>
@@ -81,14 +81,14 @@ const Header = () => {
                 <>
                   <Menu.Item
                     as={Link}
-                    to={'/users'}
+                    to={'/ips/users'}
                     name={'Korisnici'}
                     active={activeItem === 'Korisnici'}
                     onClick={onItemClick}
                   />
                   <Menu.Item
                     as={Link}
-                    to={'/groups'}
+                    to={'/ips/groups'}
                     name="Grupe"
                     active={activeItem === 'Grupe'}
                     onClick={onItemClick}
@@ -97,21 +97,10 @@ const Header = () => {
               )}
             </>
           )}
-          {roles && !!roles.find((role) => role === 'ROLE_ACQ') && (
-            <>
-              <Menu.Item
-                as={Link}
-                to={'/reports'}
-                name="Izveštaji"
-                active={activeItem === 'Izveštaji'}
-                onClick={onItemClick}
-              />
-            </>
-          )}
         </Menu>
       </div>
       <div className="logout">
-        <Link className="logoutContainer" onClick={onLogout} to="/">
+        <Link className="logoutContainer" onClick={onLogout}>
           <Icon className="logoutIcon" name={'log out'} size="large" />
           <p className="logoutLabel">Odjavi se</p>
         </Link>

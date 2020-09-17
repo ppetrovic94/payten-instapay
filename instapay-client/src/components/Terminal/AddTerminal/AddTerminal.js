@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
@@ -33,10 +34,13 @@ const AddTerminal = () => {
       }
     };
     const fetchTerminalMetadata = async () => {
+      setLoading(true);
       try {
         const response = await axios.get('/user/terminals/metadata');
         setTerminalMetadata(response.data);
+        setLoading(false);
       } catch (err) {
+        setLoading(false);
         setErrors(err.response);
       }
     };
@@ -60,10 +64,8 @@ const AddTerminal = () => {
     if (terminalId) {
       if (terminalFields.terminalTypeId === 1) {
         generateCredentials(terminalId);
-        history.push(`/terminals/${terminalId}/details`);
-      } else {
-        history.goBack();
       }
+      history.goBack();
       setLoading(false);
     }
   }, [terminalId]);
@@ -72,8 +74,10 @@ const AddTerminal = () => {
     setLoading(true);
     try {
       const addedTerminal = await axios.post(`/user/pos/${id}/terminals/add`, terminalFields);
+      toast.success(`Uspešno ste dodali terminal ${terminalFields.acquirerTid}`);
       setTerminalId(addedTerminal.data.terminalId);
     } catch (err) {
+      toast.error('Došlo je do greške pri dodavanju terminala');
       setLoading(false);
       setErrors(err.response.data);
     }

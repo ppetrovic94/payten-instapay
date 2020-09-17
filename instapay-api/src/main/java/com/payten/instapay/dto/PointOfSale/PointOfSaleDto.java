@@ -16,9 +16,10 @@ public class PointOfSaleDto {
     @NotEmpty(message = "Morate uneti adresu prodajnog mesta")
     private String pointOfSaleAddress;
 
+    @NotNull(message = "Morate uneti grad prodajnog mesta")
     private Integer cityId;
 
-    @NotNull(message = "Morate uneti datum unosa novog prodajnog mesta")
+    @NotEmpty(message = "Morate uneti datum unosa novog prodajnog mesta")
     private String setupDate;
 
     private String paymentMethodId;

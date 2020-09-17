@@ -149,7 +149,6 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
         if (status == null) { throw new RequestedResourceNotFoundException("Ne postoji status sa ID-em " + pointOfSaleDto.getStatusId()); }
 
         PaymentMethod paymentMethod = paymentMethodRepository.getByPaymentMethodId(pointOfSaleDto.getPaymentMethodId());
-        if (paymentMethod == null) { throw new RequestedResourceNotFoundException("Ne postoji metod plaćanja sa ID-em " + pointOfSaleDto.getPaymentMethodId()); }
 
         City city = cityRepository.getByCityId(pointOfSaleDto.getCityId());
 
@@ -193,7 +192,7 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
 
     private Map<String, String> checkPointOfSaleUniqueConstraints(String pointOfSaleLocalId, PointOfSale pointOfSale){
         Map<String,String> errorMap;
-        if (pointOfSale != null && pointOfSale.getPointOfSaleLocalId().equals(pointOfSaleLocalId)){
+        if (pointOfSale != null && pointOfSale.getPointOfSaleLocalId() != null && pointOfSale.getPointOfSaleLocalId().equals(pointOfSaleLocalId)){
             errorMap = null;
         } else {
             if (!pointOfSaleLocalId.isEmpty() && pointOfSaleRepository.existsByPointOfSaleLocalId(pointOfSaleLocalId)) {

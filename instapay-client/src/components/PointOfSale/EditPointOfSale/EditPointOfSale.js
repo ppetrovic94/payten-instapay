@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import axios from '../../../utils/API';
 import { getPointOfSaleFormConfig, pointOfSaleFormTemplate } from '../utils/pointOfSaleForm';
 import CustomForm from '../../CustomForm/CustomForm';
@@ -57,9 +58,11 @@ const EditPointOfSale = () => {
     setLoading(true);
     try {
       await axios.put(`/user/pos/${id}/edit`, updatedPointOfSale);
+      toast.success(`Uspešno ste ažurirali prodajno mesto ${updatedPointOfSale.pointOfSaleName}`);
       setLoading(false);
-      history.push('/');
+      history.goBack();
     } catch (err) {
+      toast.error('Došlo je do greške pri ažuriranju prodajnog mesta');
       setLoading(false);
       setErrors(err.response.data);
     }

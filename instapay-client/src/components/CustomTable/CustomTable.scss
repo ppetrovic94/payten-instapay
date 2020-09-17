@@ -41,3 +41,21 @@
   background-color: #c7c1c1;
   height: 500px;
 }
+
+.tableStatus {
+  &-Inactive {
+    color: #fa8f43;
+  }
+
+  &-Active {
+    color: #4ca66a;
+  }
+
+  &-Deactivated {
+    color: purple;
+  }
+
+  &-Suspended {
+    color: red;
+  }
+}

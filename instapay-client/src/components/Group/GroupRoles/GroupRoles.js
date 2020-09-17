@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { Table } from 'semantic-ui-react';
 import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
@@ -36,7 +37,7 @@ const GroupRoles = ({ groupFields, setGroupFields, errorMessage }) => {
       });
     }
 
-    setCheckedRoles((checkedRole) => ({ ...checkedRoles, ...temp }));
+    setCheckedRoles({ ...checkedRoles, ...temp });
   }, [groupFields, roles]);
 
   const onCheckboxClick = (e) => {
@@ -46,7 +47,7 @@ const GroupRoles = ({ groupFields, setGroupFields, errorMessage }) => {
     } else {
       setGroupFields({
         ...groupFields,
-        roleIds: groupFields.roleIds.filter((elem) => elem !== e.target.value),
+        roleIds: groupFields.roleIds.filter((elem) => elem != e.target.value),
       });
     }
   };
@@ -72,7 +73,7 @@ const GroupRoles = ({ groupFields, setGroupFields, errorMessage }) => {
                     id={role.roleId}
                     onChange={onCheckboxClick}
                     value={role.roleId}
-                    checked={checkedRoles[role.roleId]}
+                    defaultChecked={checkedRoles[role.roleId]}
                   />
                 </Table.Cell>
               </Table.Row>
@@ -82,6 +83,12 @@ const GroupRoles = ({ groupFields, setGroupFields, errorMessage }) => {
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
     </div>
   );
+};
+
+GroupRoles.propTypes = {
+  groupFields: PropTypes.object,
+  setGroupFields: PropTypes.func,
+  errorMessage: PropTypes.string,
 };
 
 export default GroupRoles;

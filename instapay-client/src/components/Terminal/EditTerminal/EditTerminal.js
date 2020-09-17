@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
@@ -38,10 +39,13 @@ const EditTerminal = () => {
     };
 
     const fetchTerminalById = async (id) => {
+      setLoading(true);
       try {
         const response = await axios.get(`/user/terminals/${id}`);
         setTerminalFields({ ...response.data });
+        setLoading(false);
       } catch (err) {
+        setLoading(false);
         setNotFound(err.response);
       }
     };
@@ -54,8 +58,10 @@ const EditTerminal = () => {
     setLoading(true);
     try {
       await axios.put(`/user/terminals/${id}/edit`, terminalFields);
+      toast.success(`Uspešno ste ažurirali terminal ${terminalFields.acquirerTid}`);
       history.goBack();
     } catch (err) {
+      toast.error(`Došlo je do greške pri ažuriranju terminala ${terminalFields.acquirerTid}`);
       setLoading(false);
       setErrors(err.response.data);
     }

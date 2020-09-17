@@ -193,17 +193,17 @@ public class TerminalServiceImpl implements TerminalService {
             newTerminal.setActivationCode(null);
             newTerminal.setUserId(null);
             newTerminal.setTerminalAccount(terminalDto.getTerminalAccount());
-            newTerminal.setPaymentMethod(paymentMethod.getPaymentMethodId());
+            newTerminal.setPaymentMethod(paymentMethod != null ? paymentMethod.getPaymentMethodId() : null);
             newTerminal.setStatus(status);
             newTerminal.setSetupDate(terminalDto.getSetupDate());
             newTerminal.setTerminalType(terminalType.getTerminalTypeName());
             return newTerminal;
         } else {
             terminal.setAcquirerTid(terminalDto.getAcquirerTid());
-            terminal.setActivationCode(null);
-            terminal.setUserId(null);
+            terminal.setActivationCode(terminalDto.getActivationCode());
+            terminal.setUserId(terminalDto.getUserId());
             terminal.setTerminalAccount(terminalDto.getTerminalAccount());
-            terminal.setPaymentMethod(paymentMethod.getPaymentMethodId());
+            terminal.setPaymentMethod(paymentMethod != null ? paymentMethod.getPaymentMethodId() : null);
             terminal.setStatus(status);
             terminal.setSetupDate(terminalDto.getSetupDate());
             terminal.setTerminalType(terminalType.getTerminalTypeName());

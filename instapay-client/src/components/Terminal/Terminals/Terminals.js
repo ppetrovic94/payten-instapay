@@ -33,7 +33,7 @@ const Terminals = () => {
           {
             key: 'merchantName',
             content: merchantName.data,
-            href: `/merchant/${merchantId}/pos`,
+            href: `/ips/merchant/${merchantId}/pos`,
           },
           {
             key: 'pointOfSaleName',
@@ -113,7 +113,7 @@ const Terminals = () => {
     terminals && (
       <div className="terminalsTable">
         <CustomTable
-          tableAddItem={`/pos/${id}/terminals/add`}
+          tableAddItem={`/ips/pos/${id}/terminals/add`}
           tableHeader={terminalTableHeader}
           tableActions={terminalActionConfig}
           content={formatTerminalData(terminals)}

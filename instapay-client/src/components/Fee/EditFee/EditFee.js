@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
@@ -45,9 +46,11 @@ const EditFee = () => {
     setLoading(true);
     try {
       await axios.put(`/user/fees/${id}/update`, updatedFee);
+      toast.success('Uspešno ste ažurirali proviziju');
       setLoading(false);
       history.goBack();
     } catch (err) {
+      toast.error('Došlo je do greške pri ažuriranju provizije');
       setLoading(false);
       setErrors(err.response.data);
     }

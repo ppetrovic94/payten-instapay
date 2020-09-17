@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
+import { Form, Button } from 'semantic-ui-react';
 import axios from '../../../utils/API';
 import CustomTable from '../../CustomTable/CustomTable';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import { cityTableHeader, formatCitiesData, cityActionConfig } from '../utils/cityTable';
 import './Cities.scss';
-import { Form, Button } from 'semantic-ui-react';
 
 const Cities = () => {
   const [cityForm, setCityForm] = useState({ cityName: '', cityCode: '' });
@@ -68,10 +69,12 @@ const Cities = () => {
     setLoading(true);
     try {
       await axios.post('/user/cities/add', cityForm);
+      toast.success(`Uspešno ste dodali grad ${cityForm.cityName}`);
       fetchCities();
       setErrors(null);
       setLoading(false);
     } catch (err) {
+      toast.error('Došlo je do greške pri dodavanju grada');
       setLoading(false);
       setErrors(err.response.data);
     }
@@ -81,9 +84,11 @@ const Cities = () => {
     setLoading(true);
     try {
       await axios.delete(`/user/cities/${id}/delete`);
+      toast.success(`Uspešno ste obrisali grad ${cityForm.cityName}`);
       fetchCities();
       setLoading(false);
     } catch (error) {
+      toast.error('Došlo je do greške pri brisanju grada');
       setLoading(false);
       console.error(error.response);
     }
@@ -123,7 +128,7 @@ const Cities = () => {
       <div className="cityTable">
         {cities && (
           <CustomTable
-            tableTitle={'Gradovi'}
+            tableTitle="Gradovi"
             tableHeader={cityTableHeader}
             content={formatCitiesData(cities)}
             tableSearchHandler={onChangeSearchTerm}

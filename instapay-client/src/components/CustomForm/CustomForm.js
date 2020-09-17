@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Form } from 'semantic-ui-react';
 import { Button, Dropdown } from 'semantic-ui-react';
 import _ from 'lodash';
@@ -105,8 +106,8 @@ const CustomForm = ({
   return (
     <div className="formWrapper">
       <Form>
-        {_.map(formConfig, (value) => (
-          <Form.Field>
+        {_.map(formConfig, (value, key) => (
+          <Form.Field key={key}>
             {value.required ? (
               <label className="requiredField">{value.title}</label>
             ) : (
@@ -126,6 +127,16 @@ const CustomForm = ({
       </div>
     </div>
   );
+};
+
+CustomForm.propTypes = {
+  formConfig: PropTypes.object,
+  formFields: PropTypes.object,
+  setFormFields: PropTypes.func,
+  formSubmitHandler: PropTypes.func,
+  formErrors: PropTypes.object,
+  formWarnings: PropTypes.object,
+  setFormWarnings: PropTypes.func,
 };
 
 export default CustomForm;

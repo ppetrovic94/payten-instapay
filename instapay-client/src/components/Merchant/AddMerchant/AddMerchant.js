@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
@@ -28,13 +29,15 @@ const AddMerchant = () => {
     fetchMerchantMetadata();
   }, []);
 
-  const saveMerchant = async (merchant) => {
+  const saveMerchant = async () => {
     setLoading(true);
     try {
-      await axios.post('/user/merchants/add', merchant);
+      await axios.post('/user/merchants/add', formFields);
+      toast.success(`Uspešno ste dodali trgovca ${formFields.merchantName}`);
       setLoading(false);
-      history.push('/merchants');
+      history.push('/ips/merchants');
     } catch (err) {
+      toast.error('Došlo je do greške pri dodavanju trgovca');
       setLoading(false);
       setErrors(err.response.data);
     }
