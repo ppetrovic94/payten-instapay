@@ -16,7 +16,6 @@ const Groups = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const intervalRef = useRef();
   const [roles, setRoles] = useState(null);
-  const [errors, setErrors] = useState(null);
 
   useEffect(() => {
     fetchRoles();
@@ -32,7 +31,7 @@ const Groups = () => {
       setLoading(false);
     } catch (err) {
       setLoading(false);
-      setErrors(err.response);
+      console.error(err.response);
     }
   };
   const fetchRoles = async () => {

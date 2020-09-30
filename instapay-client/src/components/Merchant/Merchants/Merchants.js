@@ -15,7 +15,6 @@ const Merchants = () => {
   const [activePage, setActivePage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
-  const [errors, setErrors] = useState(null);
 
   useEffect(() => {
     const fetchMerchants = async () => {
@@ -28,7 +27,7 @@ const Merchants = () => {
         setTotalPages(totalPages);
         setLoading(false);
       } catch (err) {
-        setErrors(err.response);
+        console.error(err.response);
       }
     };
     fetchMerchants();

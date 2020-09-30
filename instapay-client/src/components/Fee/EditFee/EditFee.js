@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -47,8 +48,8 @@ const EditFee = () => {
     try {
       await axios.put(`/user/fees/${id}/update`, updatedFee);
       toast.success('Uspešno ste ažurirali proviziju');
-      setLoading(false);
       history.goBack();
+      setLoading(false);
     } catch (err) {
       toast.error('Došlo je do greške pri ažuriranju provizije');
       setLoading(false);

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from '../../utils/API';
@@ -9,6 +10,7 @@ import CustomLoader from '../CustomLoader/CustomLoader';
 
 const Transactions = () => {
   const [date, setDate] = useState({ dateFrom: '', dateTo: '' });
+  const [time, setTime] = useState({ timeFrom: '', timeTo: '' });
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const [transactions, setTransactions] = useState(null);
@@ -16,7 +18,6 @@ const Transactions = () => {
   const [activePage, setActivePage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [sections, setSections] = useState([]);
-  const [errors, setErrors] = useState(null);
   const { id } = useParams();
 
   useEffect(() => {
@@ -48,7 +49,7 @@ const Transactions = () => {
           { key: 'transactions', content: 'Transakcije' },
         ]);
       } catch (err) {
-        setErrors(err.response);
+        console.error(err.response);
       }
     };
 
@@ -65,11 +66,19 @@ const Transactions = () => {
     setDate({ ...date, [e.target.name]: e.target.value });
   };
 
+  const onChangeTime = (e) => {
+    setTime({ ...time, [e.target.name]: e.target.value });
+  };
+
   const onGetTransactions = async () => {
     setLoading(true);
+    const dateAndTime = {
+      from: time.timeFrom ? date.dateFrom + ' ' + time.timeFrom : date.dateFrom,
+      to: time.timeTo ? date.dateFrom + ' ' + time.timeTo : date.dateTo,
+    };
     try {
       const response = await axios.get(
-        `/user/terminals/${acquirerTid}/transactions?dateFrom=${date.dateFrom}&dateTo=${date.dateTo}&pageNum=${activePage}&pageSize=15`,
+        `/user/terminals/${acquirerTid}/transactions?dateFrom=${dateAndTime.from}&dateTo=${dateAndTime.to}&pageNum=${activePage}&pageSize=15`,
       );
       setTransactions(response.data.content);
       setTotalPages(response.data.totalPages);
@@ -81,10 +90,13 @@ const Transactions = () => {
 
   const onPageChange = async (e, { activePage }) => {
     setActivePage(activePage);
-
+    const dateAndTime = {
+      from: time.timeFrom ? date.dateFrom + ' ' + time.timeFrom : date.dateFrom,
+      to: time.timeTo ? date.dateFrom + ' ' + time.timeTo : date.dateTo,
+    };
     try {
       const response = await axios.get(
-        `/user/terminals/${acquirerTid}/transactions?dateFrom=${date.dateFrom}&dateTo=${date.dateTo}&pageNum=${activePage}&pageSize=15`,
+        `/user/terminals/${acquirerTid}/transactions?dateFrom=${dateAndTime.from}&dateTo=${dateAndTime.to}&pageNum=${activePage}&pageSize=15`,
       );
 
       setTransactions(response.data.content);
@@ -109,6 +121,13 @@ const Transactions = () => {
               defaultValue={date.dateFrom}
               onChange={onChangeDate}
             />
+            <input
+              type="time"
+              placeholder={'Od'}
+              name={'timeFrom'}
+              defaultValue={time.timeFrom}
+              onChange={onChangeTime}
+            />
             <label className="dateLabel">Do: </label>
             <input
               type="date"
@@ -116,6 +135,13 @@ const Transactions = () => {
               name={'dateTo'}
               defaultValue={date.dateTo}
               onChange={onChangeDate}
+            />
+            <input
+              type="time"
+              placeholder={'Do'}
+              name={'timeTo'}
+              defaultValue={time.timeTo}
+              onChange={onChangeTime}
             />
 
             <Button
