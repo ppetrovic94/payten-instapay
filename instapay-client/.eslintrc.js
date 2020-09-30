@@ -19,7 +19,7 @@ module.exports = {
     semi: ['error', 'always'],
     'linebreak-style': ['error', 'windows'],
     'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
     'no-console': ['error', { allow: ['warn', 'error'] }],
   },
   settings: {
