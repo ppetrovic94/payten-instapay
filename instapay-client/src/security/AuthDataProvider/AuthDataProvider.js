@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useState, useEffect, useMemo, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from '../../utils/API';
