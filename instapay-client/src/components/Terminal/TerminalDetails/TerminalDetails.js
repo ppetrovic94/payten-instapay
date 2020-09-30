@@ -41,37 +41,37 @@ const TerminalDetails = () => {
     }
   };
 
-  const fetchNavbarData = async () => {
-    const merchantId = localStorage.getItem('merchantId');
-    const posId = localStorage.getItem('pointOfSaleId');
-
-    try {
-      const posName = await axios.get(`/user/pos/${posId}/name`);
-      const merchantName = await axios.get(`/user/merchants/${merchantId}/name`);
-      const terminalName = await axios.get(`/user/terminals/${id}/acquirerTid`);
-      setSections([
-        {
-          key: 'merchantName',
-          content: merchantName.data,
-          href: `/ips/merchant/${merchantId}/pos`,
-        },
-        {
-          key: 'pointOfSaleName',
-          content: posName.data,
-          href: `/ips/pos/${posId}/terminals`,
-        },
-        {
-          key: 'terminalName',
-          content: terminalName.data,
-        },
-        { key: 'credentials', content: 'Kredencijali' },
-      ]);
-    } catch (err) {
-      console.error(err.response);
-    }
-  };
-
   useEffect(() => {
+    const fetchNavbarData = async () => {
+      const merchantId = localStorage.getItem('merchantId');
+      const posId = localStorage.getItem('pointOfSaleId');
+
+      try {
+        const posName = await axios.get(`/user/pos/${posId}/name`);
+        const merchantName = await axios.get(`/user/merchants/${merchantId}/name`);
+        const terminalName = await axios.get(`/user/terminals/${id}/acquirerTid`);
+        setSections([
+          {
+            key: 'merchantName',
+            content: merchantName.data,
+            href: `/ips/merchant/${merchantId}/pos`,
+          },
+          {
+            key: 'pointOfSaleName',
+            content: posName.data,
+            href: `/ips/pos/${posId}/terminals`,
+          },
+          {
+            key: 'terminalName',
+            content: terminalName.data,
+          },
+          { key: 'credentials', content: 'Kredencijali' },
+        ]);
+      } catch (err) {
+        console.error(err.response);
+      }
+    };
+
     fetchTerminalById(id);
     fetchNavbarData();
     fetchEmailByMerchantId();

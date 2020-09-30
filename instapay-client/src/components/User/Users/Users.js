@@ -12,7 +12,6 @@ const Users = () => {
   const [activePage, setActivePage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
-  const [errors, setErrors] = useState(null);
 
   useEffect(() => {
     fetchUsers();
@@ -26,7 +25,7 @@ const Users = () => {
       setTotalPages(response.data.totalPages);
       setLoading(false);
     } catch (err) {
-      setErrors(err.response);
+      console.error(err.response);
       setLoading(false);
     }
   };

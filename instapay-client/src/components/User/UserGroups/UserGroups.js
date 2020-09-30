@@ -9,7 +9,6 @@ const UserGroups = ({ userFields, setUserFields, errorMessage }) => {
   const [groups, setGroups] = useState(null);
   const [checkedGroups, setCheckedGroups] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState(null);
 
   useEffect(() => {
     setLoading(true);
@@ -19,7 +18,7 @@ const UserGroups = ({ userFields, setUserFields, errorMessage }) => {
         setGroups(response.data);
         setLoading(false);
       } catch (err) {
-        setErrors(err.response);
+        console.error(err.response);
       }
     };
     fetchGroups();

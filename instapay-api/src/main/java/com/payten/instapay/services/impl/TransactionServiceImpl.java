@@ -11,10 +11,7 @@ import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
 import javax.persistence.StoredProcedureQuery;
 import javax.transaction.Transactional;
-import java.sql.Date;
 import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,15 +26,15 @@ public class TransactionServiceImpl implements TransactionService {
     public TerminalTransactionPage getTransactionByTerminalIdAndDateRangePaginated(String dateFrom, String dateTo, String terminalId, Integer pageNum, Integer pageSize) {
         StoredProcedureQuery procedureQuery = em.createStoredProcedureQuery("GET_TRANSACTIONS_PAGINATED", TerminalTransaction.class);
 
-        procedureQuery.registerStoredProcedureParameter("I_DATE_FROM", Date.class, ParameterMode.IN);
-        procedureQuery.registerStoredProcedureParameter("I_DATE_TO", Date.class, ParameterMode.IN);
+        procedureQuery.registerStoredProcedureParameter("I_DATE_FROM", String.class, ParameterMode.IN);
+        procedureQuery.registerStoredProcedureParameter("I_DATE_TO", String.class, ParameterMode.IN);
         procedureQuery.registerStoredProcedureParameter("I_TID", String.class, ParameterMode.IN);
         procedureQuery.registerStoredProcedureParameter("I_PAGE_NUMBER", Integer.class, ParameterMode.IN);
         procedureQuery.registerStoredProcedureParameter("I_PAGE_SIZE", Integer.class, ParameterMode.IN);
         procedureQuery.registerStoredProcedureParameter("@O_RECORD_COUNT", Integer.class, ParameterMode.OUT);
 
-        procedureQuery.setParameter("I_DATE_FROM", convertToDateType(dateFrom));
-        procedureQuery.setParameter("I_DATE_TO", convertToDateType(dateTo));
+        procedureQuery.setParameter("I_DATE_FROM", dateFrom);
+        procedureQuery.setParameter("I_DATE_TO", dateTo);
         procedureQuery.setParameter("I_TID", terminalId);
         procedureQuery.setParameter("I_PAGE_NUMBER", pageNum);
         procedureQuery.setParameter("I_PAGE_SIZE", pageSize);
@@ -86,20 +83,5 @@ public class TransactionServiceImpl implements TransactionService {
 
         return transactionDetailsList;
     }
-
-
-    public Date convertToDateType(String date){
-        Date parsedDate = null;
-        try {
-            java.util.Date formatedDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-            parsedDate = new Date(formatedDate.getTime());
-            return parsedDate;
-        } catch(ParseException e){
-            e.printStackTrace();
-        }
-        return parsedDate;
-    }
-
-
 
 }

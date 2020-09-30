@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'semantic-ui-react';
@@ -9,7 +10,6 @@ const GroupRoles = ({ groupFields, setGroupFields, errorMessage }) => {
   const [roles, setRoles] = useState(null);
   const [checkedRoles, setCheckedRoles] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState(null);
 
   useEffect(() => {
     setLoading(true);
@@ -19,7 +19,7 @@ const GroupRoles = ({ groupFields, setGroupFields, errorMessage }) => {
         setRoles(response.data);
         setLoading(false);
       } catch (err) {
-        setErrors(err.response);
+        console.error(err.response);
       }
     };
     fetchRoles();
