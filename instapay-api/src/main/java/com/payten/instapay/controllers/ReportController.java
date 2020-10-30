@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(path="/api/user")
+@RequestMapping(path="/api/acq")
 public class ReportController {
 
     private final TransactionReportService transactionReportService;
