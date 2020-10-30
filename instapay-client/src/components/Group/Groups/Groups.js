@@ -1,36 +1,76 @@
 import React, { useEffect, useState, useRef } from 'react';
-import axios from 'axios';
 import { Table, Icon, Pagination, Input, Button } from 'semantic-ui-react';
+import { toast } from 'react-toastify';
+import axios from '../../../utils/API';
 import TableActions from '../../TableActions/TableActions';
 import { Link } from 'react-router-dom';
 import { groupActionConfig } from '../utils/groupTable';
 import './Groups.scss';
+import CustomLoader from '../../CustomLoader/CustomLoader';
 
 const Groups = () => {
+  const [loading, setLoading] = useState(false);
   const [groups, setGroups] = useState(null);
+  const [activePage, setActivePage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
   const intervalRef = useRef();
   const [roles, setRoles] = useState(null);
-  const [errors, setErrors] = useState(null);
 
   useEffect(() => {
-    const fetchGroups = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8080/admin/groups`);
-        setGroups(response.data.content);
-      } catch (err) {
-        setErrors(err.response);
-      }
-    };
-    const fetchRoles = async () => {
-      const response = await axios.get('http://localhost:8080/admin/roles');
-      setRoles(response.data);
-    };
-    fetchGroups();
     fetchRoles();
+    fetchGroups();
   }, []);
 
+  const fetchGroups = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get('/admin/groups');
+      setGroups(response.data.content);
+      setTotalPages(response.data.totalPages);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      console.error(err.response);
+    }
+  };
+  const fetchRoles = async () => {
+    const response = await axios.get('/admin/roles');
+    setRoles(response.data);
+  };
+
+  const onDeleteGroup = async (groupId) => {
+    setLoading(true);
+    try {
+      await axios.delete(`/admin/groups/${groupId}/delete`);
+      toast.success('Uspešno ste obrisali grupu uloga');
+      setLoading(false);
+      fetchGroups();
+    } catch (error) {
+      toast.error(error.response.data);
+      console.error(error.response);
+      setLoading(false);
+    }
+  };
+
+  const onPageChange = async (e, { activePage }) => {
+    setActivePage(activePage);
+    let response = null;
+    if (searchTerm) {
+      response = await axios.get(
+        `/admin/groups?searchTerm=${searchTerm}&pagenum=${activePage - 1}`,
+      );
+    } else {
+      response = await axios.get(`/admin/groups?pagenum=${activePage - 1}`);
+    }
+
+    setGroups(response.data.content);
+  };
+
   const getFilteredGroups = async (term) => {
-    const filtered = await axios.get(`http://localhost:8080/admin/groups?searchTerm=${term}`);
+    const filtered = await axios.get(`/admin/groups?searchTerm=${term}`);
+    setSearchTerm(term);
+    setTotalPages(filtered.data.totalPages);
     setGroups(filtered.data.content);
   };
 
@@ -40,9 +80,9 @@ const Groups = () => {
     intervalRef.current = setTimeout(() => getFilteredGroups(value), 350);
   };
 
-  const onPageChange = () => {};
-
-  return (
+  return loading ? (
+    <CustomLoader />
+  ) : (
     <div>
       <div className="groupsTable">
         <div className="groupsTableDetails">
@@ -50,7 +90,7 @@ const Groups = () => {
             <h3 className="groupTitle">Grupe</h3>
             <div className="groupTableHeaderWrapper">
               <div>
-                <Button as={Link} to={'/groups/add'} color="black">
+                <Button as={Link} to={'/ips/groups/add'} color="black">
                   Dodaj
                 </Button>
               </div>
@@ -91,19 +131,22 @@ const Groups = () => {
                       <Table.Cell>{group.groupName}</Table.Cell>
                       <Table.Cell>{group.description}</Table.Cell>
                       {roles &&
-                        roles.map((role) => {
-                          return !!group.roles.find(
-                            (groupRole) => role.roleId == groupRole.roleId,
+                        roles.map((role, key) => {
+                          return group.roles.find(
+                            (groupRole) => role.roleId === groupRole.roleId,
                           ) ? (
-                            <Table.Cell textAlign="center">
+                            <Table.Cell key={key} textAlign="center">
                               <Icon color="green" name="checkmark" size="large" />
                             </Table.Cell>
                           ) : (
-                            <Table.Cell></Table.Cell>
+                            <Table.Cell key={key}></Table.Cell>
                           );
                         })}
                       <Table.Cell>
-                        <TableActions actionConfig={groupActionConfig} actionKey={group.groupId} />
+                        <TableActions
+                          actions={groupActionConfig(group.groupId)}
+                          onDeleteHandler={() => onDeleteGroup(group.groupId)}
+                        />
                       </Table.Cell>
                     </Table.Row>
                   ))}
@@ -113,9 +156,9 @@ const Groups = () => {
           <div className="groupTablePageing">
             <Pagination
               siblingRange={null}
-              activePage={0}
+              activePage={activePage}
               onPageChange={onPageChange}
-              totalPages={2}
+              totalPages={totalPages}
             />
           </div>
         </div>

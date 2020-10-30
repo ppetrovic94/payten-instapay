@@ -8,7 +8,7 @@ import java.sql.Date;
 public class FeeRule {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "FEE_ID")
     private Integer feeId;
 

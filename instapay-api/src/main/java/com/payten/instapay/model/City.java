@@ -7,6 +7,7 @@ import javax.persistence.*;
 public class City {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "CITY_ID")
     private Integer cityId;
 

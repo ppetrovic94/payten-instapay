@@ -8,7 +8,7 @@ import java.util.List;
 @Table(name="ACQ_POINTS_OF_SALE")
 public class PointOfSale {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "POINT_OF_SALE_ID")
     private Integer pointOfSaleId;
 
@@ -28,7 +28,7 @@ public class PointOfSale {
 
     @OneToOne
     @JoinColumn(name = "POINT_OF_SALE_STATUS")
-    private AcqStatus status;
+    private Status status;
 
     @Column(name = "MERCHANT_ID")
     private Integer merchantId;
@@ -92,11 +92,11 @@ public class PointOfSale {
         this.setupDate = setupDate;
     }
 
-    public AcqStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(AcqStatus status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

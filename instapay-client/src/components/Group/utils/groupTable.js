@@ -21,7 +21,7 @@ export const groupActionConfig = (id) => {
       type: 'UPDATE',
       name: 'updateGroup',
       label: 'Izmeni',
-      redirectLink: `/groups/${id}`,
+      redirectLink: `/ips/groups/${id}`,
       icon: 'edit',
     },
     {

@@ -1,29 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import axios from 'axios';
+import { toast } from 'react-toastify';
+import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
-import {
-  terminalFormTemplate,
-  getTerminalFormConfig,
-  generateCredentials,
-} from '../utils/terminalForm';
+import { terminalFormTemplate, getTerminalFormConfig } from '../utils/terminalForm';
 import './EditTerminal.scss';
+import NotFound from '../../../security/NotFound/NotFound';
 
 const EditTerminal = () => {
   const [loading, setLoading] = useState(false);
   const [terminalMetadata, setTerminalMetadata] = useState(null);
+  const [pointOfSaleTitle, setPointOfSaleTitle] = useState('');
   const [terminalFields, setTerminalFields] = useState({ ...terminalFormTemplate });
-  const [currentTerminal, setCurrentTerminal] = useState({});
-  const [terminalId, setTerminalId] = useState('');
+  const [notFound, setNotFound] = useState(null);
   const [errors, setErrors] = useState(null);
+
   const history = useHistory();
   const { id } = useParams();
 
   useEffect(() => {
+    const fetchPointOfSaleName = async () => {
+      const posId = localStorage.getItem('pointOfSaleId');
+      try {
+        const response = await axios.get(`/user/pos/${posId}/name`);
+        setPointOfSaleTitle(response.data);
+      } catch (err) {
+        setErrors(err.response);
+      }
+    };
     const fetchTerminalMetadata = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/user/terminals/metadata');
+        const response = await axios.get('/user/terminals/metadata');
         setTerminalMetadata(response.data);
       } catch (err) {
         setErrors(err.response);
@@ -31,45 +39,29 @@ const EditTerminal = () => {
     };
 
     const fetchTerminalById = async (id) => {
+      setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:8080/user/terminals/${id}`);
+        const response = await axios.get(`/user/terminals/${id}`);
         setTerminalFields({ ...response.data });
-        setCurrentTerminal({ ...response.data });
+        setLoading(false);
       } catch (err) {
-        setErrors(err.response);
+        setLoading(false);
+        setNotFound(err.response);
       }
     };
-
+    fetchPointOfSaleName();
     fetchTerminalMetadata();
     fetchTerminalById(id);
   }, [id]);
 
-  useEffect(() => {
-    if (
-      terminalId &&
-      currentTerminal.statusId !== terminalFields.statusId &&
-      terminalFields.terminalTypeId == '1' &&
-      terminalFields.statusId == '100'
-    ) {
-      console.log('terminalId', terminalId);
-      console.log('USO JE DA GENERISE');
-      generateCredentials(terminalId);
-    }
-    setLoading(false);
-  }, [terminalId]);
-
   const editTerminal = async () => {
     setLoading(true);
     try {
-      debugger;
-      const updatedTerminal = await axios.put(
-        `http://localhost:8080/user/terminals/${id}/edit`,
-        terminalFields,
-      );
-      debugger;
-      setTerminalId(updatedTerminal.data.terminalId);
+      await axios.put(`/user/terminals/${id}/edit`, terminalFields);
+      toast.success(`Uspešno ste ažurirali terminal ${terminalFields.acquirerTid}`);
       history.goBack();
     } catch (err) {
+      toast.error(`Došlo je do greške pri ažuriranju terminala ${terminalFields.acquirerTid}`);
       setLoading(false);
       setErrors(err.response.data);
     }
@@ -77,10 +69,12 @@ const EditTerminal = () => {
 
   return loading ? (
     <CustomLoader />
+  ) : notFound ? (
+    <NotFound message={notFound.data} />
   ) : (
     terminalMetadata && (
       <div>
-        <h2 className="terminalFormHeader">Terminal</h2>
+        <h2 className="terminalFormHeader">{`${pointOfSaleTitle} - Izmena terminala`}</h2>
         <CustomForm
           formConfig={getTerminalFormConfig(terminalMetadata, false)}
           formFields={terminalFields}

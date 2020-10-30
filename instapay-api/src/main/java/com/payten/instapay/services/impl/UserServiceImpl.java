@@ -4,18 +4,19 @@ import com.payten.instapay.dto.User.UserDto;
 import com.payten.instapay.exceptions.handlers.RequestedResourceNotFoundException;
 import com.payten.instapay.exceptions.handlers.ValidationException;
 import com.payten.instapay.model.Group;
+import com.payten.instapay.model.Role;
 import com.payten.instapay.model.User;
 import com.payten.instapay.repositories.GroupRepository;
 import com.payten.instapay.repositories.UserRepository;
 import com.payten.instapay.services.UserService;
 import com.payten.instapay.services.validation.MapValidationErrorService;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
@@ -27,17 +28,25 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
     private final MapValidationErrorService mapValidationErrorService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, GroupRepository groupRepository, MapValidationErrorService mapValidationErrorService) {
+    public UserServiceImpl(UserRepository userRepository, GroupRepository groupRepository, MapValidationErrorService mapValidationErrorService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.groupRepository = groupRepository;
         this.mapValidationErrorService = mapValidationErrorService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
-    public Page<User> getUsers(int pageNum, String searchTerm) {
-        Pageable page = PageRequest.of(pageNum, 25, Sort.by("userId"));
-        Page<User> users = null;
+    public Page<User> getUsers(int pageNum, String searchTerm, String sortBy, String direction) {
+        Pageable page;
+        Page<User> users;
+
+        if (sortBy.isEmpty()){
+            page = PageRequest.of(pageNum, 10,Sort.Direction.ASC, "fullName");
+        } else {
+            page = PageRequest.of(pageNum, 10, direction.equals("ascending") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
+        }
 
         if (searchTerm.isEmpty()) {
             users = userRepository.findAll(page);
@@ -59,6 +68,11 @@ public class UserServiceImpl implements UserService {
     public User addUser(UserDto userDto, BindingResult result) {
         Map<String, String> errorMap = mapValidationErrorService.validate(result);
 
+        if(userDto.getGroupIds().isEmpty()) {
+            if (errorMap == null) errorMap = new HashMap<>();
+            errorMap.put("groupIds", "Korisnik mora imati dodeljenu bar jednu grupu uloga");
+        }
+
         if (errorMap != null) {
             throw new ValidationException(errorMap);
         } else {
@@ -69,6 +83,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = convertToEntity(userDto, null);
+
         return userRepository.save(user);
     }
 
@@ -81,6 +96,12 @@ public class UserServiceImpl implements UserService {
         }
 
         Map<String, String> errorMap = mapValidationErrorService.validate(result);
+
+        if(userDto.getGroupIds().isEmpty()) {
+            if (errorMap == null) errorMap = new HashMap<>();
+            errorMap.put("groupIds", "Korisnik mora imati dodeljenu bar jednu grupu uloga");
+        }
+
         if (errorMap != null) {
             throw new ValidationException(errorMap);
         } else {
@@ -121,6 +142,19 @@ public class UserServiceImpl implements UserService {
         return groupRepository.findAll();
     }
 
+    @Override
+    public Set<String> getRolesForCurrentUser(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) throw new RequestedResourceNotFoundException("Korisnik " + username + " trenutno nije ulogovan ili ne postoji");
+        Set<String> distinctRoles = new HashSet<>();
+        for(Group userGroup : user.getGroups()){
+            for(Role userRole : userGroup.getRoles()){
+                distinctRoles.add(userRole.getRoleName());
+            }
+        }
+
+        return distinctRoles;
+    }
 
     private User convertToEntity(UserDto userDto, User user) {
         if (user == null) {
@@ -135,7 +169,7 @@ public class UserServiceImpl implements UserService {
         }
         setUserGroups(userDto.getGroupIds(), user);
         user.setUsername(userDto.getUsername());
-        user.setPassword(userDto.getPassword());
+        user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
         user.setEmail(userDto.getEmail());
         user.setIsApproved(userDto.getIsApproved());
         user.setFullName(userDto.getFullName());
@@ -160,7 +194,6 @@ public class UserServiceImpl implements UserService {
 
     private void setUserGroups(List<Integer> groupIds, User user) {
         if (groupIds == null) throw new RequestedResourceNotFoundException("Korisniku nije dodeljena nijedna grupa uloga.");
-
         Set<Group> groups = new HashSet<>();
         for(Integer groupId : groupIds){
             Group group = groupRepository.getByGroupId(groupId);
@@ -197,7 +230,7 @@ public class UserServiceImpl implements UserService {
         if (user != null && user.getEmail().equals(email)) {
             errorMap = null;
         } else {
-            if (userRepository.existsByUsername(username)) {
+            if (userRepository.existsByEmail(username)) {
                 errorMap = new HashMap<>();
                 errorMap.put("email", "Korisnik sa unetim email-om: " + email + " već postoji u bazi");
                 return errorMap;

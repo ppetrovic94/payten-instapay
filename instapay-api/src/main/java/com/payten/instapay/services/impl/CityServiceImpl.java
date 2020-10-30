@@ -32,9 +32,15 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public Page<City> getCities(int pageNumber, String searchTerm) {
-        Pageable page = PageRequest.of(pageNumber, 25, Sort.by("cityId"));
+    public Page<City> getCities(int pageNumber, String searchTerm, String sortBy, String direction) {
+        Pageable page;
         Page<City> cities = null;
+
+        if (sortBy.isEmpty()){
+            page = PageRequest.of(pageNumber, 10,Sort.Direction.ASC, "cityName");
+        } else {
+            page = PageRequest.of(pageNumber, 10, direction.equals("ascending") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
+        }
 
         if (searchTerm.isEmpty()) {
             cities = cityRepository.findAll(page);
@@ -69,8 +75,7 @@ public class CityServiceImpl implements CityService {
         city.setCityName(cityDto.getCityName());
         city.setCityCode(cityDto.getCityCode());
         city.setCountry(countryRepository.getByCountryName("Srbija"));
-
-        return city;
+        return cityRepository.save(city);
     }
 
 
@@ -94,8 +99,8 @@ public class CityServiceImpl implements CityService {
 
         found.setCityName(cityDto.getCityName());
         found.setCityCode(cityDto.getCityCode());
-
-        return found;
+        found.setCountry(countryRepository.getByCountryName("Srbija"));
+        return cityRepository.save(found);
     }
 
     @Override

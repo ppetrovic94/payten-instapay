@@ -1,9 +1,10 @@
 export const merchantFormTemplate = {
   localMerchantId: '',
   merchantName: '',
+  merchantAddress: '',
+  merchantEmail: '',
   personalIdentityNumber: '',
   taxIdentityNumber: '',
-  merchantAddress: '',
   cityId: '',
   statusId: 200,
   setupDate: '',
@@ -19,6 +20,8 @@ export const merchantFormTemplate = {
 export const merchantFormConfig = {
   localMerchantId: { key: 'localMerchantId', title: 'ID Trgovca', type: 'TEXT', required: false },
   merchantName: { key: 'merchantName', title: 'Naziv trgovca', type: 'TEXT', required: true },
+  merchantAddress: { key: 'merchantAddress', title: 'Adresa', type: 'TEXT', required: true },
+  merchantEmail: { key: 'merchantEmail', title: 'Email', type: 'TEXT', required: false },
   personalIdentityNumber: {
     key: 'personalIdentityNumber',
     title: 'Matični broj',
@@ -26,13 +29,12 @@ export const merchantFormConfig = {
     required: false,
   },
   taxIdentityNumber: { key: 'taxIdentityNumber', title: 'PIB', type: 'TEXT', required: false },
-  merchantAddress: { key: 'merchantAddress', title: 'Adresa', type: 'TEXT', required: true },
   city: {
     key: 'cityId',
     title: 'Grad',
     type: 'DROPDOWN',
     options: [],
-    required: false,
+    required: true,
     disabled: false,
   },
   status: {

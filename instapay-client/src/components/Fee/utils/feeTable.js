@@ -19,7 +19,7 @@ export const formatFeeData = (data) => {
         feeType: feeType ? feeType.typeName : '',
         productType: productType ? productType.typeName : '',
         condition,
-        amount,
+        amount: feeType.typeName === 'Procentualni' ? `${amount}%` : amount,
         validityDate,
       };
     },
@@ -32,14 +32,14 @@ export const feeActionConfig = (id) => {
       type: 'UPDATE',
       name: 'editFee',
       label: 'Izmeni',
-      redirectLink: `/fees/${id}`,
+      redirectLink: `/ips/fees/${id}`,
       icon: 'edit',
     },
     {
       type: 'DELETE',
       name: 'deleteFee',
       label: 'Ukloni',
-      redirectLink: ``,
+      redirectLink: '',
       icon: 'trash',
     },
   ];

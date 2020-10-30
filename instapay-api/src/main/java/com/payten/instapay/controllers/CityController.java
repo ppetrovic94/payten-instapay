@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(path="/user",produces = "application/json")
-@CrossOrigin(origins="*")
+@RequestMapping(path="/api/user",produces = "application/json")
 public class CityController {
 
     private final CityService cityService;
@@ -24,8 +23,10 @@ public class CityController {
     @GetMapping("/cities")
     @ResponseStatus(value = HttpStatus.OK)
     public Page<City> getCities(@RequestParam(name="pagenum",required = false, defaultValue = "0") int pageNumber,
-                                @RequestParam(name="searchTerm", required = false, defaultValue="") String searchTerm){
-        return cityService.getCities(pageNumber, searchTerm);
+                                @RequestParam(name="searchTerm", required = false, defaultValue="") String searchTerm,
+                                @RequestParam(name ="sortBy", required = false, defaultValue = "") String sortBy,
+                                @RequestParam(name = "direction", required = false, defaultValue = "ASC") String direction){
+        return cityService.getCities(pageNumber, searchTerm, sortBy, direction);
     }
 
     @GetMapping("/cities/{cityId}")

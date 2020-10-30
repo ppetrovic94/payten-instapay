@@ -2,6 +2,7 @@ package com.payten.instapay.controllers;
 
 import com.payten.instapay.dto.Merchant.MerchantDto;
 import com.payten.instapay.dto.Merchant.MerchantMetadata;
+import com.payten.instapay.dto.Merchant.MerchantNames;
 import com.payten.instapay.model.FeeRule;
 import com.payten.instapay.model.Group;
 import com.payten.instapay.model.Merchant;
@@ -16,8 +17,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(path="/user",produces = "application/json")
-@CrossOrigin(origins="*")
+@RequestMapping(path="/api/user",produces = "application/json")
 public class MerchantController {
 
     private final MerchantService merchantService;
@@ -40,15 +40,24 @@ public class MerchantController {
 
     @GetMapping("/merchants/{merchantId}/fees")
     @ResponseStatus(value = HttpStatus.OK)
-    public Page<FeeRule> getFeesByMerchantId(@PathVariable Integer merchantId, @RequestParam(name="pagenum",required = false, defaultValue = "0") int pageNumber,
-                                             @RequestParam(name="searchTerm", required = false, defaultValue="") String searchTerm) {
-        return feeService.getFeeRulesByMerchantId(merchantId, pageNumber, searchTerm);
+    public Page<FeeRule> getFeesByMerchantId(@PathVariable Integer merchantId,
+                                             @RequestParam(name="pagenum",required = false, defaultValue = "0") int pageNumber,
+                                             @RequestParam(name="searchTerm", required = false, defaultValue="") String searchTerm,
+                                             @RequestParam(name ="sortBy", required = false, defaultValue = "") String sortBy,
+                                             @RequestParam(name = "direction", required = false, defaultValue = "ASC") String direction) {
+        return feeService.getFeeRulesByMerchantId(merchantId, pageNumber, searchTerm, sortBy, direction);
     }
 
     @GetMapping("/merchants/{merchantId}/name")
     @ResponseStatus(value = HttpStatus.OK)
     public String getMerchantNameById(@PathVariable Integer merchantId){
         return merchantService.getMerchantNameById(merchantId);
+    }
+
+    @GetMapping("/merchants/{merchantId}/email")
+    @ResponseStatus(value = HttpStatus.OK)
+    public String getMerchantEmailById(@PathVariable Integer merchantId){
+        return merchantService.getMerchantEmailById(merchantId);
     }
 
     @GetMapping("/merchants/all")
@@ -85,6 +94,12 @@ public class MerchantController {
     @ResponseStatus(value = HttpStatus.OK)
     public MerchantMetadata getMerchantMetadata(){
         return merchantService.getMerchantMetadata();
+    }
+
+    @GetMapping("/merchants/names")
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<MerchantNames> getMerchantNames(){
+        return merchantService.getMerchantNames();
     }
 
 }

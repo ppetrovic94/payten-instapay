@@ -1,25 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
+import { toast } from 'react-toastify';
+import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
-import { feeFormConfig, getFeeFormConfig } from '../utils/feeForm';
+import { getFeeFormConfig, feeFormTemplate } from '../utils/feeForm';
 import './AddFee.scss';
 
 const AddFee = () => {
   const [loading, setLoading] = useState(false);
   const [feeMetadata, setFeeMetadata] = useState(null);
-  const [formFields, setFormFields] = useState({ ...feeFormConfig });
+  const [formFields, setFormFields] = useState({ ...feeFormTemplate });
   const [errors, setErrors] = useState(null);
   const history = useHistory();
 
   useEffect(() => {
     const fetchFeeMetadata = async () => {
+      setLoading(true);
       try {
-        const response = await axios.get('http://localhost:8080/api/user/fees/metadata');
+        const response = await axios.get('/user/fees/metadata');
         setFeeMetadata(response.data);
+        setLoading(false);
       } catch (err) {
         setErrors(err.response);
+        setLoading(false);
       }
     };
     fetchFeeMetadata();
@@ -28,11 +32,12 @@ const AddFee = () => {
   const saveFee = async () => {
     setLoading(true);
     try {
-      await axios.post(`http://localhost:8080/api/user/fees/add`, formFields);
+      await axios.post('/user/fees/add', formFields);
+      toast.success('Uspešno ste dodali proviziju');
       setLoading(false);
       history.goBack();
     } catch (err) {
-      console.log(err, 'greskaaaa');
+      toast.error('Došlo je do greške pri dodavanju provizije');
       setLoading(false);
       setErrors(err.response.data);
     }

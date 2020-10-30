@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
+import { toast } from 'react-toastify';
+import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
 import { userFormTemplate, userFormConfig } from '../utils/userForm';
@@ -15,16 +16,16 @@ const AddUser = () => {
   const saveUser = async () => {
     setLoading(true);
     try {
-      await axios.post(`http://localhost:8080/admin/users/add`, formFields);
+      await axios.post('/admin/users/add', formFields);
+      toast.success(`Uspešno ste dodali novog korisnika ${formFields.username}`);
       setLoading(false);
-      history.push('/users');
+      history.push('/ips/users');
     } catch (err) {
+      toast.error('Došlo je do greške pri dodavanju novog korisnika');
       setLoading(false);
       setErrors(err.response.data);
     }
   };
-
-  console.log(formFields, 'trenutna forma');
 
   return loading ? (
     <CustomLoader />

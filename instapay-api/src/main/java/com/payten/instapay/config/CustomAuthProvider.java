@@ -9,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -17,16 +18,27 @@ import java.util.Collection;
 public class CustomAuthProvider implements AuthenticationProvider {
 
     @Autowired
-    private UserService userService;
+    UserService userService;
+
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String password = (String) authentication.getCredentials();
-        User user = userService.findByUsernameAndPassword(username, password);
+        User user = (User) userService.loadUserByUsername(username);
+
         if (user == null) {
-            throw new RequestedResourceNotFoundException("Korisnik sa korisničkim imenom: " + username + " ne postoji.");
+            throw new RequestedResourceNotFoundException("Uneli ste pogrešno korisničko ime ili lozinku");
         }
+
+        if(!bCryptPasswordEncoder.matches(password, user.getPassword())) throw new RequestedResourceNotFoundException("Uneli ste pogrešnu lozinku za korisnika " + username);
+
+        if (user.getIsApproved() == 0) {
+            throw new RequestedResourceNotFoundException("Korisnik " + username + " je neaktivan");
+        }
+
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
 
         return new UsernamePasswordAuthenticationToken(user, password, authorities);
@@ -34,6 +46,6 @@ public class CustomAuthProvider implements AuthenticationProvider {
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return false;
+        return true;
     }
 }

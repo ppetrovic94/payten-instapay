@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
+import { toast } from 'react-toastify';
+import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
 import { groupFormTemplate, groupFormConfig } from '../utils/groupForm';
@@ -15,10 +16,12 @@ const AddGroup = () => {
   const saveGroup = async () => {
     setLoading(true);
     try {
-      await axios.post(`http://localhost:8080/admin/groups/add`, formFields);
+      await axios.post('/admin/groups/add', formFields);
+      toast.success(`Uspešno ste dodali grupu ${formFields.groupName}`);
       setLoading(false);
-      history.push('/groups');
+      history.push('/ips/groups');
     } catch (err) {
+      toast.error('Došlo je do greške pri dodavanju grupe');
       setLoading(false);
       setErrors(err.response.data);
     }

@@ -2,13 +2,14 @@ package com.payten.instapay.services.impl;
 
 import com.payten.instapay.dto.Merchant.MerchantDto;
 import com.payten.instapay.dto.Merchant.MerchantMetadata;
+import com.payten.instapay.dto.Merchant.MerchantNames;
 import com.payten.instapay.exceptions.handlers.RequestedResourceNotFoundException;
 import com.payten.instapay.exceptions.handlers.ValidationException;
-import com.payten.instapay.model.AcqStatus;
+import com.payten.instapay.model.Status;
 import com.payten.instapay.model.City;
 import com.payten.instapay.model.Merchant;
 import com.payten.instapay.model.PaymentMethod;
-import com.payten.instapay.repositories.AcqStatusRepository;
+import com.payten.instapay.repositories.StatusRepository;
 import com.payten.instapay.repositories.CityRepository;
 import com.payten.instapay.repositories.MerchantRepository;
 import com.payten.instapay.repositories.PaymentMethodRepository;
@@ -37,15 +38,15 @@ public class MerchantServiceImpl implements MerchantService {
 
     private final MerchantRepository merchantRepository;
     private final MapValidationErrorService mapValidationErrorService;
-    private final AcqStatusRepository acqStatusRepository;
+    private final StatusRepository statusRepository;
     private final CityRepository cityRepository;
     private final PaymentMethodRepository paymentMethodRepository;
     private final ModelMapper modelMapper;
 
-    public MerchantServiceImpl(MerchantRepository merchantRepository, MapValidationErrorService mapValidationErrorService, AcqStatusRepository acqStatusRepository, CityRepository cityRepository, PaymentMethodRepository paymentMethodRepository, ModelMapper modelMapper) {
+    public MerchantServiceImpl(MerchantRepository merchantRepository, MapValidationErrorService mapValidationErrorService, StatusRepository statusRepository, CityRepository cityRepository, PaymentMethodRepository paymentMethodRepository, ModelMapper modelMapper) {
         this.merchantRepository = merchantRepository;
         this.mapValidationErrorService = mapValidationErrorService;
-        this.acqStatusRepository = acqStatusRepository;
+        this.statusRepository = statusRepository;
         this.cityRepository = cityRepository;
         this.paymentMethodRepository = paymentMethodRepository;
         this.modelMapper = modelMapper;
@@ -57,7 +58,7 @@ public class MerchantServiceImpl implements MerchantService {
         Page<Merchant> merchants = null;
 
         if (sortBy.isEmpty()){
-            page = PageRequest.of(pageNum, 10,Sort.Direction.ASC, "merchantName");
+            page = PageRequest.of(pageNum, 10,Sort.Direction.DESC, "setupDate");
         } else {
             page = PageRequest.of(pageNum, 10, direction.equals("ascending") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
         }
@@ -135,13 +136,29 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Override
     public String getMerchantNameById(Integer merchantId) {
-        Merchant found = merchantRepository.getByMerchantId(merchantId);
+        String merchantName = merchantRepository.getMerchantNameById(merchantId);
 
-        if (found == null) {
+        if (merchantName == null) {
             throw new RequestedResourceNotFoundException("Ne postoji trgovac sa ID-em: " + merchantId);
         }
 
-        return merchantRepository.getMerchantNameById(merchantId);
+        return merchantName;
+    }
+
+    @Override
+    public String getMerchantEmailById(Integer merchantId) {
+        String merchantEmail = merchantRepository.getMerchantEmailById(merchantId);
+
+        if (merchantEmail == null) {
+            throw new RequestedResourceNotFoundException("Trgovac sa IDem: " + merchantId + " nema unetu adresu elektronske pošte");
+        }
+
+        return merchantEmail;
+    }
+
+    @Override
+    public List<MerchantNames> getMerchantNames() {
+        return merchantRepository.findMerchantNames();
     }
 
     @Override
@@ -159,7 +176,7 @@ public class MerchantServiceImpl implements MerchantService {
     public MerchantMetadata getMerchantMetadata() {
         MerchantMetadata merchantMetadata = new MerchantMetadata();
 
-        List<AcqStatus> statuses = acqStatusRepository.findAll();
+        List<Status> statuses = statusRepository.findAll();
         List<City> cities = cityRepository.findAll();
         List<PaymentMethod> paymentMethods = paymentMethodRepository.findAll();
 
@@ -172,7 +189,7 @@ public class MerchantServiceImpl implements MerchantService {
 
     private Merchant convertToEntity(MerchantDto merchantDto, Merchant merchant)  {
 
-        AcqStatus status = acqStatusRepository.getAcqStatusByStatusId(merchantDto.getStatusId());
+        Status status = statusRepository.getStatusByStatusId(merchantDto.getStatusId());
             if (status == null) { throw new RequestedResourceNotFoundException("Ne postoji status sa ID-em " + merchantDto.getStatusId()); }
 
         PaymentMethod paymentMethod = paymentMethodRepository.getByPaymentMethodId(merchantDto.getPaymentMethodId());

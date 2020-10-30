@@ -13,8 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(path="/admin",produces = "application/json")
-@CrossOrigin(origins="*")
+@RequestMapping(path="/api/admin",produces = "application/json")
 public class GroupController {
 
     private final GroupService groupService;
@@ -26,8 +25,10 @@ public class GroupController {
     @GetMapping("/groups")
     @ResponseStatus(value = HttpStatus.OK)
     public Page<Group> getGroups(@RequestParam(name="pagenum",required = false, defaultValue = "0") int pageNumber,
-                                 @RequestParam(name="searchTerm", required = false, defaultValue="") String searchTerm) {
-        return groupService.getGroups(pageNumber, searchTerm);
+                                 @RequestParam(name="searchTerm", required = false, defaultValue="") String searchTerm,
+                                 @RequestParam(name ="sortBy", required = false, defaultValue = "") String sortBy,
+                                 @RequestParam(name = "direction", required = false, defaultValue = "ASC") String direction) {
+        return groupService.getGroups(pageNumber, searchTerm, sortBy, direction);
     }
 
     @GetMapping("/groups/{groupId}")

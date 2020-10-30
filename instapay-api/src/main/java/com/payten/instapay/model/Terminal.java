@@ -7,12 +7,12 @@ import java.sql.Date;
 @Table(name="ACQ_TERMINALS")
 @NamedStoredProcedureQuery(name = "Terminal.generateCredentials",
         procedureName = "GENERATE_CREDENTIALS", parameters = {
-        @StoredProcedureParameter(mode = ParameterMode.IN, name = "TERMINAL_ID", type = Integer.class),
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "I_TERMINAL_ID", type = Integer.class),
 })
 public class Terminal {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "TERMINAL_ID")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer terminalId;
 
     @Basic
@@ -21,7 +21,7 @@ public class Terminal {
 
     @OneToOne
     @JoinColumn(name = "TERMINAL_STATUS")
-    private AcqStatus status;
+    private Status status;
 
     @Column(name = "POINT_OF_SALE_ID")
     private Integer pointOfSaleId;
@@ -63,11 +63,11 @@ public class Terminal {
         this.setupDate = setupDate;
     }
 
-    public AcqStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(AcqStatus status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

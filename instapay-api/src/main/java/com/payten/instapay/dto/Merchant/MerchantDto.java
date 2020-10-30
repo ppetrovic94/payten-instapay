@@ -16,6 +16,9 @@ public class MerchantDto {
     @NotEmpty(message = "Morate uneti adresu trgovca")
     private String merchantAddress;
 
+    @Email(message = "Email nije u odgovarajućem formatu")
+    private String merchantEmail;
+
     @NotEmpty(message = "Morate uneti datum unosa novog trgovca")
     private String setupDate;
 
@@ -28,13 +31,15 @@ public class MerchantDto {
     @NotNull(message = "Morate izabrati trenutni status trgovca")
     private Integer statusId;
 
-    @NotNull(message = "Morate uneti MCC kod")
+    @NotNull(message = "Morate uneti MCC kod trgovca")
     private Integer mcc;
 
-    @NotEmpty(message = "Morate uneti broj racuna")
+    @NotEmpty(message = "Morate uneti broj računa trgovca")
     private String merchantAccount;
 
+    @NotNull(message = "Morate uneti grad trgovca")
     private Integer cityId;
+
     private String taxIdentityNumber;
     private String personalIdentityNumber;
     private Integer returnEnabled;
@@ -169,5 +174,13 @@ public class MerchantDto {
 
     public void setEreceiptEnabled(Integer ereceiptEnabled) {
         this.ereceiptEnabled = ereceiptEnabled;
+    }
+
+    public String getMerchantEmail() {
+        return merchantEmail;
+    }
+
+    public void setMerchantEmail(String merchantEmail) {
+        this.merchantEmail = merchantEmail;
     }
 }

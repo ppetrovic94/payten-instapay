@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
+import { toast } from 'react-toastify';
+import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
 import { merchantFormTemplate, getFormConfig } from '../utils/merchantForm';
@@ -15,24 +16,28 @@ const AddMerchant = () => {
 
   useEffect(() => {
     const fetchMerchantMetadata = async () => {
+      setLoading(true);
       try {
-        const response = await axios.get('http://localhost:8080/user/merchants/metadata');
+        const response = await axios.get('/user/merchants/metadata');
         setMerchantMetadata(response.data);
+        setLoading(false);
       } catch (err) {
         setErrors(err.response);
+        setLoading(false);
       }
     };
     fetchMerchantMetadata();
   }, []);
 
-  const saveMerchant = async (merchant) => {
+  const saveMerchant = async () => {
     setLoading(true);
     try {
-      await axios.post('http://localhost:8080/user/merchants/add', merchant);
+      await axios.post('/user/merchants/add', formFields);
+      toast.success(`Uspešno ste dodali trgovca ${formFields.merchantName}`);
       setLoading(false);
-      history.push('/');
+      history.push('/ips/merchants');
     } catch (err) {
-      console.log(err);
+      toast.error('Došlo je do greške pri dodavanju trgovca');
       setLoading(false);
       setErrors(err.response.data);
     }

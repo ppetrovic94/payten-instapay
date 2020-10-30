@@ -2,6 +2,7 @@ package com.payten.instapay.services;
 
 import com.payten.instapay.dto.Merchant.MerchantDto;
 import com.payten.instapay.dto.Merchant.MerchantMetadata;
+import com.payten.instapay.dto.Merchant.MerchantNames;
 import com.payten.instapay.model.Merchant;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.BindingResult;
@@ -18,4 +19,6 @@ public interface MerchantService {
     MerchantMetadata getMerchantMetadata();
     MerchantDto editMerchant(Integer id, MerchantDto merchant, BindingResult result);
     String getMerchantNameById(Integer merchantId);
+    String getMerchantEmailById(Integer merchantId);
+    List<MerchantNames> getMerchantNames();
 }

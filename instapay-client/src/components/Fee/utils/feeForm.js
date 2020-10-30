@@ -1,8 +1,8 @@
 export const feeFormTemplate = {
-  feeReceiverId: null,
+  feeReceiverId: 1,
   merchantId: null,
-  feeTypeId: null,
-  productTypeId: null,
+  feeTypeId: 0,
+  productTypeId: 1,
   condition: null,
   amount: null,
   validityDate: '',

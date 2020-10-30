@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import PropTypes from 'prop-types';
 import { Table } from 'semantic-ui-react';
-import _ from 'lodash';
+import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import './GroupRoles.scss';
 
-const GroupRoles = ({ groupFields, setGroupFields }) => {
+const GroupRoles = ({ groupFields, setGroupFields, errorMessage }) => {
   const [roles, setRoles] = useState(null);
   const [checkedRoles, setCheckedRoles] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState(null);
 
   useEffect(() => {
     setLoading(true);
     const fetchRoles = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/admin/roles');
+        const response = await axios.get('/admin/roles');
         setRoles(response.data);
         setLoading(false);
       } catch (err) {
-        setErrors(err.response);
+        console.error(err.response);
       }
     };
     fetchRoles();
@@ -32,12 +31,12 @@ const GroupRoles = ({ groupFields, setGroupFields }) => {
       roles.forEach((item) => {
         temp = {
           ...temp,
-          [item.roleId]: !!groupFields.roleIds.find((el) => item.roleId == el) || false,
+          [item.roleId]: !!groupFields.roleIds.find((el) => item.roleId === el) || false,
         };
       });
     }
 
-    setCheckedRoles((checkedRole) => ({ ...checkedRoles, ...temp }));
+    setCheckedRoles({ ...checkedRoles, ...temp });
   }, [groupFields, roles]);
 
   const onCheckboxClick = (e) => {
@@ -59,7 +58,7 @@ const GroupRoles = ({ groupFields, setGroupFields }) => {
       <Table basic="very">
         <Table.Row>
           <Table.HeaderCell>Naziv</Table.HeaderCell>
-          <Table.HeaderCell>Opis</Table.HeaderCell>
+          <Table.HeaderCell className="groupRoleDescription">Opis</Table.HeaderCell>
         </Table.Row>
         <Table.Body>
           {roles &&
@@ -73,15 +72,22 @@ const GroupRoles = ({ groupFields, setGroupFields }) => {
                     id={role.roleId}
                     onChange={onCheckboxClick}
                     value={role.roleId}
-                    checked={checkedRoles[role.roleId]}
+                    defaultChecked={checkedRoles[role.roleId]}
                   />
                 </Table.Cell>
               </Table.Row>
             ))}
         </Table.Body>
       </Table>
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
     </div>
   );
+};
+
+GroupRoles.propTypes = {
+  groupFields: PropTypes.object,
+  setGroupFields: PropTypes.func,
+  errorMessage: PropTypes.string,
 };
 
 export default GroupRoles;

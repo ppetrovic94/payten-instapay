@@ -10,7 +10,7 @@ import java.sql.Date;
 public class Merchant implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "MERCHANT_ID")
     private Integer merchantId;
 
@@ -19,6 +19,15 @@ public class Merchant implements Serializable {
 
     @Column(name = "MERCHANT_ADDRESS")
     private String merchantAddress;
+
+    @Column(name = "MERCHANT_MIN_FEE")
+    private Integer merchantMinFee;
+
+    @Column(name = "MERCHANT_PERC_FEE")
+    private Double merchantPercFee;
+
+    @Column(name = "MERCHANT_EMAIL")
+    private String merchantEmail;
 
     @Basic
     @Column(name = "MERCHANT_SETUP_DATE")
@@ -57,7 +66,7 @@ public class Merchant implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "MERCHANT_STATUS")
-    private AcqStatus status;
+    private Status status;
 
     @OneToOne
     @JoinColumn(name = "MERCHANT_CITY_ID")
@@ -122,11 +131,11 @@ public class Merchant implements Serializable {
         this.merchantAccount = merchantAccount;
     }
 
-    public AcqStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(AcqStatus status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -192,5 +201,29 @@ public class Merchant implements Serializable {
 
     public void setMerchantId(Integer merchantId) {
         this.merchantId = merchantId;
+    }
+
+    public String getMerchantEmail() {
+        return merchantEmail;
+    }
+
+    public void setMerchantEmail(String merchantEmail) {
+        this.merchantEmail = merchantEmail;
+    }
+
+    public Integer getMerchantMinFee() {
+        return merchantMinFee;
+    }
+
+    public void setMerchantMinFee(Integer merchantMinFee) {
+        this.merchantMinFee = merchantMinFee;
+    }
+
+    public Double getMerchantPercFee() {
+        return merchantPercFee;
+    }
+
+    public void setMerchantPercFee(Double merchantPercFee) {
+        this.merchantPercFee = merchantPercFee;
     }
 }

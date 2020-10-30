@@ -1,5 +1,5 @@
 export const pointOfSaleTableHeader = {
-  pointOfSaleLocalId: 'ID Prodajnog Mesta',
+  pointOfSaleLocalId: 'ID prodajnog Mesta',
   pointOfSaleName: 'Naziv prodajnog mesta',
   pointOfSaleAddress: 'Adresa',
   city: 'Grad',
@@ -44,14 +44,14 @@ export const pointOfSaleActionConfig = (id) => {
       type: 'UPDATE',
       name: 'editPointOfSale',
       label: 'Izmeni',
-      redirectLink: `/pos/${id}`,
+      redirectLink: `/ips/pos/${id}`,
       icon: 'edit',
     },
     {
       type: 'GET',
       name: 'getTerminals',
       label: 'Terminali',
-      redirectLink: `/pos/${id}/terminals`,
+      redirectLink: `/ips/pos/${id}/terminals`,
       icon: 'calculator',
     },
   ];
