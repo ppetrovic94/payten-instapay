@@ -268,7 +268,7 @@ public class MerchantServiceImpl implements MerchantService {
             errorMap = null;
         }
         else {
-            if (!personalIdentityNumber.isEmpty() && merchantRepository.existsByPersonalIdentityNumber(personalIdentityNumber)){
+            if (personalIdentityNumber != null && merchantRepository.existsByPersonalIdentityNumber(personalIdentityNumber)){
                 errorMap = new HashMap<>();
                 errorMap.put("personalIdentityNumber", "Trgovac sa unetim matičnim brojem: " + personalIdentityNumber + " već postoji u bazi");
                 return errorMap;
@@ -279,7 +279,7 @@ public class MerchantServiceImpl implements MerchantService {
             errorMap = null;
         }
         else {
-            if (!taxIdentityNumber.isEmpty() && merchantRepository.existsByTaxIdentityNumber(taxIdentityNumber)){
+            if (taxIdentityNumber != null && merchantRepository.existsByTaxIdentityNumber(taxIdentityNumber)){
                 errorMap = new HashMap<>();
                 errorMap.put("taxIdentityNumber", "Trgovac sa unetim PIB: " + taxIdentityNumber + " već postoji u bazi");
                 return errorMap;

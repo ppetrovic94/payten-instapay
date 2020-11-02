@@ -195,7 +195,7 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
         if (pointOfSale != null && pointOfSale.getPointOfSaleLocalId() != null && pointOfSale.getPointOfSaleLocalId().equals(pointOfSaleLocalId)){
             errorMap = null;
         } else {
-            if (!pointOfSaleLocalId.isEmpty() && pointOfSaleRepository.existsByPointOfSaleLocalId(pointOfSaleLocalId)) {
+            if (pointOfSaleLocalId != null && pointOfSaleRepository.existsByPointOfSaleLocalId(pointOfSaleLocalId)) {
                 errorMap = new HashMap<>();
                 errorMap.put("pointOfSaleLocalId", "Prodajno mesto sa unetim ID-em: " + pointOfSaleLocalId + " već postoji u bazi");
                 return errorMap;
