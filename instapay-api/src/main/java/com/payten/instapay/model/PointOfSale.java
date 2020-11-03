@@ -1,5 +1,7 @@
 package com.payten.instapay.model;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.List;
@@ -7,8 +9,10 @@ import java.util.List;
 @Entity
 @Table(name="ACQ_POINTS_OF_SALE")
 public class PointOfSale {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
     @Column(name = "POINT_OF_SALE_ID")
     private Integer pointOfSaleId;
 

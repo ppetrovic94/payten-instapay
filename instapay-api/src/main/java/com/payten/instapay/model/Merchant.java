@@ -1,5 +1,7 @@
 package com.payten.instapay.model;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -10,7 +12,8 @@ import java.sql.Date;
 public class Merchant implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
     @Column(name = "MERCHANT_ID")
     private Integer merchantId;
 

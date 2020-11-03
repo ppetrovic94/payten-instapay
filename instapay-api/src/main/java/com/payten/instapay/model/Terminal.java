@@ -1,5 +1,7 @@
 package com.payten.instapay.model;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -10,9 +12,11 @@ import java.sql.Date;
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "I_TERMINAL_ID", type = Integer.class),
 })
 public class Terminal {
+
     @Id
     @Column(name = "TERMINAL_ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
     private Integer terminalId;
 
     @Basic
