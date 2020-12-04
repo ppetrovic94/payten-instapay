@@ -32,6 +32,7 @@ public interface MerchantRepository extends JpaRepository<Merchant, Integer>, Pa
     @Query("SELECT m.merchantEmail FROM Merchant m where m.merchantId = :id")
     String getMerchantEmailById(@Param("id") Integer id);
 
+    boolean existsByMerchantId(Integer merchantId);
     boolean existsByLocalMerchantId(String localMerchantId);
     boolean existsByPersonalIdentityNumber(String personalIdentityNumber);
     boolean existsByTaxIdentityNumber(String taxIdentityNumber);

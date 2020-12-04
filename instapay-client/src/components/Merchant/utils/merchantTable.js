@@ -22,6 +22,7 @@ export const formatMerchantData = (data) => {
       setupDate,
       personalIdentityNumber,
       paymentMethod,
+      acqUser,
     }) => {
       return {
         merchantId,
@@ -33,6 +34,7 @@ export const formatMerchantData = (data) => {
         setupDate,
         personalIdentityNumber,
         paymentMethod: paymentMethod ? paymentMethod.paymentMethodName : '',
+        acqUser,
       };
     },
   );
@@ -60,6 +62,13 @@ export const merchantActionConfig = (id) => {
       label: 'Provizije',
       redirectLink: `/ips/merchant/${id}/fees`,
       icon: 'file powerpoint',
+    },
+    {
+      type: 'GET',
+      name: 'merchantCredentials',
+      label: 'Kredencijali',
+      redirectLink: `/ips/merchant/${id}/credentials`,
+      icon: 'qrcode',
     },
   ];
 };

@@ -7,6 +7,7 @@ import TableActions from '../TableActions/TableActions';
 import './CustomTable.scss';
 import TerminalActions from '../Terminal/TerminalActions/TerminalActions';
 import TransactionActions from '../Transactions/TransactionActions/TransactionActions';
+import MerchantActions from '../Merchant/MerchantActions/MerchantActions';
 
 const CustomTable = ({
   tableTitle,
@@ -19,6 +20,7 @@ const CustomTable = ({
   tableHandlePageChange,
   tableTotalPages,
   tableColumnSortHandler,
+  tableCustomFunction,
   onDeleteHandler,
   navbarSections,
   rotated,
@@ -102,7 +104,11 @@ const CustomTable = ({
                       return header === 'actions' && tableActions ? (
                         <Table.Cell key={key}>
                           {item.merchantId && (
-                            <TableActions actions={tableActions(item.merchantId)} />
+                            <MerchantActions
+                              actions={tableActions(item.merchantId)}
+                              merchant={item}
+                              merchantRerender={tableCustomFunction}
+                            />
                           )}
                           {item.pointOfSaleId && (
                             <TableActions actions={tableActions(item.pointOfSaleId)} />
@@ -178,6 +184,7 @@ CustomTable.propTypes = {
   tableTitle: PropTypes.string,
   tableHeader: PropTypes.object,
   tableActions: PropTypes.func,
+  tableCustomFunction: PropTypes.func,
   content: PropTypes.array,
   rotated: PropTypes.bool,
   tableSearchHandler: PropTypes.func,

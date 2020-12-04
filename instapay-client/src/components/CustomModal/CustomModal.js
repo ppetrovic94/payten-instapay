@@ -14,6 +14,7 @@ const CustomModal = ({
   return (
     <Modal
       {...others}
+      style={{ zIndex: '10000' }}
       closeIcon
       open={open}
       trigger={triggerElement && triggerElement()}

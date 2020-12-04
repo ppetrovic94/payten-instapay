@@ -1,5 +1,7 @@
 package com.payten.instapay.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -74,6 +76,10 @@ public class Merchant implements Serializable {
     @OneToOne
     @JoinColumn(name = "MERCHANT_CITY_ID")
     private City city;
+
+    @OneToOne(mappedBy = "merchant")
+    @JsonIgnoreProperties("merchant")
+    private AcqUser acqUser;
 
     public Merchant() {
     }
@@ -228,5 +234,13 @@ public class Merchant implements Serializable {
 
     public void setMerchantPercFee(Double merchantPercFee) {
         this.merchantPercFee = merchantPercFee;
+    }
+
+    public AcqUser getAcqUser() {
+        return acqUser;
+    }
+
+    public void setAcqUser(AcqUser acqUser) {
+        this.acqUser = acqUser;
     }
 }

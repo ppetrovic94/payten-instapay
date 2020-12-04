@@ -6,7 +6,6 @@ import './TerminalActions.scss';
 
 const TerminalActions = ({ terminal, actionConfig }) => {
   const terminalActions = actionConfig(terminal.terminalId);
-
   return (
     <div className="actionContainer">
       {terminalActions &&

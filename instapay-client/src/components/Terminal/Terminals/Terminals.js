@@ -18,17 +18,18 @@ const Terminals = () => {
   const [activePage, setActivePage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
+  const [credentialsOnMerchant, setCredentialsOnMerchant] = useState(false);
   const [errors, setErrors] = useState(null);
   const { id } = useParams();
 
   useEffect(() => {
     localStorage.setItem('pointOfSaleId', id);
-
     const fetchNavbarData = async (id) => {
       const merchantId = localStorage.getItem('merchantId');
       try {
         const posName = await axios.get(`/user/pos/${id}/name`);
         const merchantName = await axios.get(`/user/merchants/${merchantId}/name`);
+        const hasCredentials = await axios.get(`/user/merchants/${merchantId}/hasCredentials`);
         setSections([
           {
             key: 'merchantName',
@@ -41,6 +42,7 @@ const Terminals = () => {
           },
           { key: 'terminals', content: 'Terminali' },
         ]);
+        setCredentialsOnMerchant(hasCredentials.data);
       } catch (err) {
         setErrors(err.response);
       }
@@ -115,7 +117,7 @@ const Terminals = () => {
         <CustomTable
           tableAddItem={`/ips/pos/${id}/terminals/add`}
           tableHeader={terminalTableHeader}
-          tableActions={terminalActionConfig}
+          tableActions={(id) => terminalActionConfig(id, credentialsOnMerchant)}
           content={formatTerminalData(terminals)}
           tableSearchHandler={onChangeSearchTerm}
           tableActivePage={activePage}

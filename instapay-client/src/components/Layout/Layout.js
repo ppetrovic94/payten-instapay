@@ -25,8 +25,8 @@ import Cities from '../City/Cities/Cities';
 import NotFound from '../../security/NotFound/NotFound';
 import Transactions from '../Transactions/Transactions';
 import './Layout.scss';
-import IpsReport from '../TransactionReport/TransactionReport';
 import TransactionReport from '../TransactionReport/TransactionReport';
+import MerchantCredentials from '../Merchant/MerchantCredentials/MerchantCredentials';
 
 const Layout = () => {
   return (
@@ -36,6 +36,11 @@ const Layout = () => {
         <ProtectedRoute path="/ips/merchants" exact component={Merchants} />
         <ProtectedRoute path="/ips/merchants/add" exact component={AddMerchant} />
         <ProtectedRoute path="/ips/merchant/:id" exact component={EditMerchant} />
+        <ProtectedRoute
+          path="/ips/merchant/:id/credentials"
+          exact
+          component={MerchantCredentials}
+        />
         <ProtectedRoute path="/ips/merchant/:id/pos" exact component={PointOfSales} />
         <ProtectedRoute path="/ips/merchant/:id/fees" exact component={Fees} />
         <ProtectedRoute path="/ips/merchant/:id/pos/add" exact component={AddPointOfSale} />

@@ -37,7 +37,7 @@ export const formatTerminalData = (data) => {
   );
 };
 
-export const terminalActionConfig = (id) => {
+export const terminalActionConfig = (id, credentialsOnMerchant) => {
   return [
     {
       type: 'UPDATE',
@@ -53,12 +53,16 @@ export const terminalActionConfig = (id) => {
       redirectLink: `/ips/terminals/${id}/transactions`,
       icon: 'exchange',
     },
-    {
-      type: 'GET_ANDROID_DETAILS',
-      name: 'androidDetails',
-      label: 'Kredencijali za ANDROID',
-      redirectLink: `/ips/terminals/${id}/details`,
-      icon: 'android',
-    },
+    ...(credentialsOnMerchant
+      ? []
+      : [
+          {
+            type: 'GET_ANDROID_DETAILS',
+            name: 'androidDetails',
+            label: 'Kredencijali za ANDROID',
+            redirectLink: `/ips/terminals/${id}/details`,
+            icon: 'android',
+          },
+        ]),
   ];
 };

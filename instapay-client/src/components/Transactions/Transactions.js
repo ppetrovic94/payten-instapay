@@ -77,7 +77,7 @@ const Transactions = () => {
     };
     try {
       const response = await axios.get(
-        `/user/terminals/${acquirerTid}/transactions?dateFrom=${dateAndTime.from}&dateTo=${dateAndTime.to}&pageNum=${activePage}&pageSize=15`,
+        `/user/terminals/transactions?terminalId=${acquirerTid}&dateFrom=${dateAndTime.from}&dateTo=${dateAndTime.to}&pageNum=${activePage}&pageSize=15`,
       );
       setTransactions(response.data.content);
       setTotalPages(response.data.totalPages);
@@ -95,7 +95,7 @@ const Transactions = () => {
     };
     try {
       const response = await axios.get(
-        `/user/terminals/${acquirerTid}/transactions?dateFrom=${dateAndTime.from}&dateTo=${dateAndTime.to}&pageNum=${activePage}&pageSize=15`,
+        `/user/terminals/transactions?terminalId=${acquirerTid}&dateFrom=${dateAndTime.from}&dateTo=${dateAndTime.to}&pageNum=${activePage}&pageSize=15`,
       );
 
       setTransactions(response.data.content);
