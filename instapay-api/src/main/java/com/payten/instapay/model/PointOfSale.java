@@ -1,5 +1,6 @@
 package com.payten.instapay.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -52,6 +53,10 @@ public class PointOfSale {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "pointOfSaleId", cascade = CascadeType.ALL)
     private List<Terminal> terminals;
+
+    @OneToOne(mappedBy = "pointOfSale")
+    @JsonIgnoreProperties("pointOfSale")
+    private AcqUser acqUser;
 
     public PointOfSale() {
     }

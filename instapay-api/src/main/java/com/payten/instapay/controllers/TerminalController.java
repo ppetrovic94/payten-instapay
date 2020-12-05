@@ -5,6 +5,7 @@ import com.payten.instapay.dto.Terminal.TerminalMetadata;
 import com.payten.instapay.model.Terminal;
 import com.payten.instapay.model.custom.TerminalTransactionDetails;
 import com.payten.instapay.model.custom.TerminalTransactionPage;
+import com.payten.instapay.services.CredentialsService;
 import com.payten.instapay.services.MailService;
 import com.payten.instapay.services.TerminalService;
 import com.payten.instapay.services.TransactionService;
@@ -29,7 +30,7 @@ public class TerminalController {
     private final TransactionService transactionService;
     private final MailService mailService;
 
-    public TerminalController(TerminalService terminalService, TransactionService transactionService, MailService mailService) {
+    public TerminalController(TerminalService terminalService, TransactionService transactionService, MailService mailService, CredentialsService credentialsService) {
         this.terminalService = terminalService;
         this.transactionService = transactionService;
         this.mailService = mailService;
@@ -87,11 +88,10 @@ public class TerminalController {
         return terminalService.getAcquirerTidById(terminalId);
     }
 
-    @GetMapping("/terminals/{acquirerTid}/generateCredentials")
+    @GetMapping("/terminals/{terminalId}/userId")
     @ResponseStatus(value = HttpStatus.OK)
-    public void generateCredentials(@PathVariable String acquirerTid,
-                                    @RequestParam(name="regenerate",required = false, defaultValue = "false") boolean regenerate){
-        terminalService.generateCredentials(acquirerTid, regenerate);
+    public String getUserId(@PathVariable Integer terminalId){
+        return terminalService.getUserIdByTerminalId(terminalId);
     }
 
     @GetMapping("/terminals/qrcode/{userId}")
@@ -104,14 +104,15 @@ public class TerminalController {
         outputStream.close();
     }
 
-    @GetMapping("/terminals/{terminalId}/transactions")
+    @GetMapping("/terminals/transactions")
     @ResponseStatus(value = HttpStatus.OK)
-    public TerminalTransactionPage getTransactionByTerminalIdAndDateRangePaginated(@PathVariable String terminalId,
-                                                                                   @RequestParam(name="dateFrom") String dateFrom,
-                                                                                   @RequestParam(name="dateTo") String dateTo,
+    public TerminalTransactionPage getTransactionByTerminalIdAndDateRangePaginated(@RequestParam(name="terminalId", required = false) String terminalId,
+                                                                                   @RequestParam(name="merchantId", required = false) String merchantId,
+                                                                                   @RequestParam(name="dateFrom", required = false) String dateFrom,
+                                                                                   @RequestParam(name="dateTo", required = false) String dateTo,
                                                                                    @RequestParam(name ="pageNum") Integer pageNum,
                                                                                    @RequestParam(name ="pageSize") Integer pageSize){
-        return transactionService.getTransactionByTerminalIdAndDateRangePaginated(dateFrom,dateTo, terminalId, pageNum, pageSize);
+        return transactionService.getTransactionByTerminalIdAndDateRangePaginated(dateFrom,dateTo, terminalId, merchantId, pageNum, pageSize);
     }
 
     @GetMapping("/terminals/transactions/{endToEndId}")

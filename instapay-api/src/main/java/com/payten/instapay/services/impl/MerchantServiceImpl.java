@@ -167,14 +167,6 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
-    public void generateCredentialsForMerchant(Integer merchantId) {
-
-        if(!merchantRepository.existsByMerchantId(merchantId)) throw new RequestedResourceNotFoundException("Ne postoji trgovac sa ID-em: " + merchantId);
-
-        acqUserRepository.generateCredentials3(merchantId, null, null);
-    }
-
-    @Override
     public boolean checkMerchantCredentialsByMerchantId(Integer merchantId) {
         return acqUserRepository.existsByMerchant_MerchantId(merchantId);
     }

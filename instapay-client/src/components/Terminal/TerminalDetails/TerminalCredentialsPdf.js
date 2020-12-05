@@ -26,7 +26,7 @@ const TerminalCredentialsPdf = ({ acquirerTid, activationCode, userId }) => (
           <Image
             style={styles.image}
             source={{
-              uri: `http://localhost:8080/api/user/terminals/qrcode/${userId}`,
+              uri: `http://localhost:8080/ips/api/user/terminals/qrcode/${userId}`,
               method: 'GET',
             }}
           />

@@ -11,7 +11,6 @@ import org.springframework.validation.BindingResult;
 import java.util.List;
 
 public interface MerchantService {
-
     List<Merchant> findAll();
     Page<Merchant> findAllMerchantsPaginated(int pageNum, String searchTerm, String sortBy, String direction);
     MerchantDto findById(Integer id);
@@ -23,7 +22,6 @@ public interface MerchantService {
     String getMerchantEmailById(Integer merchantId);
     String getUserIdByMerchantId(Integer merchantId);
     List<MerchantNames> getMerchantNames();
-    void generateCredentialsForMerchant(Integer merchantId);
     boolean checkMerchantCredentialsByMerchantId(Integer merchantId);
     AcqUser saveCredentials(Integer merchantId, String userId);
     AcqUser updateCredentials(Integer merchantId, String userId);

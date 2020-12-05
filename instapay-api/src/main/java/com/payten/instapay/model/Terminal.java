@@ -1,5 +1,6 @@
 package com.payten.instapay.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -47,6 +48,10 @@ public class Terminal {
 
     @Column(name = "TERMINAL_TYPE")
     private String terminalType;
+
+    @OneToOne(mappedBy = "terminal")
+    @JsonIgnoreProperties("terminal")
+    private AcqUser acqUser;
 
     public Terminal() {
     }

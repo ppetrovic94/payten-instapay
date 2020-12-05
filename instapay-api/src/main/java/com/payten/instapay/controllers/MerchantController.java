@@ -115,12 +115,6 @@ public class MerchantController {
         return merchantService.checkMerchantCredentialsByMerchantId(merchantId);
     }
 
-    @GetMapping("/merchants/{merchantId}/generateCredentials")
-    @ResponseStatus(value = HttpStatus.OK)
-    public void generateCredentials(@PathVariable Integer merchantId){
-        merchantService.generateCredentialsForMerchant(merchantId);
-    }
-
     @PostMapping("/merchants/{merchantId}/saveCredentials")
     @ResponseStatus(value = HttpStatus.OK)
     public AcqUser saveMerchantCredentials(@PathVariable Integer merchantId, @RequestBody MerchantUserId merchantCredentials) {

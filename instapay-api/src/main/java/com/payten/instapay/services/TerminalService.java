@@ -14,7 +14,6 @@ public interface TerminalService {
     TerminalMetadata getTerminalMetadata();
     Terminal updateTerminal(Integer terminalId, TerminalDto terminalDto, BindingResult result);
     void deleteTerminal(Integer terminalId);
-    void generateCredentials(String acquirerTid, boolean regenarate);
     String getAcquirerTidById(Integer terminalId);
-    //Integer getTerminalIdByAcquirerTid(String acquirerTid);
+    String getUserIdByTerminalId(Integer terminalId);
 }

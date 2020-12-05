@@ -16,7 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
-import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,14 +29,16 @@ public class TerminalServiceImpl implements TerminalService {
     private final MapValidationErrorService mapValidationErrorService;
     private final TerminalTypeRepository terminalTypeRepository;
     private final StatusRepository statusRepository;
+    private final AcqUserRepository acqUserRepository;
 
-    public TerminalServiceImpl(TerminalRepository terminalRepository, PointOfSaleRepository pointOfSaleRepository, PaymentMethodRepository paymentMethodRepository, MapValidationErrorService mapValidationErrorService, TerminalTypeRepository terminalTypeRepository, StatusRepository statusRepository) {
+    public TerminalServiceImpl(TerminalRepository terminalRepository, PointOfSaleRepository pointOfSaleRepository, PaymentMethodRepository paymentMethodRepository, MapValidationErrorService mapValidationErrorService, TerminalTypeRepository terminalTypeRepository, StatusRepository statusRepository, AcqUserRepository acqUserRepository) {
         this.terminalRepository = terminalRepository;
         this.pointOfSaleRepository = pointOfSaleRepository;
         this.paymentMethodRepository = paymentMethodRepository;
         this.mapValidationErrorService = mapValidationErrorService;
         this.terminalTypeRepository = terminalTypeRepository;
         this.statusRepository = statusRepository;
+        this.acqUserRepository = acqUserRepository;
     }
 
     @Override
@@ -157,17 +158,14 @@ public class TerminalServiceImpl implements TerminalService {
         return acquirerTid;
     }
 
-//    @Override
-//    public Integer getTerminalIdByAcquirerTid(String acquirerTid) {
-//        Integer terminalId = terminalRepository.getTerminalIdByAcquirerTid(acquirerTid);
-//
-//        if (terminalId == null) {
-//            throw new RequestedResourceNotFoundException("Ne postoji terminal sa ID-em: " + acquirerTid);
-//        }
-//
-//        return terminalId;
-//    }
+    @Override
+    public String getUserIdByTerminalId(Integer terminalId) {
+        AcqUser credentials = acqUserRepository.getByTerminal_TerminalId(terminalId);
 
+        if (credentials == null) throw new RequestedResourceNotFoundException("Terminal sa IDem: " + terminalId + " nema generisane kredencijale");
+
+        return credentials.getUserId();
+    }
 
     @Override
     public void deleteTerminal(Integer terminalId) {
@@ -178,18 +176,6 @@ public class TerminalServiceImpl implements TerminalService {
         }
 
         terminalRepository.delete(found);
-    }
-
-    @Override
-    @Transactional
-    public void generateCredentials(String acquirerTid, boolean regenerate) {
-        Integer terminalId = terminalRepository.getTerminalIdByAcquirerTid(acquirerTid);
-
-        if (regenerate) {
-            terminalRepository.updateTerminalStatusToInactive(terminalId, statusRepository.getStatusByStatusName("Inactive"));
-        }
-
-        terminalRepository.generateCredentials(terminalId);
     }
 
 

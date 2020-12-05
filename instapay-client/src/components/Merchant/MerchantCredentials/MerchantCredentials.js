@@ -45,7 +45,7 @@ const MerchantCredentials = ({ userId, merchantName, merchantId, merchantRerende
     );
     if (doSave) {
       try {
-        await axios.get(`/user/merchants/${merchantId}/generateCredentials`);
+        await axios.get(`/user/credentials/generate?merchantId=${merchantId}`);
         toast.success('Uspešno ste generisali nove kredencijale');
       } catch (err) {
         toast.error('Došlo je do greške pri generisanju novih kredencijala');

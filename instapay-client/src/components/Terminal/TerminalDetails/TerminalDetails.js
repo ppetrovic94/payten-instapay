@@ -14,6 +14,7 @@ import EmailCard from '../../Cards/EmailCard/EmailCard';
 const TerminalDetails = () => {
   const [loading, setLoading] = useState(false);
   const [terminalDetails, setTerminalDetails] = useState(null);
+  const [terminalUserId, setTerminalUserId] = useState(null);
   const [merchantEmail, setMerchantEmail] = useState('');
   const [sections, setSections] = useState(null);
   const [notFound, setNotFound] = useState(null);
@@ -22,8 +23,10 @@ const TerminalDetails = () => {
   const fetchTerminalById = async (id) => {
     setLoading(true);
     try {
-      const response = await axios.get(`/user/terminals/${id}/details`);
-      setTerminalDetails(response.data);
+      const detailsRes = await axios.get(`/user/terminals/${id}/details`);
+      const userIdRes = await axios.get(`/user/terminals/${id}/userId`);
+      setTerminalDetails(detailsRes.data);
+      setTerminalUserId(userIdRes.data);
       setLoading(false);
     } catch (err) {
       setNotFound(err.response);
@@ -80,7 +83,7 @@ const TerminalDetails = () => {
   const regenerateCredentials = async (terminalId) => {
     setLoading(true);
     try {
-      await axios.get(`/user/terminals/${terminalId}/generateCredentials?regenerate=true`);
+      await axios.get(`/user/credentials/generate?terminalId=${terminalId}`);
       toast.success('Uspešno ste generisali nove kredencijale');
     } catch (err) {
       toast.error('Došlo je do greške pri generisanju novih kredencijala');
@@ -94,7 +97,7 @@ const TerminalDetails = () => {
     pdf(
       <TerminalCredentialsPdf
         acquirerTid={terminalDetails.acquirerTid}
-        userId={terminalDetails.userId}
+        userId={terminalUserId}
         activationCode={terminalDetails.activationCode}
       />,
     )
@@ -139,12 +142,14 @@ const TerminalDetails = () => {
         </div>
         <div className="terminalDetailsCards">
           <CredentialsCard
+            userId={terminalUserId}
             details={terminalDetails}
             regenerateCredentials={regenerateCredentials}
             fetchTerminalById={fetchTerminalById}
           />
           <EmailCard
             onSendHandler={sendOnMail}
+            userId={terminalUserId}
             details={terminalDetails}
             merchantEmail={merchantEmail}
           />

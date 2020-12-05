@@ -26,11 +26,15 @@ public class AcqUser {
     @JsonIgnoreProperties("acqUser")
     private Merchant merchant;
 
-    @Column(name = "POINT_OF_SALE_ID")
-    private Integer pointOfSaleId;
+    @OneToOne
+    @JoinColumn(name = "POINT_OF_SALE_ID")
+    @JsonIgnoreProperties("acqUser")
+    private PointOfSale pointOfSale;
 
+    @OneToOne
     @JoinColumn(name = "TERMINAL_ID")
-    private Integer terminalId;
+    @JsonIgnoreProperties("acqUser")
+    private Terminal terminal;
 
     @Column(name = "USER_ID")
     private String userId;
@@ -54,27 +58,27 @@ public class AcqUser {
         this.userId = userId;
     }
 
-    public Integer getPointOfSaleId() {
-        return pointOfSaleId;
-    }
-
-    public void setPointOfSaleId(Integer pointOfSaleId) {
-        this.pointOfSaleId = pointOfSaleId;
-    }
-
-    public Integer getTerminalId() {
-        return terminalId;
-    }
-
-    public void setTerminalId(Integer terminalId) {
-        this.terminalId = terminalId;
-    }
-
     public Merchant getMerchant() {
         return merchant;
     }
 
     public void setMerchant(Merchant merchant) {
         this.merchant = merchant;
+    }
+
+    public PointOfSale getPointOfSale() {
+        return pointOfSale;
+    }
+
+    public void setPointOfSale(PointOfSale pointOfSale) {
+        this.pointOfSale = pointOfSale;
+    }
+
+    public Terminal getTerminal() {
+        return terminal;
+    }
+
+    public void setTerminal(Terminal terminal) {
+        this.terminal = terminal;
     }
 }

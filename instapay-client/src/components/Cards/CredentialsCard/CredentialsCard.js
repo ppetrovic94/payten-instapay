@@ -4,7 +4,7 @@ import { Card, Button, Image } from 'semantic-ui-react';
 import CustomModal from '../../CustomModal/CustomModal';
 import './CredentialsCard.scss';
 
-const CredentialsCard = ({ details, regenerateCredentials, fetchTerminalById }) => {
+const CredentialsCard = ({ details, userId, regenerateCredentials, fetchTerminalById }) => {
   const credentialsModalContent = () => (
     <>
       <h3>{`Generisanje novih kredencjiala će vratiti terminal ${details.acquirerTid} u 'Inactive' status nakon čega će terminal zahtevati ponovnu aktivaciju sa novim kredencijalima.
@@ -24,7 +24,7 @@ const CredentialsCard = ({ details, regenerateCredentials, fetchTerminalById }) 
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <Image
-          src={`http://localhost:8080/ips/api/user/terminals/qrcode/${details.userId}`}
+          src={`http://localhost:8080/ips/api/user/terminals/qrcode/${userId}`}
           style={{
             width: '200px',
           }}
@@ -61,6 +61,7 @@ const CredentialsCard = ({ details, regenerateCredentials, fetchTerminalById }) 
 };
 
 CredentialsCard.propTypes = {
+  userId: PropTypes.string,
   details: PropTypes.object,
   regenerateCredentials: PropTypes.func,
   fetchTerminalById: PropTypes.func,
