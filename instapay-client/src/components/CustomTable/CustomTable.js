@@ -166,7 +166,7 @@ const CustomTable = ({
       {(!content || !content.length) && !rotated && (
         <div className="tableNoContent">Tabela ne sadrži podatke</div>
       )}
-      {tableActivePage && (
+      {!!tableTotalPages && (
         <div className="tablePageing">
           <Pagination
             siblingRange={null}

@@ -1,6 +1,7 @@
 package com.payten.instapay.services.impl;
 
 import com.payten.instapay.dto.PointOfSale.PointOfSaleDto;
+import com.payten.instapay.dto.PointOfSale.PointOfSaleNames;
 import com.payten.instapay.exceptions.handlers.RequestedResourceNotFoundException;
 import com.payten.instapay.exceptions.handlers.ValidationException;
 import com.payten.instapay.model.*;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -98,7 +100,7 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
         if (errorMap != null){
             throw new ValidationException(errorMap);
         } else {
-            errorMap = checkPointOfSaleUniqueConstraints(pointOfSaleDto.getPointOfSaleLocalId(), null);
+            errorMap = checkPointOfSaleUniqueConstraints(pointOfSaleDto.getPointOfSaleLocalId(), null, merchantId);
             if (errorMap != null) {
                 throw new ValidationException(errorMap);
             }
@@ -122,7 +124,7 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
         if (errorMap != null) {
             throw new ValidationException(errorMap);
         } else {
-            errorMap = checkPointOfSaleUniqueConstraints(pointOfSaleDto.getPointOfSaleLocalId(), found);
+            errorMap = checkPointOfSaleUniqueConstraints(pointOfSaleDto.getPointOfSaleLocalId(), found, null);
             if (errorMap != null) {
                 throw new ValidationException(errorMap);
             }
@@ -190,15 +192,20 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
         return modelMapper.map(pointOfSale, PointOfSaleDto.class);
     }
 
-    private Map<String, String> checkPointOfSaleUniqueConstraints(String pointOfSaleLocalId, PointOfSale pointOfSale){
+    private Map<String, String> checkPointOfSaleUniqueConstraints(String pointOfSaleLocalId, PointOfSale pointOfSale, Integer merchantId){
         Map<String,String> errorMap;
         if (pointOfSale != null && pointOfSale.getPointOfSaleLocalId() != null && pointOfSale.getPointOfSaleLocalId().equals(pointOfSaleLocalId)){
             errorMap = null;
         } else {
             if (pointOfSaleLocalId != null && pointOfSaleRepository.existsByPointOfSaleLocalId(pointOfSaleLocalId)) {
-                errorMap = new HashMap<>();
-                errorMap.put("pointOfSaleLocalId", "Prodajno mesto sa unetim ID-em: " + pointOfSaleLocalId + " već postoji u bazi");
-                return errorMap;
+                Integer mId = merchantId != null ? merchantId : pointOfSale.getMerchantId();
+                List<PointOfSale> pointOfSaleList = pointOfSaleRepository.findAllByPointOfSaleIdAndMerchantId(pointOfSaleLocalId, mId);
+                if (!pointOfSaleList.isEmpty()) {
+                    errorMap = new HashMap<>();
+                    errorMap.put("pointOfSaleLocalId", "Prodajno mesto sa unetim ID-em: " + pointOfSaleLocalId + " već postoji za trgovca sa ID-em: " + mId);
+                    return errorMap;
+                }
+
             }
         }
 

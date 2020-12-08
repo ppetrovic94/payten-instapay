@@ -27,12 +27,14 @@ import Transactions from '../Transactions/Transactions';
 import './Layout.scss';
 import TransactionReport from '../TransactionReport/TransactionReport';
 import MerchantCredentials from '../Merchant/MerchantCredentials/MerchantCredentials';
+import TransactionsGlobal from '../Transactions/TransactionsGlobal';
 
 const Layout = () => {
   return (
     <div className="appContent">
       <Header />
       <Switch>
+        <ProtectedRoute path="/ips/transactions" exact component={TransactionsGlobal} />
         <ProtectedRoute path="/ips/merchants" exact component={Merchants} />
         <ProtectedRoute path="/ips/merchants/add" exact component={AddMerchant} />
         <ProtectedRoute path="/ips/merchant/:id" exact component={EditMerchant} />

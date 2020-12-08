@@ -35,6 +35,13 @@ const Header = () => {
             <>
               <Menu.Item
                 as={Link}
+                to={'/ips/transactions'}
+                name="Transakcije"
+                active={activeItem === 'Transakcije'}
+                onClick={onItemClick}
+              />
+              <Menu.Item
+                as={Link}
                 to={'/ips/merchants'}
                 name="Trgovci"
                 active={activeItem === 'Trgovci'}

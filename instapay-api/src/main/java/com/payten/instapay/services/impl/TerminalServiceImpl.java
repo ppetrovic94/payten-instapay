@@ -1,5 +1,7 @@
 package com.payten.instapay.services.impl;
 
+import com.payten.instapay.dto.PointOfSale.PointOfSaleNames;
+import com.payten.instapay.dto.Terminal.TerminalAcquirerIds;
 import com.payten.instapay.dto.Terminal.TerminalDto;
 import com.payten.instapay.dto.Terminal.TerminalMetadata;
 import com.payten.instapay.exceptions.handlers.RequestedResourceNotFoundException;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -165,6 +168,23 @@ public class TerminalServiceImpl implements TerminalService {
         if (credentials == null) throw new RequestedResourceNotFoundException("Terminal sa IDem: " + terminalId + " nema generisane kredencijale");
 
         return credentials.getUserId();
+    }
+
+    @Override
+    public List<TerminalAcquirerIds> getTerminalAcquirerIdsByMerchantId(Integer merchantId) {
+        List<TerminalAcquirerIds> terminalAcquirerIds = new ArrayList<>();
+
+        List<PointOfSaleNames> pointOfSaleNamesList = pointOfSaleRepository.findPointOfSaleIds(merchantId);
+        if (pointOfSaleNamesList != null && !pointOfSaleNamesList.isEmpty()) {
+            for (PointOfSaleNames pos: pointOfSaleNamesList) {
+                List<TerminalAcquirerIds> terminalsForPos = terminalRepository.findTerminalAcquirerIdsByPointOfSaleId(pos.getPointOfSaleId());
+                if (terminalsForPos != null && !terminalsForPos.isEmpty()) {
+                    terminalAcquirerIds.addAll(terminalsForPos);
+                }
+            }
+        }
+
+        return terminalAcquirerIds;
     }
 
     @Override

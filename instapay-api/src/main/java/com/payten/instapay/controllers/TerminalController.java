@@ -1,7 +1,9 @@
 package com.payten.instapay.controllers;
 
+import com.payten.instapay.dto.Terminal.TerminalAcquirerIds;
 import com.payten.instapay.dto.Terminal.TerminalDto;
 import com.payten.instapay.dto.Terminal.TerminalMetadata;
+import com.payten.instapay.model.PaymentRequest;
 import com.payten.instapay.model.Terminal;
 import com.payten.instapay.model.custom.TerminalTransactionDetails;
 import com.payten.instapay.model.custom.TerminalTransactionPage;
@@ -88,6 +90,12 @@ public class TerminalController {
         return terminalService.getAcquirerTidById(terminalId);
     }
 
+    @GetMapping("/terminals/names")
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<TerminalAcquirerIds> getTerminalAcquirerIdList( @RequestParam(name ="merchantId") Integer merchantId){
+        return terminalService.getTerminalAcquirerIdsByMerchantId(merchantId);
+    }
+
     @GetMapping("/terminals/{terminalId}/userId")
     @ResponseStatus(value = HttpStatus.OK)
     public String getUserId(@PathVariable Integer terminalId){
@@ -107,7 +115,7 @@ public class TerminalController {
     @GetMapping("/terminals/transactions")
     @ResponseStatus(value = HttpStatus.OK)
     public TerminalTransactionPage getTransactionByTerminalIdAndDateRangePaginated(@RequestParam(name="terminalId", required = false) String terminalId,
-                                                                                   @RequestParam(name="merchantId", required = false) String merchantId,
+                                                                                   @RequestParam(name="merchantId", required = false) Integer merchantId,
                                                                                    @RequestParam(name="dateFrom", required = false) String dateFrom,
                                                                                    @RequestParam(name="dateTo", required = false) String dateTo,
                                                                                    @RequestParam(name ="pageNum") Integer pageNum,
