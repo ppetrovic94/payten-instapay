@@ -194,18 +194,15 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
 
     private Map<String, String> checkPointOfSaleUniqueConstraints(String pointOfSaleLocalId, PointOfSale pointOfSale, Integer merchantId){
         Map<String,String> errorMap;
+        Integer mId = merchantId != null ? merchantId : pointOfSale.getMerchantId();
+
         if (pointOfSale != null && pointOfSale.getPointOfSaleLocalId() != null && pointOfSale.getPointOfSaleLocalId().equals(pointOfSaleLocalId)){
             errorMap = null;
         } else {
-            if (pointOfSaleLocalId != null && pointOfSaleRepository.existsByPointOfSaleLocalId(pointOfSaleLocalId)) {
-                Integer mId = merchantId != null ? merchantId : pointOfSale.getMerchantId();
-                List<PointOfSale> pointOfSaleList = pointOfSaleRepository.findAllByPointOfSaleIdAndMerchantId(pointOfSaleLocalId, mId);
-                if (!pointOfSaleList.isEmpty()) {
-                    errorMap = new HashMap<>();
-                    errorMap.put("pointOfSaleLocalId", "Prodajno mesto sa unetim ID-em: " + pointOfSaleLocalId + " već postoji za trgovca sa ID-em: " + mId);
-                    return errorMap;
-                }
-
+            if (pointOfSaleLocalId != null && pointOfSaleRepository.existsByPointOfSaleLocalIdAndMerchantId(pointOfSaleLocalId, mId)) {
+                errorMap = new HashMap<>();
+                errorMap.put("pointOfSaleLocalId", "Prodajno mesto sa unetim ID-em: " + pointOfSaleLocalId + " već postoji za ovog trgovca");
+                return errorMap;
             }
         }
 

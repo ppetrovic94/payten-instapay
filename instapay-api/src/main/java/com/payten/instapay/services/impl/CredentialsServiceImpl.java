@@ -28,13 +28,13 @@ public class CredentialsServiceImpl implements CredentialsService {
 
         if (merchantId != null) {
             if (!merchantRepository.existsByMerchantId(merchantId)) throw new RequestedResourceNotFoundException("Ne postoji trgovac sa ID-em: " + merchantId);
-            acqUserRepository.generateCredentials3(merchantId, null, null);
+            acqUserRepository.generateCredentials2(merchantId, null, null);
         } else if (posId != null) {
             if (!pointOfSaleRepository.existsById(posId)) throw new RequestedResourceNotFoundException("Ne postoji prodajno mesto sa ID-em: " + posId);
-            acqUserRepository.generateCredentials3(null, posId, null);
+            acqUserRepository.generateCredentials2(null, posId, null);
         } else if (terminalId != null) {
             if (!terminalRepository.existsById(terminalId)) throw new RequestedResourceNotFoundException("Ne postoji terminal sa ID-em: " + terminalId);
-            acqUserRepository.generateCredentials3(null, null, terminalId);
+            acqUserRepository.generateCredentials2(null, null, terminalId);
         }
 
     }

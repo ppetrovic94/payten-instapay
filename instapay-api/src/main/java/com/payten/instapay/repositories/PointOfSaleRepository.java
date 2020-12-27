@@ -34,5 +34,6 @@ public interface PointOfSaleRepository extends JpaRepository<PointOfSale, Intege
 
     boolean existsByMerchantId(Integer merchantId);
     boolean existsByPointOfSaleLocalId(String pointOfSaleLocalId);
+    boolean existsByPointOfSaleLocalIdAndMerchantId(String pointOfSaleLocalId, Integer merchantId);
 
 }

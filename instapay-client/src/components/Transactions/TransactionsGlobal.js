@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../../utils/API';
-import { Button, Form, Dropdown } from 'semantic-ui-react';
+import { Button, Form, Dropdown, Input } from 'semantic-ui-react';
 import './TransactionsGlobal.scss';
 import CustomTable from '../CustomTable/CustomTable';
 import { transactionsTableHeader, terminalActionConfig } from './utils/transactionsTable';
@@ -131,10 +131,15 @@ const TransactionsGlobal = () => {
 
   const handleMerchantDropdown = (e, { value }) => {
     setSelectedMerchant({ merchantId: value, merchantName: e.target.textContent });
+    setSelectedAcquirerTid({ acquirerId: '' });
   };
 
   const handleTerminalDropdown = (e, { value }) => {
     setSelectedAcquirerTid({ acquirerId: value });
+  };
+
+  const onChangeTerminalInput = (e) => {
+    setSelectedAcquirerTid({ acquirerId: e.target.value });
   };
 
   const onReset = () => {
@@ -147,7 +152,7 @@ const TransactionsGlobal = () => {
   return (
     <div className="transactionsGlobalContainer">
       <Form size="small" className="transactionsGlobalForm">
-        <label className="dateLabel">Od: </label>
+        <label className="transactionsGlobalDateLabel">Od: </label>
         <input
           type="date"
           placeholder={'Od'}
@@ -156,7 +161,7 @@ const TransactionsGlobal = () => {
           onChange={onChangeDate}
           className="transactionsGlobalDate"
         />
-        <label className="dateLabel">Do: </label>
+        <label className="transactionsGlobalDateLabel">Do: </label>
         <input
           type="date"
           placeholder={'Do'}
@@ -165,7 +170,7 @@ const TransactionsGlobal = () => {
           onChange={onChangeDate}
           className="transactionsGlobalDate"
         />
-        <label className="dateLabel">Trgovac:</label>
+        <label className="transactionsGlobalDateLabel">Trgovac:</label>
         <Dropdown
           search
           selection
@@ -182,24 +187,32 @@ const TransactionsGlobal = () => {
           onChange={handleMerchantDropdown}
           placeholder="Odaberi trgovca"
         />
-        <label className="dateLabel">Terminal: </label>
-        <Dropdown
-          search
-          selection
-          fluid
-          options={
-            terminalsList &&
-            terminalsList.map(({ acquirerId }) => {
-              return { value: acquirerId, text: acquirerId, key: acquirerId };
-            })
-          }
-          className="transactionsGlobalDropdown"
-          name="Terminali"
-          value={selectedAcquirerTid.acquirerId}
-          onChange={handleTerminalDropdown}
-          placeholder="Odaberi terminal"
-          disabled={disabledTerminalChoice}
-        />
+        <label className="transactionsGlobalDateLabel">Terminal: </label>
+        {selectedMerchant.merchantId ? (
+          <Dropdown
+            search
+            selection
+            fluid
+            options={
+              terminalsList &&
+              terminalsList.map(({ acquirerId }) => {
+                return { value: acquirerId, text: acquirerId, key: acquirerId };
+              })
+            }
+            className="transactionsGlobalDropdown"
+            name="Terminali"
+            value={selectedAcquirerTid.acquirerId}
+            onChange={handleTerminalDropdown}
+            placeholder="Odaberi terminal"
+            disabled={disabledTerminalChoice}
+          />
+        ) : (
+          <Input
+            className="transactionsGlobalTerminalInput"
+            onChange={onChangeTerminalInput}
+            placeholder="Unesite TID"
+          />
+        )}
 
         <div className="transactionsGlobalButtons">
           <Button color="red" className="getTransactionsButton" onClick={onReset}>

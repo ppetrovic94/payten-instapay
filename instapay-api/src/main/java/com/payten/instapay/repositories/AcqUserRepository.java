@@ -15,8 +15,8 @@ public interface AcqUserRepository extends JpaRepository<AcqUser, Integer> {
 
     boolean existsByMerchant_MerchantId(Integer merchantId);
 
-    @Procedure(name = "AcqUser.generateCredentials3")
-    void generateCredentials3(@Param("I_MERCHANT_ID") Integer merchantId,
+    @Procedure(name = "AcqUser.generateCredentials2")
+    void generateCredentials2(@Param("I_MERCHANT_ID") Integer merchantId,
                               @Param("I_POS_ID") Integer posId,
                               @Param("I_TERMINAL_ID") Integer terminalId);
 

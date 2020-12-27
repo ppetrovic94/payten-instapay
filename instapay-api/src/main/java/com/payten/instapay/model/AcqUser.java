@@ -6,8 +6,8 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 
 @Entity
-@NamedStoredProcedureQuery(name = "AcqUser.generateCredentials3",
-        procedureName = "GENERATE_CREDENTIALS_3", parameters = {
+@NamedStoredProcedureQuery(name = "AcqUser.generateCredentials2",
+        procedureName = "GENERATE_CREDENTIALS_2", parameters = {
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "I_MERCHANT_ID", type = Integer.class),
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "I_POS_ID", type = Integer.class),
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "I_TERMINAL_ID", type = Integer.class),
