@@ -103,7 +103,7 @@ const TransactionReport = () => {
             </Button>
             <Button
               as={'a'}
-              href={`http://localhost:8080/ips/api/acq/exportIpsReport?dateFrom=${date.dateFrom}&dateTo=${date.dateTo}&merchantId=${merchant.merchantId}&merchantName=${merchant.merchantName}`}
+              href={`/ips/api/acq/exportIpsReport?dateFrom=${date.dateFrom}&dateTo=${date.dateTo}&merchantId=${merchant.merchantId}&merchantName=${merchant.merchantName}`}
               color="green"
               disabled={disabled}
               download>

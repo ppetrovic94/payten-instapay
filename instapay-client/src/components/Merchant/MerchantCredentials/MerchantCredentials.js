@@ -82,7 +82,7 @@ const MerchantCredentials = ({ userId, merchantName, merchantId, merchantRerende
       <div className="merchantCredentialsContainer">
         {userId && (
           <Image
-            src={`http://localhost:8080/ips/api/user/terminals/qrcode/${userId}`}
+            src={`/ips/api/user/terminals/qrcode/${userId}`}
             style={{
               width: '200px',
             }}

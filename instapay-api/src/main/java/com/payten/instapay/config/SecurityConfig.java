@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/acq/**").hasRole("ACQ")
                 .anyRequest().authenticated()
                 .and()
-                .cors().and().csrf().disable();
+                .csrf().disable();
     }
 
 }
