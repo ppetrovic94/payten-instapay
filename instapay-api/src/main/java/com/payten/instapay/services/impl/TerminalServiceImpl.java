@@ -242,7 +242,7 @@ public class TerminalServiceImpl implements TerminalService {
         terminalDto.setPaymentMethodId(terminal.getPaymentMethod());
         terminalDto.setStatusId(terminal.getStatus().getStatusId());
         terminalDto.setSetupDate(terminal.getSetupDate().toString());
-        terminalDto.setTerminalTypeId(terminalType.getTerminalTypeId());
+        terminalDto.setTerminalTypeId(terminalType != null ? terminalType.getTerminalTypeId() : null);
 
         return terminalDto;
     }

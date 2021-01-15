@@ -3,6 +3,9 @@ package com.payten.instapay.model.custom;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Entity
 public class TerminalTransaction {
@@ -53,14 +56,6 @@ public class TerminalTransaction {
         this.status = status;
     }
 
-    public String getStatusDate() {
-        return statusDate;
-    }
-
-    public void setStatusDate(String statusDate) {
-        this.statusDate = statusDate;
-    }
-
     public String getStatusCode() {
         return statusCode;
     }
@@ -75,5 +70,13 @@ public class TerminalTransaction {
 
     public void setInstructedAmount(Float instructedAmount) {
         this.instructedAmount = instructedAmount;
+    }
+
+    public String getStatusDate() {
+        return statusDate;
+    }
+
+    public void setStatusDate(String statusDate) {
+        this.statusDate = statusDate;
     }
 }

@@ -49,7 +49,7 @@ const MerchantActions = ({ actions, merchant, merchantRerender }) => {
               trigger={
                 action.name === 'merchantCredentials' ? (
                   <div className="customModal">
-                    {merchant.acqUser && merchant.acqUser.terminalId == null ? (
+                    {merchant.acqUser && merchant.acqUser.userId !== null ? (
                       <CustomModal
                         content={credentialDetails}
                         triggerElement={() => <Icon name="key" size="large" />}

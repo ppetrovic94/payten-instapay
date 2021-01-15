@@ -25,6 +25,7 @@ public interface PointOfSaleRepository extends JpaRepository<PointOfSale, Intege
     Page<PointOfSale> findByMerchantIdAndCity_cityNameContaining(Integer merchantId, String cityName, Pageable page);
 
     PointOfSale getByPointOfSaleId(Integer id);
+    PointOfSale getByPointOfSaleNameAndMerchantId(String pointOfSaleName, Integer merchantId);
 
     @Query("SELECT p.pointOfSaleName FROM PointOfSale p where p.pointOfSaleId = :id")
     String getPointOfSaleNameById(@Param("id") Integer id);

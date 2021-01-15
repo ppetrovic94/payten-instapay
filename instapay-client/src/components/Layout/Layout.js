@@ -10,6 +10,7 @@ import Terminals from '../Terminal/Terminals/Terminals';
 import AddTerminal from '../Terminal/AddTerminal/AddTerminal';
 import EditTerminal from '../Terminal/EditTerminal/EditTerminal';
 import TerminalDetails from '../Terminal/TerminalDetails/TerminalDetails';
+import ImportCard from '../Cards/ImportCard/ImportCard';
 import Merchants from '../Merchant/Merchants/Merchants';
 import Users from '../User/Users/Users';
 import AddUser from '../User/AddUser/AddUser';
@@ -36,6 +37,7 @@ const Layout = () => {
       <Switch>
         <ProtectedRoute path="/ips/transactions" exact component={TransactionsGlobal} />
         <ProtectedRoute path="/ips/merchants" exact component={Merchants} />
+        <ProtectedRoute path="/ips/import" exact component={ImportCard} />
         <ProtectedRoute path="/ips/merchants/add" exact component={AddMerchant} />
         <ProtectedRoute path="/ips/merchant/:id" exact component={EditMerchant} />
         <ProtectedRoute

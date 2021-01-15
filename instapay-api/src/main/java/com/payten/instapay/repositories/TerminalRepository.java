@@ -22,6 +22,7 @@ public interface TerminalRepository extends JpaRepository<Terminal, Integer>, Pa
 
     Page<Terminal> findAllByPointOfSaleId(Integer pointOfSaleId,Pageable page);
     Terminal getByTerminalId(Integer terminalId);
+    Terminal getByAcquirerTid(String acquirerTid);
 
     Page<Terminal> findByPointOfSaleIdAndAcquirerTidContaining(Integer pointOfSaleId, String acquirerTid, Pageable pageable);
     Page<Terminal> findByPointOfSaleIdAndTerminalAccountContaining(Integer pointOfSaleId, String terminalAccount, Pageable pageable);

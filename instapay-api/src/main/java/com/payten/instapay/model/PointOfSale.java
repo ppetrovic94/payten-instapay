@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -52,7 +53,7 @@ public class PointOfSale {
     private String pointOfSaleMCC;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "pointOfSaleId", cascade = CascadeType.ALL)
-    private List<Terminal> terminals;
+    private List<Terminal> terminals = new ArrayList<>();
 
     @OneToOne(mappedBy = "pointOfSale")
     @JsonIgnoreProperties("pointOfSale")
@@ -109,14 +110,6 @@ public class PointOfSale {
         this.status = status;
     }
 
-    public Integer getMerchantId() {
-        return merchantId;
-    }
-
-    public void setMerchantId(Integer merchantId) {
-        this.merchantId = merchantId;
-    }
-
     public String getPointOfSaleLocalId() {
         return pointOfSaleLocalId;
     }
@@ -156,4 +149,13 @@ public class PointOfSale {
     public void setTerminals(List<Terminal> terminals) {
         this.terminals = terminals;
     }
+
+    public Integer getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(Integer merchantId) {
+        this.merchantId = merchantId;
+    }
+
 }

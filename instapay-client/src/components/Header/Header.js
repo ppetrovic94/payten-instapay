@@ -26,7 +26,7 @@ const Header = () => {
 
   return (
     <div className="headerHolder">
-      <div className="headerLogo">
+      <div className="headerLogo" onClick={() => history.push('/ips/transactions')}>
         <Logo />
       </div>
       <div className="headerLinks">
@@ -45,6 +45,13 @@ const Header = () => {
                 to={'/ips/merchants'}
                 name="Trgovci"
                 active={activeItem === 'Trgovci'}
+                onClick={onItemClick}
+              />
+              <Menu.Item
+                as={Link}
+                to={'/ips/import'}
+                name="Import"
+                active={activeItem === 'Import'}
                 onClick={onItemClick}
               />
               <Menu.Item

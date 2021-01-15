@@ -11,7 +11,6 @@ import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
 import javax.persistence.StoredProcedureQuery;
 import javax.transaction.Transactional;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +49,7 @@ public class TransactionServiceImpl implements TransactionService {
         if (success) {
             List<TerminalTransaction> resultList = procedureQuery.getResultList();
             Integer recordCount = (Integer) procedureQuery.getOutputParameterValue("O_RECORD_COUNT");
+
             transactionsPage.setContent(resultList);
             transactionsPage.setTotalElements(recordCount);
             transactionsPage.setTotalPages((int) Math.ceil((float) recordCount/pageSize));
@@ -82,12 +82,11 @@ public class TransactionServiceImpl implements TransactionService {
                 terminalTransactionDetails.setStatusDate((String) obj[3]);
                 terminalTransactionDetails.setEndToEndId((String) obj[4]);
                 terminalTransactionDetails.setInstructionId((String) obj[5]);
-                terminalTransactionDetails.setSetupDate((Timestamp) obj[6]);
+                terminalTransactionDetails.setSetupDate(String.valueOf(obj[6]));
                 transactionDetailsList.add(terminalTransactionDetails);
             }
         }
 
         return transactionDetailsList;
     }
-
 }

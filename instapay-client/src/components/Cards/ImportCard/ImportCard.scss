@@ -1,0 +1,92 @@
+.importCardContainer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+}
+
+.backIcon {
+  color: royalblue;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.accordionHeader {
+  display: flex;
+  justify-content: space-between;
+  width: 70%;
+}
+
+.accordionFooter {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 20px;
+}
+
+.headerFileName {
+  font-style: italic;
+  font-weight: 500;
+}
+
+.uploadFileContainer {
+  display: flex;
+  align-items: center;
+  border: 1px solid lightgrey;
+  border-radius: 4px;
+}
+
+.parseButtonContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+}
+
+.parseButton {
+  width: 120px;
+}
+
+.importButton {
+  width: 200px;
+  margin-left: 20px !important;
+}
+
+.p-filename {
+  font-weight: 500;
+  padding-left: 20px;
+  color: grey;
+  font-style: italic;
+}
+
+.importCardTitle {
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+}
+
+.paymentMethodDropdown {
+  width: 300px !important;
+}
+
+.dropdownLabel {
+  font-weight: 500;
+}
+
+.dropdownLabel::after {
+  content: '*';
+  color: red;
+}
+
+.countContainer {
+  display: flex;
+  height: 30px;
+  width: 70%;
+  justify-content: space-between;
+  background-color: lightgrey;
+  align-items: center;
+  padding: 0 5px;
+}
+
+.countLabel {
+  margin-bottom: 0;
+  font-weight: 500;
+}

@@ -1,5 +1,6 @@
 package com.payten.instapay.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -7,6 +8,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "ACQ_MERCHANTS")
@@ -79,6 +82,10 @@ public class Merchant implements Serializable {
     @OneToOne(mappedBy = "merchant")
     @JsonIgnoreProperties("merchant")
     private AcqUser acqUser;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "merchantId")
+    @JsonIgnore
+    private List<PointOfSale> pointOfSales = new ArrayList<>();
 
     public Merchant() {
     }
@@ -241,5 +248,13 @@ public class Merchant implements Serializable {
 
     public void setAcqUser(AcqUser acqUser) {
         this.acqUser = acqUser;
+    }
+
+    public List<PointOfSale> getPointOfSales() {
+        return pointOfSales;
+    }
+
+    public void setPointOfSales(List<PointOfSale> pointOfSales) {
+        this.pointOfSales = pointOfSales;
     }
 }
