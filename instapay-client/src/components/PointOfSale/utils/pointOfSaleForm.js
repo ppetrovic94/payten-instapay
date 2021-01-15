@@ -45,7 +45,7 @@ export const pointOfSaleFormConfig = {
   pointOfSaleAccount: {
     key: 'pointOfSaleAccount',
     title: 'Broj računa',
-    type: 'NUMBER',
+    type: 'TEXT',
     required: false,
   },
   paymentMethod: {

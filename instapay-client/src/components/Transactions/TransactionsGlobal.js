@@ -3,8 +3,14 @@ import axios from '../../utils/API';
 import { Button, Form, Dropdown, Input } from 'semantic-ui-react';
 import './TransactionsGlobal.scss';
 import CustomTable from '../CustomTable/CustomTable';
-import { transactionsTableHeader, terminalActionConfig } from './utils/transactionsTable';
+import {
+  transactionsTableHeader,
+  terminalActionConfig,
+  formatTransactionsInstructedAmounts,
+} from './utils/transactionsTable';
 import CustomLoader from '../CustomLoader/CustomLoader';
+import { transactionDetailsTableHeader, formatTerminalDetails } from './utils/transactionsTable';
+import CustomModal from '../CustomModal/CustomModal';
 
 const TransactionsGlobal = () => {
   const [date, setDate] = useState({ dateFrom: '', dateTo: '' });
@@ -12,6 +18,7 @@ const TransactionsGlobal = () => {
   const [disabled, setDisabled] = useState(false);
   const [disabledTerminalChoice, setDisabledTerminalChoice] = useState(true);
   const [transactions, setTransactions] = useState({ list: null, dateRange: '' });
+  const [details, setDetails] = useState(null);
   const [activePage, setActivePage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [merchantsList, setMerchantsList] = useState(null);
@@ -20,10 +27,12 @@ const TransactionsGlobal = () => {
   const [selectedAcquirerTid, setSelectedAcquirerTid] = useState({
     acquirerId: '',
   });
+  const [transactionReference, setTransactionReference] = useState('');
+  const [error, setError] = useState(null);
 
   const getDate = () => {
     if (date.dateFrom && date.dateTo) {
-      return `${date.dateFrom} - ${date.dateTo}`;
+      return `${date.dateFrom.replace(/-/g, '/')} - ${date.dateTo.replace(/-/g, '/')}`;
     }
     const today = new Date();
     const dd = String(today.getDate()).padStart(2, '0');
@@ -149,6 +158,46 @@ const TransactionsGlobal = () => {
     setDisabledTerminalChoice(true);
   };
 
+  const onChangeReference = (e) => {
+    setTransactionReference(e.target.value);
+  };
+
+  const onGetTransactionDetails = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`/user/terminals/transactions/${transactionReference}`);
+      setDetails(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error(error.response);
+      setError(
+        `Došlo je do greške pri dobijanju detalja transakcije za referencu:  ${transactionReference}`,
+      );
+      setLoading(false);
+    }
+  };
+
+  const detailsContent = () => {
+    return loading ? (
+      <CustomLoader />
+    ) : (
+      <>
+        {details && (
+          <CustomTable
+            tableTitle={`Detalji transakcije - ${transactionReference}`}
+            content={formatTerminalDetails(details)}
+            tableHeader={transactionDetailsTableHeader}
+          />
+        )}
+        {error && (
+          <div className="errorContainer">
+            <p style={{ fontSize: '20px', fontWeight: '500' }}>{error}</p>
+          </div>
+        )}
+      </>
+    );
+  };
+
   return (
     <div className="transactionsGlobalContainer">
       <Form size="small" className="transactionsGlobalForm">
@@ -226,6 +275,27 @@ const TransactionsGlobal = () => {
             Pretrazi
           </Button>
         </div>
+        <div className="transactionsGlobalDetailsContainer">
+          <label className="transactionsGlobalDateLabel">E2E referenca: </label>
+          <Input
+            className="transactionsGlobalDetailsInput"
+            onChange={onChangeReference}
+            placeholder="Unesite E2E referencu"
+          />
+          <CustomModal
+            content={detailsContent}
+            onOpenHandler={onGetTransactionDetails}
+            triggerElement={() => (
+              <Button
+                className="transactionsGlobalDetailsTrigger"
+                disabled={!transactionReference}
+                color="twitter">
+                Prikazi detalje
+              </Button>
+            )}
+            size="large"
+          />
+        </div>
       </Form>
       <div className="transactionsGlobalTable">
         {loading ? (
@@ -233,7 +303,7 @@ const TransactionsGlobal = () => {
         ) : (
           <CustomTable
             tableHeader={transactionsTableHeader}
-            content={transactions.list}
+            content={transactions.list && formatTransactionsInstructedAmounts(transactions.list)}
             tableActions={terminalActionConfig}
             tableTotalPages={totalPages}
             tableActivePage={activePage}

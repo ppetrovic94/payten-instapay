@@ -41,3 +41,21 @@
 .transactionsGlobalDate {
   margin-top: 10px !important;
 }
+
+.transactionsGlobalDetailsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  align-items: flex-start;
+}
+
+.transactionsGlobalDetailsInput {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.transactionsGlobalDetailsTrigger {
+  margin-top: 10px !important;
+  align-self: center;
+}

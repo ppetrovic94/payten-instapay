@@ -44,7 +44,7 @@ export const terminalFormConfig = {
   terminalAccount: {
     key: 'terminalAccount',
     title: 'Broj računa',
-    type: 'NUMBER',
+    type: 'TEXT',
     required: false,
   },
 };

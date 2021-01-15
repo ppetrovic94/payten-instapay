@@ -97,6 +97,8 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
             throw new RequestedResourceNotFoundException("Trgovac sa ID-em: " + merchantId + " ne postoji");
         }
 
+        //Merchant merchant = merchantRepository.getByMerchantId(merchantId);
+
         if (errorMap != null){
             throw new ValidationException(errorMap);
         } else {

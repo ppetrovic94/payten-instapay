@@ -43,6 +43,13 @@ export const formatTerminalDetails = (data) => {
   );
 };
 
+export const formatTransactionsInstructedAmounts = (data) => {
+  return data.map((item) => ({
+    ...item,
+    instructedAmount: new Intl.NumberFormat('de-DE').format(item.instructedAmount),
+  }));
+};
+
 export const terminalActionConfig = (endToEndId) => {
   return [
     {

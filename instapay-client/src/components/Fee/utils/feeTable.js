@@ -18,8 +18,11 @@ export const formatFeeData = (data) => {
         merchant: merchant ? merchant.merchantName : '',
         feeType: feeType ? feeType.typeName : '',
         productType: productType ? productType.typeName : '',
-        condition,
-        amount: feeType.typeName === 'Procentualni' ? `${amount}%` : amount,
+        condition: new Intl.NumberFormat('de-DE').format(condition),
+        amount:
+          feeType.typeName === 'Procentualni'
+            ? `${amount}%`
+            : new Intl.NumberFormat('de-DE').format(amount),
         validityDate,
       };
     },
