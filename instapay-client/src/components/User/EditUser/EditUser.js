@@ -7,6 +7,7 @@ import CustomForm from '../../CustomForm/CustomForm';
 import { userFormTemplate, userFormConfig } from '../utils/userForm';
 import './EditUser.scss';
 import NotFound from '../../../security/NotFound/NotFound';
+import { Icon } from 'semantic-ui-react';
 
 const EditUser = () => {
   const [loading, setLoading] = useState(false);
@@ -51,7 +52,13 @@ const EditUser = () => {
     <NotFound message={notFound.data} />
   ) : (
     <>
-      <h2 className="userFormHeader">Izmena korisnika</h2>
+      <div className="editUserFormHeader" onClick={() => history.goBack()}>
+        <div className="editUserFormIconWrapper">
+          <Icon name="angle left" />
+          <p>Nazad</p>
+        </div>
+        <h2 className="editUserFormTitle">Izmena korisnika</h2>
+      </div>
       <CustomForm
         formConfig={userFormConfig}
         formFields={formFields}

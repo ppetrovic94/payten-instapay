@@ -7,6 +7,7 @@ import CustomForm from '../../CustomForm/CustomForm';
 import { terminalFormTemplate, getTerminalFormConfig } from '../utils/terminalForm';
 import './EditTerminal.scss';
 import NotFound from '../../../security/NotFound/NotFound';
+import { Icon } from 'semantic-ui-react';
 
 const EditTerminal = () => {
   const [loading, setLoading] = useState(false);
@@ -74,7 +75,13 @@ const EditTerminal = () => {
   ) : (
     terminalMetadata && (
       <div>
-        <h2 className="terminalFormHeader">{`${pointOfSaleTitle} - Izmena terminala`}</h2>
+        <div className="editTerminalFormHeader" onClick={() => history.goBack()}>
+          <div className="editTerminalFormIconWrapper">
+            <Icon name="angle left" />
+            <p>Nazad</p>
+          </div>
+          <h2 className="editTerminalFormTitle">{`${pointOfSaleTitle} - Izmena terminala`}</h2>
+        </div>
         <CustomForm
           formConfig={getTerminalFormConfig(terminalMetadata, false)}
           formFields={terminalFields}

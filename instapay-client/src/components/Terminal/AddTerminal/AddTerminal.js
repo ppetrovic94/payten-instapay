@@ -7,6 +7,7 @@ import CustomForm from '../../CustomForm/CustomForm';
 import { terminalFormTemplate, getTerminalFormConfig } from '../utils/terminalForm';
 import './AddTerminal.scss';
 import NotFound from '../../../security/NotFound/NotFound';
+import { Icon } from 'semantic-ui-react';
 
 const AddTerminal = () => {
   const [loading, setLoading] = useState(false);
@@ -90,7 +91,13 @@ const AddTerminal = () => {
   ) : (
     terminalMetadata && (
       <div>
-        <h2 className="terminalFormHeader">{`${pointOfSaleTitle} - Dodavanje terminala`}</h2>
+        <div className="addTerminalFormHeader" onClick={() => history.goBack()}>
+          <div className="addTerminalFormIconWrapper">
+            <Icon name="angle left" />
+            <p>Nazad</p>
+          </div>
+          <h2 className="addTerminalFormTitle">{`${pointOfSaleTitle} - Dodavanje terminala`}</h2>
+        </div>
         <CustomForm
           formConfig={getTerminalFormConfig(terminalMetadata)}
           formFields={terminalFields}

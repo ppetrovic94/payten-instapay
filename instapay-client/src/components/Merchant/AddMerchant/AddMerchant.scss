@@ -1,5 +1,19 @@
-.merchantFormHeader {
-  display: flex;
-  justify-content: center;
+.addMerchantFormTitle {
   margin: 0;
+}
+
+.addMerchantFormHeader {
+  padding-left: 25%;
+  padding-right: 25%;
+  display: flex;
+  align-items: center;
+}
+
+.addMerchantFormIconWrapper {
+  color: royalblue;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-right: 30%;
 }

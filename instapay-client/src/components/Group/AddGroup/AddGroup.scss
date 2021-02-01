@@ -1,5 +1,19 @@
-.groupFormHeader {
-  display: flex;
-  justify-content: center;
+.addGroupFormTitle {
   margin: 0;
+}
+
+.addGroupFormHeader {
+  padding-left: 25%;
+  padding-right: 25%;
+  display: flex;
+  align-items: center;
+}
+
+.addGroupFormIconWrapper {
+  color: royalblue;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-right: 30%;
 }

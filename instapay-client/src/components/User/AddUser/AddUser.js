@@ -6,6 +6,7 @@ import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
 import { userFormTemplate, userFormConfig } from '../utils/userForm';
 import './AddUser.scss';
+import { Icon } from 'semantic-ui-react';
 
 const AddUser = () => {
   const [loading, setLoading] = useState(false);
@@ -31,7 +32,14 @@ const AddUser = () => {
     <CustomLoader />
   ) : (
     <div>
-      <h2 className="userFormHeader">Dodavanje korisnika</h2>
+      <div className="addUserFormHeader" onClick={() => history.goBack()}>
+        <div className="addUserFormIconWrapper">
+          <Icon name="angle left" />
+          <p>Nazad</p>
+        </div>
+        <h2 className="addUserFormTitle">Dodavanje korisnika</h2>
+      </div>
+
       <CustomForm
         formConfig={userFormConfig}
         formFields={formFields}

@@ -46,7 +46,10 @@ export const formatTerminalDetails = (data) => {
 export const formatTransactionsInstructedAmounts = (data) => {
   return data.map((item) => ({
     ...item,
-    instructedAmount: new Intl.NumberFormat('de-DE').format(item.instructedAmount),
+    instructedAmount: Number(item.instructedAmount).toLocaleString('en', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }),
   }));
 };
 

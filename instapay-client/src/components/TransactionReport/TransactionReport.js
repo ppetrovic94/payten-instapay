@@ -5,7 +5,7 @@ import CustomTable from '../CustomTable/CustomTable';
 import { transactionReportTableHeader } from './utils/transactionReportTable';
 import CustomLoader from '../CustomLoader/CustomLoader';
 import './TransactionReport.scss';
-import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const TransactionReport = () => {
   const [date, setDate] = useState({ dateFrom: '', dateTo: '' });
@@ -54,6 +54,10 @@ const TransactionReport = () => {
   const handleDropdown = (e, { value }) => {
     if (value && date.dateFrom && date.dateTo) setDisabled(false);
     setMerchant({ merchantId: value, merchantName: e.target.textContent });
+  };
+
+  const showToastOnDownload = () => {
+    toast.success('Fajl se eksportuje, sačekajte par sekundi do preuzimanja...');
   };
 
   return (
@@ -106,7 +110,8 @@ const TransactionReport = () => {
               href={`/ips/api/acq/exportIpsReport?dateFrom=${date.dateFrom}&dateTo=${date.dateTo}&merchantId=${merchant.merchantId}&merchantName=${merchant.merchantName}`}
               color="green"
               disabled={disabled}
-              download>
+              download
+              onClick={showToastOnDownload}>
               .XLSX
             </Button>
           </Form>

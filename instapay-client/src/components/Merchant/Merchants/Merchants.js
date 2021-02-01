@@ -36,6 +36,7 @@ const Merchants = () => {
 
   const onPageChange = async (e, { activePage }) => {
     setActivePage(activePage);
+    setLoading(true);
     let response = null;
     if (searchTerm) {
       response = await axios.get(
@@ -46,6 +47,7 @@ const Merchants = () => {
     }
 
     setMerchants(response.data.content);
+    setLoading(false);
   };
 
   const onChangeSearchTerm = async (term) => {
