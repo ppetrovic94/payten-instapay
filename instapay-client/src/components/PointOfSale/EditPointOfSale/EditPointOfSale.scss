@@ -1,5 +1,19 @@
-.pointOfSaleFormHeader {
-  display: flex;
-  justify-content: center;
+.editPointOfSaleFormTitle {
   margin: 0;
+}
+
+.editPointOfSaleFormHeader {
+  padding-left: 25%;
+  padding-right: 25%;
+  display: flex;
+  align-items: center;
+}
+
+.editPointOfSaleFormIconWrapper {
+  color: royalblue;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-right: 20%;
 }

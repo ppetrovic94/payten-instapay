@@ -6,6 +6,7 @@ import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
 import { merchantFormTemplate, getFormConfig } from '../utils/merchantForm';
 import './AddMerchant.scss';
+import { Icon } from 'semantic-ui-react';
 
 const AddMerchant = () => {
   const [loading, setLoading] = useState(false);
@@ -48,7 +49,14 @@ const AddMerchant = () => {
   ) : (
     merchantMetadata && (
       <div>
-        <h2 className="merchantFormHeader">Dodavanje trgovca</h2>
+        <div className="addMerchantFormHeader" onClick={() => history.goBack()}>
+          <div className="addMerchantFormIconWrapper">
+            <Icon name="angle left" />
+            <p>Nazad</p>
+          </div>
+
+          <h2 className="addMerchantFormTitle">Dodavanje trgovca</h2>
+        </div>
         <CustomForm
           formConfig={getFormConfig(merchantMetadata)}
           formFields={formFields}

@@ -52,6 +52,7 @@ const PointOfSales = () => {
   }, [id]);
 
   const onPageChange = async (e, { activePage }) => {
+    setLoading(true);
     setActivePage(activePage);
     let response = null;
     if (searchTerm) {
@@ -63,6 +64,7 @@ const PointOfSales = () => {
     }
 
     setPointOfSales(response.data.content);
+    setLoading(false);
   };
 
   const onChangeSearchTerm = async (term) => {

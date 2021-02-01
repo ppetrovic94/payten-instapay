@@ -123,7 +123,7 @@ const ImportCard = () => {
                   color="green"
                   onClick={onParseData}
                   className="parseButton">
-                  Parsiraj
+                  Učitaj
                 </Button>
               </div>
             </Card.Content>

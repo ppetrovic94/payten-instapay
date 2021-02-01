@@ -1,5 +1,19 @@
-.terminalFormHeader {
-  display: flex;
-  justify-content: center;
+.editTerminalFormTitle {
   margin: 0;
+}
+
+.editTerminalFormHeader {
+  padding-left: 25%;
+  padding-right: 25%;
+  display: flex;
+  align-items: center;
+}
+
+.editTerminalFormIconWrapper {
+  color: royalblue;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-right: 20%;
 }
