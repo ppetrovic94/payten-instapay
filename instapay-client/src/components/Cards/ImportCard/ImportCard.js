@@ -108,6 +108,40 @@ const ImportCard = () => {
   return (
     <>
       <div className="importCardContainer">
+        {!parsedData && (
+          <Card
+            style={{
+              minWidth: '500px',
+              minHeight: 'unset',
+              height: 'unset',
+              width: 'unset',
+              paddingTop: '15px',
+            }}>
+            <h3 className="importCardTitle">Import podataka putem .xls fajla</h3>
+            <Card.Content>
+              <div className="uploadFileContainer">
+                <Button
+                  content="Izaberi fajl"
+                  labelPosition="left"
+                  icon="file"
+                  onClick={() => fileInputRef.current.click()}
+                />
+                <p className="p-filename">{file ? file.name : 'Ime fajla'}</p>
+              </div>
+              <input accept=".xls" ref={fileInputRef} type="file" hidden onChange={fileChange} />
+              {errors && <p style={{ color: 'red' }}>{errors}</p>}
+              <div className="parseButtonContainer">
+                <Button
+                  disabled={!file}
+                  color="green"
+                  onClick={onParseData}
+                  className="parseButton">
+                  Parsiraj
+                </Button>
+              </div>
+            </Card.Content>
+          </Card>
+        )}
         {loading ? (
           <CustomLoader />
         ) : (

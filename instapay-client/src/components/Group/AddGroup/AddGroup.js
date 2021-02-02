@@ -6,7 +6,6 @@ import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
 import { groupFormTemplate, groupFormConfig } from '../utils/groupForm';
 import './AddGroup.scss';
-import { Icon } from 'semantic-ui-react';
 
 const AddGroup = () => {
   const [loading, setLoading] = useState(false);
@@ -32,13 +31,7 @@ const AddGroup = () => {
     <CustomLoader />
   ) : (
     <div>
-      <div className="addGroupFormHeader" onClick={() => history.goBack()}>
-        <div className="addGroupFormIconWrapper">
-          <Icon name="angle left" />
-          <p>Nazad</p>
-        </div>
-        <h2 className="addGroupFormTitle">Dodavanje grupe</h2>
-      </div>
+      <h2 className="groupFormHeader">Dodavanje grupe</h2>
       <CustomForm
         formConfig={groupFormConfig}
         formFields={formFields}

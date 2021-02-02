@@ -112,8 +112,8 @@ const TransactionReport = () => {
               href={`/ips/api/acq/exportIpsReport?dateFrom=${date.dateFrom}&dateTo=${date.dateTo}&merchantId=${merchant.merchantId}&merchantName=${merchant.merchantName}`}
               color="green"
               disabled={disabled}
-              download
-              onClick={showToastOnDownload}>
+              onClick={showToastOnDownload}
+              download>
               .XLSX
             </Button>
           </Form>

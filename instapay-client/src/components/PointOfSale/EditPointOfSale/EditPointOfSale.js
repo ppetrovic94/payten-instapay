@@ -7,7 +7,6 @@ import CustomForm from '../../CustomForm/CustomForm';
 import CustomLoader from '../../CustomLoader/CustomLoader';
 import './EditPointOfSale.scss';
 import NotFound from '../../../security/NotFound/NotFound';
-import { Icon } from 'semantic-ui-react';
 
 const EditPointOfSale = () => {
   const [loading, setLoading] = useState(false);
@@ -76,14 +75,7 @@ const EditPointOfSale = () => {
   ) : (
     pointOfSaleMetadata && (
       <div>
-        <div className="editPointOfSaleFormHeader" onClick={() => history.goBack()}>
-          <div className="editPointOfSaleFormIconWrapper">
-            <Icon name="angle left" />
-            <p>Nazad</p>
-          </div>
-          <h2 className="editPointOfSaleFormTitle">{`${merchantTitle} - Prodajno mesto`}</h2>
-        </div>
-
+        <h2 className="pointOfSaleFormHeader">{`${merchantTitle} - Prodajno mesto`}</h2>
         <CustomForm
           formConfig={getPointOfSaleFormConfig(pointOfSaleMetadata)}
           formFields={formFields}

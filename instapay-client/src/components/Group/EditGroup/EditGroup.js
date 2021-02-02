@@ -7,7 +7,6 @@ import CustomForm from '../../CustomForm/CustomForm';
 import { groupFormTemplate, groupFormConfig } from '../utils/groupForm';
 import './EditGroup.scss';
 import NotFound from '../../../security/NotFound/NotFound';
-import { Icon } from 'semantic-ui-react';
 
 const EditGroup = () => {
   const [loading, setLoading] = useState(false);
@@ -53,14 +52,7 @@ const EditGroup = () => {
     <NotFound message={notFound.data} />
   ) : (
     <>
-      <div className="editGroupFormHeader" onClick={() => history.goBack()}>
-        <div className="editGroupFormIconWrapper">
-          <Icon name="angle left" />
-          <p>Nazad</p>
-        </div>
-        <h2 className="editGroupFormTitle">Izmena grupe</h2>
-      </div>
-
+      <h2 className="groupFormHeader">Izmena grupe</h2>
       <CustomForm
         formConfig={groupFormConfig}
         formFields={formFields}

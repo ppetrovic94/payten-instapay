@@ -6,7 +6,6 @@ import CustomLoader from '../../CustomLoader/CustomLoader';
 import CustomForm from '../../CustomForm/CustomForm';
 import { getFeeFormConfig, feeFormTemplate } from '../utils/feeForm';
 import './AddFee.scss';
-import { Icon } from 'semantic-ui-react';
 
 const AddFee = () => {
   const [loading, setLoading] = useState(false);
@@ -49,14 +48,7 @@ const AddFee = () => {
   ) : (
     feeMetadata && (
       <div>
-        <div className="addFeeFormHeader" onClick={() => history.goBack()}>
-          <div className="addFeeFormIconWrapper">
-            <Icon name="angle left" />
-            <p>Nazad</p>
-          </div>
-
-          <h2 className="addFeeFormTitle">Dodavanje provizije</h2>
-        </div>
+        <h2 className="feeFormHeader">Dodavanje provizije</h2>
         <CustomForm
           formConfig={getFeeFormConfig(feeMetadata)}
           formFields={formFields}

@@ -11,7 +11,6 @@ import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
 import javax.persistence.StoredProcedureQuery;
 import javax.transaction.Transactional;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,9 +1,6 @@
 package com.payten.instapay.services.impl;
 
-import com.payten.instapay.dto.Merchant.DataImport.ImportResult;
-import com.payten.instapay.dto.Merchant.DataImport.ParsedMerchant;
-import com.payten.instapay.dto.Merchant.DataImport.ParsedPointOfSale;
-import com.payten.instapay.dto.Merchant.DataImport.ParsedTerminal;
+import com.payten.instapay.dto.Merchant.DataImport.*;
 import com.payten.instapay.model.*;
 import com.payten.instapay.repositories.*;
 import com.payten.instapay.services.DataImportService;
