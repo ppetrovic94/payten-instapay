@@ -180,9 +180,9 @@ public class GroupServiceImpl implements GroupService {
     private Page<Group> searchByTerm(String searchTerm, Pageable page) {
         Page<Group> filtered;
 
-        filtered = groupRepository.findByGroupNameContaining(searchTerm, page);
+        filtered = groupRepository.findByGroupNameContainingIgnoreCase(searchTerm, page);
         if (!filtered.getContent().isEmpty()) return filtered;
-        filtered = groupRepository.findByDescriptionContaining(searchTerm, page);
+        filtered = groupRepository.findByDescriptionContainingIgnoreCase(searchTerm, page);
         if (!filtered.getContent().isEmpty()) return filtered;
 
         return filtered;

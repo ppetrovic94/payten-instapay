@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Card, Button, Icon, Dropdown } from 'semantic-ui-react';
+import { Card, Button, Icon, Dropdown, List } from 'semantic-ui-react';
 import { toast } from 'react-toastify';
 import axios from '../../../utils/API';
 import CustomLoader from '../../CustomLoader/CustomLoader';
@@ -32,9 +32,12 @@ const ImportCard = () => {
   }, [parsedData]);
 
   const fileChange = (file) => {
+    setLoading(true);
+    setErrors(null);
     if (file.target.files && !!file.target.files.length) {
       setFile(file.target.files[0]);
     }
+    setLoading(false);
   };
 
   const onParseData = async () => {
@@ -49,7 +52,17 @@ const ImportCard = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      setParsedData(res.data);
+
+      const validationArr = res.data.validationMapList;
+
+      if (validationArr && validationArr.length > 0) {
+        toast.error('Došlo je do greške pri parsiranju fajla');
+        setErrors(res.data.validationMapList);
+        setFile(null);
+      } else {
+        setParsedData(res.data.parsedMerchantSet);
+        setErrors(null);
+      }
     } catch (error) {
       setLoading(false);
       console.error(error.response);
@@ -95,104 +108,123 @@ const ImportCard = () => {
   return (
     <>
       <div className="importCardContainer">
-        {!parsedData && (
-          <Card
-            style={{
-              minWidth: '500px',
-              minHeight: 'unset',
-              height: 'unset',
-              width: 'unset',
-              paddingTop: '15px',
-            }}>
-            <h3 className="importCardTitle">Import podataka putem .xls fajla</h3>
-            <Card.Content>
-              <div className="uploadFileContainer">
-                <Button
-                  content="Izaberi fajl"
-                  labelPosition="left"
-                  icon="file"
-                  onClick={() => fileInputRef.current.click()}
-                />
-                <p className="p-filename">{file ? file.name : 'Ime fajla'}</p>
-              </div>
-              <input accept=".xls" ref={fileInputRef} type="file" hidden onChange={fileChange} />
-              {errors && <p style={{ color: 'red' }}>{errors}</p>}
-              <div className="parseButtonContainer">
-                <Button
-                  disabled={!file}
-                  color="green"
-                  onClick={onParseData}
-                  className="parseButton">
-                  Učitaj
-                </Button>
-              </div>
-            </Card.Content>
-          </Card>
-        )}
         {loading ? (
           <CustomLoader />
         ) : (
-          parsedData && (
-            <>
-              <div className="accordionHeader">
-                <div className="backIcon" onClick={onBackButtonClick}>
-                  <Icon name="angle left" />
-                  Nazad
-                </div>
-                <p className="headerFileName">{file && file.name}</p>
-              </div>
-              <AccordionGroup data={parsedData} />
-              {!importFinish ? (
-                <div className="accordionFooter">
-                  <div>
-                    <p className="dropdownLabel">Način plaćanja za sve trgovce: </p>
-                    <Dropdown
-                      className="paymentMethodDropdown"
-                      selection
-                      fluid
-                      options={
-                        paymentMethods &&
-                        paymentMethods.map(({ paymentMethodId, paymentMethodName }) => {
-                          return {
-                            value: paymentMethodId,
-                            text: paymentMethodName,
-                            key: paymentMethodId,
-                          };
-                        })
-                      }
-                      name="Nacin placanja"
-                      value={selectedPaymentMethod}
-                      onChange={handleDropdown}
-                      placeholder="Odaberi nacin placanja"
-                    />
-                  </div>
+          !parsedData && (
+            <Card
+              style={{
+                minWidth: '500px',
+                minHeight: 'unset',
+                height: 'unset',
+                width: 'unset',
+                paddingTop: '15px',
+              }}>
+              <h3 className="importCardTitle">Import podataka putem .xls fajla</h3>
+              <Card.Content>
+                <div className="uploadFileContainer">
                   <Button
-                    disabled={!selectedPaymentMethod}
-                    className="importButton"
-                    color="instagram"
-                    onClick={onDataImport}>
-                    Importuj podatke
+                    content="Izaberi fajl"
+                    labelPosition="left"
+                    icon="file"
+                    onClick={() => fileInputRef.current.click()}
+                  />
+                  <p className="p-filename">{file ? file.name : 'Ime fajla'}</p>
+                </div>
+                <input
+                  id="fileInputSelector"
+                  accept=".xls"
+                  ref={fileInputRef}
+                  type="file"
+                  hidden
+                  onChange={fileChange}
+                />
+                <div className="parseButtonContainer">
+                  <Button
+                    disabled={!file}
+                    color="green"
+                    onClick={onParseData}
+                    className="parseButton">
+                    Učitaj
                   </Button>
                 </div>
-              ) : (
-                <div className="countContainer">
-                  {countImport && (
-                    <>
-                      <p className="countLabel">
-                        Broj importovanih trgovaca: {countImport.merchantCount}
-                      </p>
-                      <p className="countLabel">
-                        Broj importovanih prodajnih mesta: {countImport.pointOfSaleCount}
-                      </p>
-                      <p className="countLabel">
-                        Broj importovanih terminala: {countImport.terminalCount}
-                      </p>
-                    </>
-                  )}
-                </div>
-              )}
-            </>
+              </Card.Content>
+            </Card>
           )
+        )}
+        {parsedData && !loading ? (
+          <>
+            <div className="accordionHeader">
+              <div className="backIcon" onClick={onBackButtonClick}>
+                <Icon name="angle left" />
+                Nazad
+              </div>
+              <p className="headerFileName">{file && file.name}</p>
+            </div>
+            <AccordionGroup data={parsedData} />
+            {!importFinish ? (
+              <div className="accordionFooter">
+                <div>
+                  <p className="dropdownLabel">Način plaćanja za sve trgovce: </p>
+                  <Dropdown
+                    className="paymentMethodDropdown"
+                    selection
+                    fluid
+                    options={
+                      paymentMethods &&
+                      paymentMethods.map(({ paymentMethodId, paymentMethodName }) => {
+                        return {
+                          value: paymentMethodId,
+                          text: paymentMethodName,
+                          key: paymentMethodId,
+                        };
+                      })
+                    }
+                    name="Nacin placanja"
+                    value={selectedPaymentMethod}
+                    onChange={handleDropdown}
+                    placeholder="Odaberi nacin placanja"
+                  />
+                </div>
+                <Button
+                  disabled={!selectedPaymentMethod}
+                  className="importButton"
+                  color="instagram"
+                  onClick={onDataImport}>
+                  Importuj podatke
+                </Button>
+              </div>
+            ) : (
+              <div className="countContainer">
+                {countImport && (
+                  <>
+                    <p className="countLabel">
+                      Broj importovanih trgovaca: {countImport.merchantCount}
+                    </p>
+                    <p className="countLabel">
+                      Broj importovanih prodajnih mesta: {countImport.pointOfSaleCount}
+                    </p>
+                    <p className="countLabel">
+                      Broj importovanih terminala: {countImport.terminalCount}
+                    </p>
+                  </>
+                )}
+              </div>
+            )}
+          </>
+        ) : (
+          <div>
+            <List bulleted>
+              {errors &&
+                errors.map((errorMsg, key) => {
+                  return (
+                    <List.Item className={'errorMsgItem'} key={key}>
+                      {errorMsg}
+                    </List.Item>
+                  );
+                })}
+            </List>
+          </div>
         )}
       </div>
     </>

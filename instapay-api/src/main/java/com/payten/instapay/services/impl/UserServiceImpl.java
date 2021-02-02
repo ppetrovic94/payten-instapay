@@ -206,9 +206,11 @@ public class UserServiceImpl implements UserService {
     private Page<User> searchByTerm(String searchTerm, Pageable page) {
         Page<User> filtered;
 
-        filtered = userRepository.findByUsernameContaining(searchTerm, page);
+        filtered = userRepository.findByUsernameContainingIgnoreCase(searchTerm, page);
         if (!filtered.getContent().isEmpty()) return filtered;
-        filtered = userRepository.findByEmailContaining(searchTerm, page);
+        filtered = userRepository.findByEmailContainingIgnoreCase(searchTerm, page);
+        if (!filtered.getContent().isEmpty()) return filtered;
+        filtered = userRepository.findByFullNameContainingIgnoreCase(searchTerm, page);
         if (!filtered.getContent().isEmpty()) return filtered;
 
         return filtered;

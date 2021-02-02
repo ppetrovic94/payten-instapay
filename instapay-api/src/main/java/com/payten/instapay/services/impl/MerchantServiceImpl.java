@@ -277,13 +277,13 @@ public class MerchantServiceImpl implements MerchantService {
             if(!filtered.getContent().isEmpty()) return filtered;
         }
 
-        filtered = merchantRepository.findByMerchantNameContaining(term, page);
+        filtered = merchantRepository.findByMerchantNameContainingIgnoreCase(term, page);
         if(!filtered.getContent().isEmpty()) return filtered;
-        filtered = merchantRepository.findByMerchantAddressContaining(term, page);
+        filtered = merchantRepository.findByCity_cityNameContainingIgnoreCase(term, page);
         if(!filtered.getContent().isEmpty()) return filtered;
-        filtered = merchantRepository.findByCity_cityNameContaining(term, page);
+        filtered = merchantRepository.findByMerchantAddressContainingIgnoreCase(term, page);
         if(!filtered.getContent().isEmpty()) return filtered;
-        filtered = merchantRepository.findByLocalMerchantIdContaining(term,page);
+        filtered = merchantRepository.findByLocalMerchantIdContainingIgnoreCase(term,page);
         if(!filtered.getContent().isEmpty()) return filtered;
 
         return filtered;
