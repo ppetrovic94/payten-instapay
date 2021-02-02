@@ -57,7 +57,9 @@ const TransactionReport = () => {
   };
 
   const showToastOnDownload = () => {
-    toast.success('Fajl se eksportuje, sačekajte par sekundi do preuzimanja...');
+    toast.success('Fajl se eksportuje, sačekajte par sekundi do preuzimanja...', {
+      autoClose: 10000,
+    });
   };
 
   return (

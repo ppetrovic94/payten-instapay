@@ -214,16 +214,16 @@ const ImportCard = () => {
           </>
         ) : (
           <div>
-            <List bulleted>
+            <ui>
               {errors &&
                 errors.map((errorMsg, key) => {
                   return (
-                    <List.Item className={'errorMsgItem'} key={key}>
+                    <li className={'errorMsgItem'} key={key}>
                       {errorMsg}
-                    </List.Item>
+                    </li>
                   );
                 })}
-            </List>
+            </ui>
           </div>
         )}
       </div>
