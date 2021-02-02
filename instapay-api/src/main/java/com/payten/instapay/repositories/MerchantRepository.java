@@ -5,6 +5,7 @@ import com.payten.instapay.model.Merchant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -13,16 +14,16 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MerchantRepository extends JpaRepository<Merchant, Integer>, PagingAndSortingRepository<Merchant, Integer> {
+public interface MerchantRepository extends JpaRepository<Merchant, Integer>, PagingAndSortingRepository<Merchant, Integer>, JpaSpecificationExecutor<Merchant> {
 
     List<Merchant> findAll();
     Page<Merchant> findAll(Pageable page);
 
-    Page<Merchant> findByLocalMerchantIdContaining(String localMerchantId, Pageable page);
-    Page<Merchant> findByMerchantNameContaining(String merchantName, Pageable page);
-    Page<Merchant> findByMerchantAddressContaining(String merchantAddress, Pageable page);
+    Page<Merchant> findByLocalMerchantIdContainingIgnoreCase(String localMerchantId, Pageable page);
+    Page<Merchant> findByMerchantNameContainingIgnoreCase(String merchantName, Pageable page);
+    Page<Merchant> findByMerchantAddressContainingIgnoreCase(String merchantAddress, Pageable page);
     Page<Merchant> findByPersonalIdentityNumberContaining(String personalIdentityNumber, Pageable page);
-    Page<Merchant> findByCity_cityNameContaining(String cityName, Pageable page);
+    Page<Merchant> findByCity_cityNameContainingIgnoreCase(String cityName, Pageable page);
 
     Merchant getByMerchantId(Integer id);
     Merchant getByTaxIdentityNumber(String taxIdentityNumber);

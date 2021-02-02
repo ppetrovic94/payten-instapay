@@ -215,15 +215,15 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
         Page<PointOfSale> filtered;
 
         if (NumberUtils.isParsable(term)) {
-            filtered = pointOfSaleRepository.findByMerchantIdAndPointOfSaleAccountContaining(merchantId, term, page);
+            filtered = pointOfSaleRepository.findByMerchantIdAndPointOfSaleAccountContainingIgnoreCase(merchantId, term, page);
             if (!filtered.getContent().isEmpty()) return filtered;
         }
 
-        filtered = pointOfSaleRepository.findByMerchantIdAndPointOfSaleNameContaining(merchantId, term, page);
+        filtered = pointOfSaleRepository.findByMerchantIdAndPointOfSaleNameContainingIgnoreCase(merchantId, term, page);
         if (!filtered.getContent().isEmpty()) return filtered;
-        filtered = pointOfSaleRepository.findByMerchantIdAndPointOfSaleLocalIdContaining(merchantId, term, page);
+        filtered = pointOfSaleRepository.findByMerchantIdAndPointOfSaleLocalIdContainingIgnoreCase(merchantId, term, page);
         if (!filtered.getContent().isEmpty()) return filtered;
-        filtered = pointOfSaleRepository.findByMerchantIdAndCity_cityNameContaining(merchantId, term, page);
+        filtered = pointOfSaleRepository.findByMerchantIdAndCity_cityNameContainingIgnoreCase(merchantId, term, page);
         if (!filtered.getContent().isEmpty()) return filtered;
 
         return filtered;

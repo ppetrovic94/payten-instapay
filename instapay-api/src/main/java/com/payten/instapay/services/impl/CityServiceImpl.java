@@ -115,9 +115,9 @@ public class CityServiceImpl implements CityService {
     Page<City> searchByTerm(String searchTerm, Pageable page){
         Page<City> filtered;
 
-        filtered = cityRepository.findByCityNameContaining(searchTerm, page);
+        filtered = cityRepository.findByCityNameContainingIgnoreCase(searchTerm, page);
         if (!filtered.getContent().isEmpty()) return filtered;
-        filtered = cityRepository.findByCityCodeContaining(searchTerm, page);
+        filtered = cityRepository.findByCityCodeContainingIgnoreCase(searchTerm, page);
         if (!filtered.getContent().isEmpty()) return filtered;
 
         return filtered;

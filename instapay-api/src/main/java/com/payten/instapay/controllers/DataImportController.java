@@ -3,6 +3,7 @@ package com.payten.instapay.controllers;
 
 import com.payten.instapay.dto.Merchant.DataImport.ImportResult;
 import com.payten.instapay.dto.Merchant.DataImport.ParsedMerchant;
+import com.payten.instapay.dto.Merchant.DataImport.ValidatedMerchantSet;
 import com.payten.instapay.model.PaymentMethod;
 import com.payten.instapay.services.DataImportService;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -24,7 +25,7 @@ public class DataImportController {
     }
 
     @PostMapping("/parsexlsx")
-    public Set<ParsedMerchant> parseXlsx(@RequestParam("fileName") MultipartFile fileName) throws IOException, InvalidFormatException {
+    public ValidatedMerchantSet parseXlsx(@RequestParam("fileName") MultipartFile fileName) throws IOException, InvalidFormatException {
         return dataImportService.parseDataFromXlsx(fileName);
     }
 

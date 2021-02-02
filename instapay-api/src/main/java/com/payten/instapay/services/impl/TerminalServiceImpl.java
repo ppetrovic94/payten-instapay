@@ -266,11 +266,11 @@ public class TerminalServiceImpl implements TerminalService {
         Page<Terminal> filtered;
 
         if (NumberUtils.isParsable(term)) {
-            filtered = terminalRepository.findByPointOfSaleIdAndTerminalAccountContaining(pointOfSaleId, term, page);
+            filtered = terminalRepository.findByPointOfSaleIdAndTerminalAccountContainingIgnoreCase(pointOfSaleId, term, page);
             if(!filtered.getContent().isEmpty()) return filtered;
         }
 
-        filtered = terminalRepository.findByPointOfSaleIdAndAcquirerTidContaining(pointOfSaleId, term, page);
+        filtered = terminalRepository.findByPointOfSaleIdAndAcquirerTidContainingIgnoreCase(pointOfSaleId, term, page);
         if (!filtered.getContent().isEmpty()) return filtered;
 
         return filtered;

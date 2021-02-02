@@ -38,8 +38,9 @@ public class DataImportServiceImpl implements DataImportService {
     }
 
     @Override
-    public Set<ParsedMerchant> parseDataFromXlsx(MultipartFile xlsxFile) throws IOException, InvalidFormatException {
+    public ValidatedMerchantSet parseDataFromXlsx(MultipartFile xlsxFile) throws IOException, InvalidFormatException {
 
+        ValidatedMerchantSet validatedMerchantSet = new ValidatedMerchantSet();
         Set<ParsedMerchant> parsedMerchantSet = new HashSet<>();
         Map<String, ParsedMerchant> parsedMerchantMap = new LinkedHashMap<String, ParsedMerchant>();
         Workbook workbook = WorkbookFactory.create(xlsxFile.getInputStream());
@@ -55,13 +56,27 @@ public class DataImportServiceImpl implements DataImportService {
             if (row.getRowNum() == 0) continue;
 
             String ipsType = row.getCell(19).getStringCellValue();
-            if (ipsType.isEmpty()) break;
+            if (ipsType.isEmpty()) {
+                break;
+            }
 
             if (ipsType.equals("da")){
                 String pib = row.getCell(2).getStringCellValue();
                 if (!pib.isEmpty()) {
 
                     ParsedMerchant parsedMerchant = null;
+
+                    String mName = row.getCell(4).getStringCellValue();
+                    if (mName.isEmpty()) validatedMerchantSet.getValidationMapList().add("Polja kolone 'Naziv trgovca' ne smeju biti prazna");
+
+                    String mAddress = row.getCell(5).getStringCellValue();
+                    if (mAddress.isEmpty()) validatedMerchantSet.getValidationMapList().add("Polja kolone 'Adresa sedišta' ne smeju biti prazna");
+
+                    int mMcc = (int) row.getCell(28).getNumericCellValue();
+                    if (String.valueOf(mMcc).length() > 4) validatedMerchantSet.getValidationMapList().add("Polja kolone 'IPS MCC' moraju imati vrednost do 4 karaktera najviše");
+
+                    String mPaymentCode = String.valueOf((int) row.getCell(29).getNumericCellValue());
+                    if (mPaymentCode.length() != 3) validatedMerchantSet.getValidationMapList().add("Polja kolone 'IPS Šifra plaćanja' moraju imati vrednost tačno 3 karaktera");
 
                     if (!parsedMerchantMap.containsKey(pib)) {
                         parsedMerchant = new ParsedMerchant();
@@ -70,21 +85,21 @@ public class DataImportServiceImpl implements DataImportService {
 
                         if (existingMerchant == null) {
                             parsedMerchant.getMerchant().setTaxIdentityNumber(pib);
-                            parsedMerchant.getMerchant().setMerchantName(row.getCell(4).getStringCellValue());
+                            parsedMerchant.getMerchant().setMerchantName(mName);
+                            parsedMerchant.getMerchant().setMerchantAddress(mAddress);
                             parsedMerchant.getMerchant().setMerchantAccount(row.getCell(3).getStringCellValue());
-                            parsedMerchant.getMerchant().setMerchantAddress(row.getCell(5).getStringCellValue());
                             parsedMerchant.getMerchant().setCity(getOrInsertCity(row.getCell(6).getStringCellValue(), null));
-                            parsedMerchant.getMerchant().setMcc((int) row.getCell(28).getNumericCellValue());
-                            parsedMerchant.getMerchant().setPaymentCode(String.valueOf((int) row.getCell(29).getNumericCellValue()));
+                            parsedMerchant.getMerchant().setMcc(mMcc);
+                            parsedMerchant.getMerchant().setPaymentCode(mPaymentCode);
                             parsedMerchant.getMerchant().setStatus(activeStatus);
                             parsedMerchant.getMerchant().setSetupDate(setupDate);
                             parsedMerchant.getImportStatus().setImported(false);
                             parsedMerchant.getImportStatus().setMessage("Moguć upis!");
                             parsedMerchant.getImportStatus().setMessageCode(1);
                         } else {
-                           parsedMerchant.setMerchant(existingMerchant);
-                           parsedMerchant.getImportStatus().setImported(true);
-                           parsedMerchant.getImportStatus().setMessage("Zapis već postoji!");
+                            parsedMerchant.setMerchant(existingMerchant);
+                            parsedMerchant.getImportStatus().setImported(true);
+                            parsedMerchant.getImportStatus().setMessage("Zapis već postoji!");
                             parsedMerchant.getImportStatus().setMessageCode(2);
                         }
 
@@ -96,6 +111,11 @@ public class DataImportServiceImpl implements DataImportService {
 
 
                     String pointOfSaleName = row.getCell(8).getStringCellValue();
+                    if (pointOfSaleName.isEmpty()) validatedMerchantSet.getValidationMapList().add("Polja kolone 'Naziv lokacije' ne smeju biti prazna");
+
+                    String pAddress = row.getCell(9).getStringCellValue();
+                    if (pAddress.isEmpty()) validatedMerchantSet.getValidationMapList().add("Polja kolone 'Adresa lokacije' ne smeju biti prazna");
+
                     ParsedPointOfSale parsedPointOfSale = null;
                     if (!parsedMerchant.getPointOfSaleMap().containsKey(pointOfSaleName)) {
                         parsedPointOfSale = new ParsedPointOfSale();
@@ -103,7 +123,7 @@ public class DataImportServiceImpl implements DataImportService {
                             PointOfSale pointOfSale = pointOfSaleRepository.getByPointOfSaleNameAndMerchantId(pointOfSaleName, parsedMerchant.getMerchant().getMerchantId());
                             if (pointOfSale == null) {
                                 parsedPointOfSale.getPointOfSale().setPointOfSaleName(pointOfSaleName);
-                                parsedPointOfSale.getPointOfSale().setPointOfSaleAddress(row.getCell(9).getStringCellValue());
+                                parsedPointOfSale.getPointOfSale().setPointOfSaleAddress(pAddress);
                                 parsedPointOfSale.getPointOfSale().setCity(getOrInsertCity(row.getCell(10).getStringCellValue(), String.valueOf((int) row.getCell(11).getNumericCellValue())));
                                 parsedPointOfSale.getPointOfSale().setStatus(activeStatus);
                                 parsedPointOfSale.getPointOfSale().setSetupDate(setupDate);
@@ -118,7 +138,7 @@ public class DataImportServiceImpl implements DataImportService {
                             }
                         } else {
                             parsedPointOfSale.getPointOfSale().setPointOfSaleName(pointOfSaleName);
-                            parsedPointOfSale.getPointOfSale().setPointOfSaleAddress(row.getCell(9).getStringCellValue());
+                            parsedPointOfSale.getPointOfSale().setPointOfSaleAddress(pAddress);
                             parsedPointOfSale.getPointOfSale().setStatus(activeStatus);
                             parsedPointOfSale.getPointOfSale().setSetupDate(setupDate);
                             parsedPointOfSale.getPointOfSale().setCity(getOrInsertCity(row.getCell(10).getStringCellValue(), String.valueOf((int) row.getCell(11).getNumericCellValue())));
@@ -135,6 +155,8 @@ public class DataImportServiceImpl implements DataImportService {
 
 
                     String acquirerTid = row.getCell(26).getStringCellValue();
+                    if (acquirerTid.length() != 8) validatedMerchantSet.getValidationMapList().add("Polja kolone 'IPS TID' moraju imati vrednost dužine 8 karaktera");
+
                     ParsedTerminal parsedTerminal = null;
                     if (!parsedPointOfSale.getTerminalMap().containsKey(acquirerTid)) {
                         parsedTerminal = new ParsedTerminal();
@@ -162,12 +184,16 @@ public class DataImportServiceImpl implements DataImportService {
 
                     parsedMerchantSet.add(parsedMerchant);
 
+                } else {
+                    validatedMerchantSet.getValidationMapList().add("Polja kolone 'Matični broj' ne smeju biti prazna.");
                 }
             }
 
         }
 
-        return parsedMerchantSet;
+        validatedMerchantSet.setParsedMerchantSet(parsedMerchantSet);
+
+        return validatedMerchantSet;
     }
 
     @Override

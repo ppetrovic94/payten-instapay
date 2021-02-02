@@ -168,13 +168,13 @@ public class FeeServiceImpl implements FeeService {
     private Page<FeeRule> searchByTerm(Integer merchantId, String searchTerm, Pageable page){
         Page<FeeRule> filtered;
 
-        filtered = feeRuleRepository.findByMerchant_MerchantIdAndMerchant_MerchantNameContaining(merchantId, searchTerm, page);
+        filtered = feeRuleRepository.findByMerchant_MerchantIdAndMerchant_MerchantNameContainingIgnoreCase(merchantId, searchTerm, page);
         if (!filtered.getContent().isEmpty()) return filtered;
-        filtered = feeRuleRepository.findByMerchant_MerchantIdAndFeeReceiver_ReceiverNameContaining(merchantId, searchTerm, page);
+        filtered = feeRuleRepository.findByMerchant_MerchantIdAndFeeReceiver_ReceiverNameContainingIgnoreCase(merchantId, searchTerm, page);
         if (!filtered.getContent().isEmpty()) return filtered;
-        filtered = feeRuleRepository.findByMerchant_MerchantIdAndFeeType_TypeNameContaining(merchantId, searchTerm, page);
+        filtered = feeRuleRepository.findByMerchant_MerchantIdAndFeeType_TypeNameContainingIgnoreCase(merchantId, searchTerm, page);
         if (!filtered.getContent().isEmpty()) return filtered;
-        filtered = feeRuleRepository.findByMerchant_MerchantIdAndProductType_TypeNameContaining(merchantId, searchTerm, page);
+        filtered = feeRuleRepository.findByMerchant_MerchantIdAndProductType_TypeNameContainingIgnoreCase(merchantId, searchTerm, page);
         if (!filtered.getContent().isEmpty()) return filtered;
 
         return filtered;
@@ -183,13 +183,13 @@ public class FeeServiceImpl implements FeeService {
     private Page<FeeRule> searchByTerm(String searchTerm, Pageable page) {
         Page<FeeRule> filtered;
 
-        filtered = feeRuleRepository.findByMerchant_MerchantNameContaining(searchTerm, page);
+        filtered = feeRuleRepository.findByMerchant_MerchantNameContainingIgnoreCase(searchTerm, page);
         if (!filtered.getContent().isEmpty()) return filtered;
-        filtered = feeRuleRepository.findByFeeReceiver_ReceiverNameContaining(searchTerm, page);
+        filtered = feeRuleRepository.findByFeeReceiver_ReceiverNameContainingIgnoreCase(searchTerm, page);
         if (!filtered.getContent().isEmpty()) return filtered;
-        filtered = feeRuleRepository.findByFeeType_TypeNameContaining(searchTerm, page);
+        filtered = feeRuleRepository.findByFeeType_TypeNameContainingIgnoreCase(searchTerm, page);
         if (!filtered.getContent().isEmpty()) return filtered;
-        filtered = feeRuleRepository.findByProductType_TypeNameContaining(searchTerm, page);
+        filtered = feeRuleRepository.findByProductType_TypeNameContainingIgnoreCase(searchTerm, page);
         if (!filtered.getContent().isEmpty()) return filtered;
 
         return filtered;
