@@ -11,6 +11,7 @@ import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
 import javax.persistence.StoredProcedureQuery;
 import javax.transaction.Transactional;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,6 @@ public class TransactionServiceImpl implements TransactionService {
     private EntityManager em;
 
     @Override
-    @Transactional
     public TerminalTransactionPage getTransactionByTerminalIdAndDateRangePaginated(String dateFrom, String dateTo, String terminalId, Integer merchantId, Integer pageNum, Integer pageSize) {
         StoredProcedureQuery procedureQuery = em.createStoredProcedureQuery("GET_TRANSACTIONS_PAGINATED", TerminalTransaction.class);
 

@@ -66,6 +66,7 @@ const Terminals = () => {
 
   const onPageChange = async (e, { activePage }) => {
     setActivePage(activePage);
+    setLoading(true);
     let response = null;
     if (searchTerm) {
       response = await axios.get(
@@ -76,6 +77,7 @@ const Terminals = () => {
     }
 
     setTerminals(response.data.content);
+    setLoading(false);
   };
 
   const onChangeSearchTerm = async (term) => {
