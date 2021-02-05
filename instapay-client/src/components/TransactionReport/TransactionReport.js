@@ -58,7 +58,7 @@ const TransactionReport = () => {
 
   const showToastOnDownload = () => {
     toast.success('Fajl se eksportuje, sačekajte par sekundi do preuzimanja...', {
-      autoClose: 10000,
+      autoClose: 15000,
     });
   };
 
@@ -112,8 +112,8 @@ const TransactionReport = () => {
               href={`/ips/api/acq/exportIpsReport?dateFrom=${date.dateFrom}&dateTo=${date.dateTo}&merchantId=${merchant.merchantId}&merchantName=${merchant.merchantName}`}
               color="green"
               disabled={disabled}
-              onClick={showToastOnDownload}
-              download>
+              download
+              onClick={showToastOnDownload}>
               .XLSX
             </Button>
           </Form>
