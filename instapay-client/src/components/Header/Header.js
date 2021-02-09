@@ -18,7 +18,7 @@ const Header = () => {
     try {
       await axios.get('/logout');
       document.cookie = `JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/ips/; domain=${document.location.hostname};`;
-      history.push('/ips');
+      history.push('/ips/');
     } catch (error) {
       console.error(error, 'logout err');
     }
