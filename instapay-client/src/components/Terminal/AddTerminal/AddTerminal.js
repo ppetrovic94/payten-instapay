@@ -60,10 +60,23 @@ const AddTerminal = () => {
     }
   };
 
+  const checkCredentialsOnMerchant = async () => {
+    const merchantId = localStorage.getItem('merchantId');
+    try {
+      const response = await axios.get(`/user/merchants/${merchantId}/hasCredentials`);
+      return response.data;
+    } catch (error) {
+      console.error(error.response);
+    }
+  };
+
   useEffect(() => {
     if (tid) {
       if (terminalFields.terminalTypeId === 1) {
-        generateCredentials(tid);
+        const hasCredentials = checkCredentialsOnMerchant();
+        if (!hasCredentials) {
+          generateCredentials(tid);
+        }
       }
       history.goBack();
       setLoading(false);

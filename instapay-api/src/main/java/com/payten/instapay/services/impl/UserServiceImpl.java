@@ -161,7 +161,7 @@ public class UserServiceImpl implements UserService {
             User newUser = new User();
             setUserGroups(userDto.getGroupIds(), newUser);
             newUser.setUsername(userDto.getUsername());
-            newUser.setPassword(userDto.getPassword());
+            newUser.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
             newUser.setEmail(userDto.getEmail());
             newUser.setIsApproved(userDto.getIsApproved());
             newUser.setFullName(userDto.getFullName());

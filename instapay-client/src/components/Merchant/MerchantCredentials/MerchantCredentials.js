@@ -55,6 +55,23 @@ const MerchantCredentials = ({ userId, merchantName, merchantId, merchantRerende
     }
   };
 
+  const onDeleteCredentials = async (userId) => {
+    let doDelete = window.confirm(
+      `Brisanjem kredencijala onemogućujete rad svih terminala ovog trgovca. Da li ste sigurni da želite da obrišete kredencijale na nivou trgovca ${merchantName}`,
+    );
+
+    if (doDelete) {
+      try {
+        await axios.delete(`/user/credentials/delete?userId=${userId}`);
+        toast.success('Uspešno ste obrisali kredencijale');
+      } catch (error) {
+        toast.error('Došlo je do greške pri brisanju kredencijala');
+        console.error(error.response);
+      }
+      merchantRerender();
+    }
+  };
+
   const onChangeInput = (e, { value }) => {
     setCurrentUserId(value);
     if (!nonSpecialCharaterRegex.test(value) && value.length !== 0) {
@@ -115,6 +132,11 @@ const MerchantCredentials = ({ userId, merchantName, merchantId, merchantRerende
         <Button onClick={() => onGenerateUserId(merchantId)} color="instagram">
           {userId ? 'Generiši ponovo i sačuvaj' : 'Generiši i sačuvaj'}
         </Button>
+        {userId && (
+          <Button color="red" onClick={() => onDeleteCredentials(userId)}>
+            Obriši kredencijale
+          </Button>
+        )}
       </div>
     </div>
   );

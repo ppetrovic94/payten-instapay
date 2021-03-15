@@ -23,4 +23,9 @@ public class CredentialsController {
         credentialsService.generateCredentials(merchantId, posId, terminalId);
     }
 
+    @DeleteMapping("/credentials/delete")
+    public void deleteCredentials(@RequestParam(name="userId", required = true) String userId){
+        credentialsService.deleteCredentials(userId);
+    }
+
 }
