@@ -161,7 +161,7 @@ public class UserServiceImpl implements UserService {
             User newUser = new User();
             setUserGroups(userDto.getGroupIds(), newUser);
             newUser.setUsername(userDto.getUsername());
-            newUser.setPassword(userDto.getPassword());
+            newUser.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
             newUser.setEmail(userDto.getEmail());
             newUser.setIsApproved(userDto.getIsApproved());
             newUser.setFullName(userDto.getFullName());
@@ -169,7 +169,9 @@ public class UserServiceImpl implements UserService {
         }
         setUserGroups(userDto.getGroupIds(), user);
         user.setUsername(userDto.getUsername());
-        user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
+        if (!(user.getPassword().equals(userDto.getPassword()))) {
+            user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
+        }
         user.setEmail(userDto.getEmail());
         user.setIsApproved(userDto.getIsApproved());
         user.setFullName(userDto.getFullName());

@@ -1,6 +1,7 @@
 package com.payten.instapay.services.impl;
 
 import com.payten.instapay.exceptions.handlers.RequestedResourceNotFoundException;
+import com.payten.instapay.model.AcqUser;
 import com.payten.instapay.repositories.AcqUserRepository;
 import com.payten.instapay.repositories.MerchantRepository;
 import com.payten.instapay.repositories.PointOfSaleRepository;
@@ -37,5 +38,12 @@ public class CredentialsServiceImpl implements CredentialsService {
             acqUserRepository.generateCredentials2(null, null, terminalId);
         }
 
+    }
+
+    @Override
+    public void deleteCredentials(String userId) {
+        AcqUser credentials = acqUserRepository.getByUserId(userId);
+        if (credentials == null) throw new RequestedResourceNotFoundException("User ID: " + userId + " ne postoji");
+        acqUserRepository.delete(credentials);
     }
 }

@@ -15,22 +15,42 @@ const TerminalDetails = () => {
   const [loading, setLoading] = useState(false);
   const [terminalDetails, setTerminalDetails] = useState(null);
   const [terminalUserId, setTerminalUserId] = useState(null);
+  const [merchantUserId, setMerchantUserId] = useState(null);
   const [merchantEmail, setMerchantEmail] = useState('');
   const [sections, setSections] = useState(null);
   const [notFound, setNotFound] = useState(null);
+  const [noCredentials, setNoCredentials] = useState(false);
   const { id } = useParams();
 
-  const fetchTerminalById = async (id) => {
+  const fetchCredentials = async (id) => {
+    const merchantId = localStorage.getItem('merchantId');
+    setLoading(true);
+    try {
+      const hasCredentialsOnMerchant = await axios.get(
+        `/user/merchants/${merchantId}/hasCredentials`,
+      );
+      if (hasCredentialsOnMerchant.data) {
+        const merchantCredentials = await axios.get(`/user/merchants/${merchantId}/credentials`);
+        setMerchantUserId(merchantCredentials.data);
+      } else {
+        const userIdRes = await axios.get(`/user/terminals/${id}/userId`);
+        setTerminalUserId(userIdRes.data);
+      }
+
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+    }
+  };
+
+  const fetchTerminalDetails = async (id) => {
     setLoading(true);
     try {
       const detailsRes = await axios.get(`/user/terminals/${id}/details`);
-      const userIdRes = await axios.get(`/user/terminals/${id}/userId`);
       setTerminalDetails(detailsRes.data);
-      setTerminalUserId(userIdRes.data);
-      setLoading(false);
     } catch (err) {
-      setNotFound(err.response);
       setLoading(false);
+      setNotFound(err.response);
     }
   };
 
@@ -43,6 +63,14 @@ const TerminalDetails = () => {
       console.error(error.response);
     }
   };
+
+  useEffect(() => {
+    if (!terminalUserId && !merchantUserId) {
+      setNoCredentials(true);
+    } else {
+      setNoCredentials(false);
+    }
+  }, [terminalUserId, merchantUserId]);
 
   useEffect(() => {
     const fetchNavbarData = async () => {
@@ -75,7 +103,8 @@ const TerminalDetails = () => {
       }
     };
 
-    fetchTerminalById(id);
+    fetchTerminalDetails(id);
+    fetchCredentials(id);
     fetchNavbarData();
     fetchEmailByMerchantId();
   }, [id]);
@@ -89,6 +118,18 @@ const TerminalDetails = () => {
       toast.error('Došlo je do greške pri generisanju novih kredencijala');
       setLoading(false);
       console.error(err.response);
+    }
+  };
+
+  const deleteCredentials = async (userId) => {
+    try {
+      await axios.delete(`/user/credentials/delete?userId=${userId}`);
+      toast.success('Uspešno ste obrisali kredencijale');
+      setNoCredentials(true);
+      setTerminalUserId(null);
+    } catch (error) {
+      toast.error('Došlo je do greške pri brisanju kredencijala');
+      console.error(error.response);
     }
   };
 
@@ -142,17 +183,25 @@ const TerminalDetails = () => {
         </div>
         <div className="terminalDetailsCards">
           <CredentialsCard
-            userId={terminalUserId}
+            terminalUserId={terminalUserId}
+            merchantUserId={merchantUserId}
             details={terminalDetails}
             regenerateCredentials={regenerateCredentials}
-            fetchTerminalById={fetchTerminalById}
+            fetchTerminalById={() => {
+              fetchTerminalDetails(id);
+              fetchCredentials(id);
+            }}
+            noCredentials={noCredentials}
+            deleteCredentials={deleteCredentials}
           />
-          <EmailCard
-            onSendHandler={sendOnMail}
-            userId={terminalUserId}
-            details={terminalDetails}
-            merchantEmail={merchantEmail}
-          />
+          {!noCredentials && (
+            <EmailCard
+              onSendHandler={sendOnMail}
+              userId={terminalUserId}
+              details={terminalDetails}
+              merchantEmail={merchantEmail}
+            />
+          )}
         </div>
       </div>
     )

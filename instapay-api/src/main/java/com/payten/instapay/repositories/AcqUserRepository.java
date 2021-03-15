@@ -12,6 +12,7 @@ public interface AcqUserRepository extends JpaRepository<AcqUser, Integer> {
     AcqUser getByMerchant_MerchantId(Integer merchantId);
     AcqUser getByPointOfSale_PointOfSaleId(Integer posId);
     AcqUser getByTerminal_TerminalId(Integer terminalId);
+    AcqUser getByUserId(String userId);
 
     boolean existsByMerchant_MerchantId(Integer merchantId);
     boolean existsByUserId(String userId);
