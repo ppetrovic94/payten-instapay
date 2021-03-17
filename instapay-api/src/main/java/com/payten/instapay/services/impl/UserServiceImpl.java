@@ -231,7 +231,7 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        if (user != null && user.getEmail().equals(email)) {
+        if (user != null && user.getEmail() != null && user.getEmail().equals(email)) {
             errorMap = null;
         } else {
             if (userRepository.existsByEmail(username)) {
