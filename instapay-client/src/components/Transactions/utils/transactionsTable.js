@@ -43,6 +43,16 @@ export const formatTerminalDetails = (data) => {
   );
 };
 
+export const formatTransactionsInstructedAmounts = (data) => {
+  return data.map((item) => ({
+    ...item,
+    instructedAmount: Number(item.instructedAmount).toLocaleString('en', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }),
+  }));
+};
+
 export const terminalActionConfig = (endToEndId) => {
   return [
     {

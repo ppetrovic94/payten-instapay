@@ -4,7 +4,11 @@ import axios from '../../utils/API';
 import { Button, Breadcrumb, Form } from 'semantic-ui-react';
 import './Transactions.scss';
 import CustomTable from '../CustomTable/CustomTable';
-import { transactionsTableHeader, terminalActionConfig } from './utils/transactionsTable';
+import {
+  transactionsTableHeader,
+  terminalActionConfig,
+  formatTransactionsInstructedAmounts,
+} from './utils/transactionsTable';
 import CustomLoader from '../CustomLoader/CustomLoader';
 
 const Transactions = () => {
@@ -65,10 +69,6 @@ const Transactions = () => {
     setDate({ ...date, [e.target.name]: e.target.value });
   };
 
-  const onChangeTime = (e) => {
-    setTime({ ...time, [e.target.name]: e.target.value });
-  };
-
   const onGetTransactions = async () => {
     setLoading(true);
     const dateAndTime = {
@@ -77,7 +77,7 @@ const Transactions = () => {
     };
     try {
       const response = await axios.get(
-        `/user/terminals/${acquirerTid}/transactions?dateFrom=${dateAndTime.from}&dateTo=${dateAndTime.to}&pageNum=${activePage}&pageSize=15`,
+        `/user/terminals/transactions?terminalId=${acquirerTid}&dateFrom=${dateAndTime.from}&dateTo=${dateAndTime.to}&pageNum=${activePage}&pageSize=15`,
       );
       setTransactions(response.data.content);
       setTotalPages(response.data.totalPages);
@@ -95,7 +95,7 @@ const Transactions = () => {
     };
     try {
       const response = await axios.get(
-        `/user/terminals/${acquirerTid}/transactions?dateFrom=${dateAndTime.from}&dateTo=${dateAndTime.to}&pageNum=${activePage}&pageSize=15`,
+        `/user/terminals/transactions?terminalId=${acquirerTid}&dateFrom=${dateAndTime.from}&dateTo=${dateAndTime.to}&pageNum=${activePage}&pageSize=15`,
       );
 
       setTransactions(response.data.content);
@@ -120,13 +120,6 @@ const Transactions = () => {
               defaultValue={date.dateFrom}
               onChange={onChangeDate}
             />
-            <input
-              type="time"
-              placeholder={'Od'}
-              name={'timeFrom'}
-              defaultValue={time.timeFrom}
-              onChange={onChangeTime}
-            />
             <label className="dateLabel">Do: </label>
             <input
               type="date"
@@ -134,13 +127,6 @@ const Transactions = () => {
               name={'dateTo'}
               defaultValue={date.dateTo}
               onChange={onChangeDate}
-            />
-            <input
-              type="time"
-              placeholder={'Do'}
-              name={'timeTo'}
-              defaultValue={time.timeTo}
-              onChange={onChangeTime}
             />
 
             <Button
@@ -159,7 +145,7 @@ const Transactions = () => {
         <div className="transactionsTable">
           <CustomTable
             tableHeader={transactionsTableHeader}
-            content={transactions}
+            content={transactions && formatTransactionsInstructedAmounts(transactions)}
             tableActions={terminalActionConfig}
             tableTotalPages={totalPages}
             tableActivePage={activePage}

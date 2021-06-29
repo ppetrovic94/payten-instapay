@@ -18,8 +18,17 @@ export const formatFeeData = (data) => {
         merchant: merchant ? merchant.merchantName : '',
         feeType: feeType ? feeType.typeName : '',
         productType: productType ? productType.typeName : '',
-        condition,
-        amount: feeType.typeName === 'Procentualni' ? `${amount}%` : amount,
+        condition: Number(condition).toLocaleString('en', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }),
+        amount:
+          feeType.typeName === 'Procentualni'
+            ? `${amount}%`
+            : Number(amount).toLocaleString('en', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }),
         validityDate,
       };
     },

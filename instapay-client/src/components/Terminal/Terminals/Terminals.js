@@ -23,7 +23,6 @@ const Terminals = () => {
 
   useEffect(() => {
     localStorage.setItem('pointOfSaleId', id);
-
     const fetchNavbarData = async (id) => {
       const merchantId = localStorage.getItem('merchantId');
       try {
@@ -64,6 +63,7 @@ const Terminals = () => {
 
   const onPageChange = async (e, { activePage }) => {
     setActivePage(activePage);
+    setLoading(true);
     let response = null;
     if (searchTerm) {
       response = await axios.get(
@@ -74,6 +74,7 @@ const Terminals = () => {
     }
 
     setTerminals(response.data.content);
+    setLoading(false);
   };
 
   const onChangeSearchTerm = async (term) => {
@@ -115,7 +116,7 @@ const Terminals = () => {
         <CustomTable
           tableAddItem={`/ips/pos/${id}/terminals/add`}
           tableHeader={terminalTableHeader}
-          tableActions={terminalActionConfig}
+          tableActions={(id) => terminalActionConfig(id)}
           content={formatTerminalData(terminals)}
           tableSearchHandler={onChangeSearchTerm}
           tableActivePage={activePage}

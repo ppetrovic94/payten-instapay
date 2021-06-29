@@ -2,8 +2,10 @@ package com.payten.instapay.controllers;
 
 import com.payten.instapay.dto.Merchant.MerchantDto;
 import com.payten.instapay.dto.Merchant.MerchantMetadata;
+import com.payten.instapay.dto.Merchant.MerchantNames;
+import com.payten.instapay.dto.Merchant.MerchantUserId;
+import com.payten.instapay.model.AcqUser;
 import com.payten.instapay.model.FeeRule;
-import com.payten.instapay.model.Group;
 import com.payten.instapay.model.Merchant;
 import com.payten.instapay.services.FeeService;
 import com.payten.instapay.services.MerchantService;
@@ -94,5 +96,36 @@ public class MerchantController {
     public MerchantMetadata getMerchantMetadata(){
         return merchantService.getMerchantMetadata();
     }
+
+    @GetMapping("/merchants/names")
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<MerchantNames> getMerchantNames(){
+        return merchantService.getMerchantNames();
+    }
+
+    @GetMapping("/merchants/{merchantId}/credentials")
+    @ResponseStatus(value = HttpStatus.OK)
+    public String getUserId(@PathVariable Integer merchantId){
+        return merchantService.getUserIdByMerchantId(merchantId);
+    }
+
+    @GetMapping("/merchants/{merchantId}/hasCredentials")
+    @ResponseStatus(value = HttpStatus.OK)
+    public boolean checkForMerchantCredentials(@PathVariable Integer merchantId){
+        return merchantService.checkMerchantCredentialsByMerchantId(merchantId);
+    }
+
+    @PostMapping("/merchants/{merchantId}/saveCredentials")
+    @ResponseStatus(value = HttpStatus.OK)
+    public AcqUser saveMerchantCredentials(@PathVariable Integer merchantId, @RequestBody MerchantUserId merchantCredentials) {
+       return merchantService.saveCredentials(merchantId, merchantCredentials.getUserId());
+    }
+
+    @PutMapping("/merchants/{merchantId}/updateCredentials")
+    @ResponseStatus(value = HttpStatus.OK)
+    public AcqUser updateMerchantCredentials(@PathVariable Integer merchantId, @RequestBody MerchantUserId merchantCredentials) {
+        return merchantService.updateCredentials(merchantId, merchantCredentials.getUserId());
+    }
+
 
 }

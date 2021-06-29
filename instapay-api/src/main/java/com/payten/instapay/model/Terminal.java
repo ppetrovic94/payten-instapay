@@ -1,18 +1,22 @@
 package com.payten.instapay.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
 @Table(name="ACQ_TERMINALS")
 @NamedStoredProcedureQuery(name = "Terminal.generateCredentials",
-        procedureName = "GENERATE_CREDENTIALS", parameters = {
-        @StoredProcedureParameter(mode = ParameterMode.IN, name = "TERMINAL_ID", type = Integer.class),
+        procedureName = "GENERATE_CREDENTIALS_", parameters = {
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "I_TERMINAL_ID", type = Integer.class),
 })
 public class Terminal {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "TERMINAL_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer terminalId;
 
     @Basic
@@ -43,6 +47,10 @@ public class Terminal {
 
     @Column(name = "TERMINAL_TYPE")
     private String terminalType;
+
+    @OneToOne(mappedBy = "terminal")
+    @JsonIgnoreProperties("terminal")
+    private AcqUser acqUser;
 
     public Terminal() {
     }

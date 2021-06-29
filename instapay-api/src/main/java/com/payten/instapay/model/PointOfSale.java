@@ -1,12 +1,17 @@
 package com.payten.instapay.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name="ACQ_POINTS_OF_SALE")
 public class PointOfSale {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "POINT_OF_SALE_ID")
@@ -43,11 +48,15 @@ public class PointOfSale {
     @Column(name = "POINT_OF_SALE_ACCOUNT")
     private String pointOfSaleAccount;
 
-    @Column(name = "MCC")
+    @Column(name = "POINT_OF_SALE_MCC")
     private String pointOfSaleMCC;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "pointOfSaleId", cascade = CascadeType.ALL)
-    private List<Terminal> terminals;
+    private List<Terminal> terminals = new ArrayList<>();
+
+    @OneToOne(mappedBy = "pointOfSale")
+    @JsonIgnoreProperties("pointOfSale")
+    private AcqUser acqUser;
 
     public PointOfSale() {
     }
@@ -100,14 +109,6 @@ public class PointOfSale {
         this.status = status;
     }
 
-    public Integer getMerchantId() {
-        return merchantId;
-    }
-
-    public void setMerchantId(Integer merchantId) {
-        this.merchantId = merchantId;
-    }
-
     public String getPointOfSaleLocalId() {
         return pointOfSaleLocalId;
     }
@@ -147,4 +148,13 @@ public class PointOfSale {
     public void setTerminals(List<Terminal> terminals) {
         this.terminals = terminals;
     }
+
+    public Integer getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(Integer merchantId) {
+        this.merchantId = merchantId;
+    }
+
 }

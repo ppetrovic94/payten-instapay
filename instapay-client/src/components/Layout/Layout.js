@@ -10,6 +10,7 @@ import Terminals from '../Terminal/Terminals/Terminals';
 import AddTerminal from '../Terminal/AddTerminal/AddTerminal';
 import EditTerminal from '../Terminal/EditTerminal/EditTerminal';
 import TerminalDetails from '../Terminal/TerminalDetails/TerminalDetails';
+import ImportCard from '../Cards/ImportCard/ImportCard';
 import Merchants from '../Merchant/Merchants/Merchants';
 import Users from '../User/Users/Users';
 import AddUser from '../User/AddUser/AddUser';
@@ -25,15 +26,25 @@ import Cities from '../City/Cities/Cities';
 import NotFound from '../../security/NotFound/NotFound';
 import Transactions from '../Transactions/Transactions';
 import './Layout.scss';
+import TransactionReport from '../TransactionReport/TransactionReport';
+import MerchantCredentials from '../Merchant/MerchantCredentials/MerchantCredentials';
+import TransactionsGlobal from '../Transactions/TransactionsGlobal';
 
 const Layout = () => {
   return (
     <div className="appContent">
       <Header />
       <Switch>
+        <ProtectedRoute path="/ips/transactions" exact component={TransactionsGlobal} />
         <ProtectedRoute path="/ips/merchants" exact component={Merchants} />
+        <ProtectedRoute path="/ips/import" exact component={ImportCard} />
         <ProtectedRoute path="/ips/merchants/add" exact component={AddMerchant} />
         <ProtectedRoute path="/ips/merchant/:id" exact component={EditMerchant} />
+        <ProtectedRoute
+          path="/ips/merchant/:id/credentials"
+          exact
+          component={MerchantCredentials}
+        />
         <ProtectedRoute path="/ips/merchant/:id/pos" exact component={PointOfSales} />
         <ProtectedRoute path="/ips/merchant/:id/fees" exact component={Fees} />
         <ProtectedRoute path="/ips/merchant/:id/pos/add" exact component={AddPointOfSale} />
@@ -53,6 +64,7 @@ const Layout = () => {
         <ProtectedRoute path="/ips/fees" exact component={Fees} />
         <ProtectedRoute path="/ips/fees/add" exact component={AddFee} />
         <ProtectedRoute path="/ips/fees/:id" exact component={EditFee} />
+        <ProtectedRoute path="/ips/reports" exact component={TransactionReport} />
         <Route component={NotFound} />
       </Switch>
     </div>

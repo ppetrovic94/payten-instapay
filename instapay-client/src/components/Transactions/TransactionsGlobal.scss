@@ -1,0 +1,61 @@
+.transactionsGlobalContainer {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
+
+.transactionsGlobalTable {
+  width: 60%;
+}
+
+.transactionsGlobalDropdown {
+  margin-top: 10px;
+}
+
+.transactionsGlobalForm {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  padding-top: 10px;
+}
+
+.transactionsGlobalButtons {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+}
+
+.transactionsGlobalTerminalInput {
+  margin-top: 10px;
+}
+
+.transactionsGlobalDateLabel {
+  display: flex;
+  align-items: center;
+  padding-right: 5px;
+  padding-left: 5px;
+  font-weight: bold;
+  margin-top: 13px;
+}
+
+.transactionsGlobalDate {
+  margin-top: 10px !important;
+}
+
+.transactionsGlobalDetailsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  align-items: flex-start;
+}
+
+.transactionsGlobalDetailsInput {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.transactionsGlobalDetailsTrigger {
+  margin-top: 10px !important;
+  align-self: center;
+}

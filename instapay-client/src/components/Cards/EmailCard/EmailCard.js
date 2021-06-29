@@ -6,7 +6,7 @@ import TerminalCredentialsPdf from '../../Terminal/TerminalDetails/TerminalCrede
 import './EmailCard.scss';
 import CustomModal from '../../CustomModal/CustomModal';
 
-const EmailCard = ({ onSendHandler, details, merchantEmail }) => {
+const EmailCard = ({ onSendHandler, details, merchantEmail, userId }) => {
   const [email, setEmail] = useState(merchantEmail);
   const [disabled, setDisabled] = useState(merchantEmail ? false : true);
   const [validationErr, setValidationErr] = useState(null);
@@ -71,7 +71,7 @@ const EmailCard = ({ onSendHandler, details, merchantEmail }) => {
               <TerminalCredentialsPdf
                 acquirerTid={details.acquirerTid}
                 activationCode={details.activationCode}
-                userId={details.userId}
+                userId={userId}
               />
             }
             fileName={`kredencijali-${details.acquirerTid}`}>
@@ -86,6 +86,7 @@ const EmailCard = ({ onSendHandler, details, merchantEmail }) => {
 };
 
 EmailCard.propTypes = {
+  userId: PropTypes.string,
   onSendHandler: PropTypes.func,
   details: PropTypes.object,
   merchantEmail: PropTypes.string,

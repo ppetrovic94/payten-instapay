@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
@@ -27,11 +28,13 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
     private final MapValidationErrorService mapValidationErrorService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, GroupRepository groupRepository, MapValidationErrorService mapValidationErrorService) {
+    public UserServiceImpl(UserRepository userRepository, GroupRepository groupRepository, MapValidationErrorService mapValidationErrorService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.groupRepository = groupRepository;
         this.mapValidationErrorService = mapValidationErrorService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
@@ -166,7 +169,9 @@ public class UserServiceImpl implements UserService {
         }
         setUserGroups(userDto.getGroupIds(), user);
         user.setUsername(userDto.getUsername());
-        user.setPassword(userDto.getPassword());
+        if (!(user.getPassword().equals(userDto.getPassword()))) {
+            user.setPassword(userDto.getPassword());
+        }
         user.setEmail(userDto.getEmail());
         user.setIsApproved(userDto.getIsApproved());
         user.setFullName(userDto.getFullName());
@@ -203,9 +208,11 @@ public class UserServiceImpl implements UserService {
     private Page<User> searchByTerm(String searchTerm, Pageable page) {
         Page<User> filtered;
 
-        filtered = userRepository.findByUsernameContaining(searchTerm, page);
+        filtered = userRepository.findByUsernameContainingIgnoreCase(searchTerm, page);
         if (!filtered.getContent().isEmpty()) return filtered;
-        filtered = userRepository.findByEmailContaining(searchTerm, page);
+        filtered = userRepository.findByEmailContainingIgnoreCase(searchTerm, page);
+        if (!filtered.getContent().isEmpty()) return filtered;
+        filtered = userRepository.findByFullNameContainingIgnoreCase(searchTerm, page);
         if (!filtered.getContent().isEmpty()) return filtered;
 
         return filtered;
@@ -224,7 +231,7 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        if (user != null && user.getEmail().equals(email)) {
+        if (user != null && user.getEmail() != null && user.getEmail().equals(email)) {
             errorMap = null;
         } else {
             if (userRepository.existsByEmail(username)) {

@@ -53,6 +53,7 @@ export const terminalActionConfig = (id) => {
       redirectLink: `/ips/terminals/${id}/transactions`,
       icon: 'exchange',
     },
+
     {
       type: 'GET_ANDROID_DETAILS',
       name: 'androidDetails',

@@ -2,6 +2,8 @@ package com.payten.instapay.services;
 
 import com.payten.instapay.dto.Merchant.MerchantDto;
 import com.payten.instapay.dto.Merchant.MerchantMetadata;
+import com.payten.instapay.dto.Merchant.MerchantNames;
+import com.payten.instapay.model.AcqUser;
 import com.payten.instapay.model.Merchant;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.BindingResult;
@@ -9,7 +11,6 @@ import org.springframework.validation.BindingResult;
 import java.util.List;
 
 public interface MerchantService {
-
     List<Merchant> findAll();
     Page<Merchant> findAllMerchantsPaginated(int pageNum, String searchTerm, String sortBy, String direction);
     MerchantDto findById(Integer id);
@@ -19,4 +20,9 @@ public interface MerchantService {
     MerchantDto editMerchant(Integer id, MerchantDto merchant, BindingResult result);
     String getMerchantNameById(Integer merchantId);
     String getMerchantEmailById(Integer merchantId);
+    String getUserIdByMerchantId(Integer merchantId);
+    List<MerchantNames> getMerchantNames();
+    boolean checkMerchantCredentialsByMerchantId(Integer merchantId);
+    AcqUser saveCredentials(Integer merchantId, String userId);
+    AcqUser updateCredentials(Integer merchantId, String userId);
 }

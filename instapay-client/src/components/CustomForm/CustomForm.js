@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form } from 'semantic-ui-react';
+import { useHistory } from 'react-router-dom';
 import { Button, Dropdown } from 'semantic-ui-react';
 import _ from 'lodash';
 import UserGroups from '../User/UserGroups/UserGroups';
@@ -16,6 +17,8 @@ const CustomForm = ({
   formWarnings,
   setFormWarnings,
 }) => {
+  const history = useHistory();
+
   const onChange = (e) => {
     setFormFields({ ...formFields, [e.target.name]: e.target.value });
   };
@@ -122,8 +125,13 @@ const CustomForm = ({
           </Form.Field>
         ))}
       </Form>
-      <div className="saveObj">
-        <Button onClick={onSave}>Sačuvaj</Button>
+      <div className="buttonsWrapper">
+        <Button color="instagram" onClick={() => history.goBack()}>
+          Odustani
+        </Button>
+        <Button className="saveBtn" color="teal" onClick={onSave}>
+          Sačuvaj
+        </Button>
       </div>
     </div>
   );

@@ -17,8 +17,8 @@ const Header = () => {
   const onLogout = async () => {
     try {
       await axios.get('/logout');
-      document.cookie = `JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/ips; domain=${document.location.hostname};`;
-      history.push('/ips');
+      document.cookie = `JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/ips/; domain=${document.location.hostname};`;
+      history.push('/ips/');
     } catch (error) {
       console.error(error, 'logout err');
     }
@@ -26,7 +26,7 @@ const Header = () => {
 
   return (
     <div className="headerHolder">
-      <div className="headerLogo">
+      <div className="headerLogo" onClick={() => history.push('/ips/transactions')}>
         <Logo />
       </div>
       <div className="headerLinks">
@@ -35,9 +35,23 @@ const Header = () => {
             <>
               <Menu.Item
                 as={Link}
+                to={'/ips/transactions'}
+                name="Transakcije"
+                active={activeItem === 'Transakcije'}
+                onClick={onItemClick}
+              />
+              <Menu.Item
+                as={Link}
                 to={'/ips/merchants'}
                 name="Trgovci"
                 active={activeItem === 'Trgovci'}
+                onClick={onItemClick}
+              />
+              <Menu.Item
+                as={Link}
+                to={'/ips/import'}
+                name="Import"
+                active={activeItem === 'Import'}
                 onClick={onItemClick}
               />
               <Menu.Item
@@ -52,6 +66,17 @@ const Header = () => {
                 to={'/ips/fees'}
                 name="Provizije"
                 active={activeItem === 'Provizije'}
+                onClick={onItemClick}
+              />
+            </>
+          )}
+          {roles && !!roles.find((role) => role === 'ROLE_ACQ') && (
+            <>
+              <Menu.Item
+                as={Link}
+                to={'/ips/reports'}
+                name="Izveštaji"
+                active={activeItem == 'Izveštaji'}
                 onClick={onItemClick}
               />
             </>

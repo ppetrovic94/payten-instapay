@@ -1,0 +1,15 @@
+.accordionContainer {
+  min-width: 70% !important;
+  width: unset !important;
+  margin: 20px 0px;
+  overflow-y: scroll;
+}
+
+.accordionTitle {
+  display: flex;
+  justify-content: space-between;
+}
+
+.accordionStatus {
+  display: flex;
+}

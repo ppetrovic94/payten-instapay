@@ -2,16 +2,11 @@ package com.payten.instapay.services.impl;
 
 import com.payten.instapay.dto.Merchant.MerchantDto;
 import com.payten.instapay.dto.Merchant.MerchantMetadata;
+import com.payten.instapay.dto.Merchant.MerchantNames;
 import com.payten.instapay.exceptions.handlers.RequestedResourceNotFoundException;
 import com.payten.instapay.exceptions.handlers.ValidationException;
-import com.payten.instapay.model.Status;
-import com.payten.instapay.model.City;
-import com.payten.instapay.model.Merchant;
-import com.payten.instapay.model.PaymentMethod;
-import com.payten.instapay.repositories.StatusRepository;
-import com.payten.instapay.repositories.CityRepository;
-import com.payten.instapay.repositories.MerchantRepository;
-import com.payten.instapay.repositories.PaymentMethodRepository;
+import com.payten.instapay.model.*;
+import com.payten.instapay.repositories.*;
 import com.payten.instapay.services.MerchantService;
 import com.payten.instapay.services.validation.MapValidationErrorService;
 
@@ -40,14 +35,16 @@ public class MerchantServiceImpl implements MerchantService {
     private final StatusRepository statusRepository;
     private final CityRepository cityRepository;
     private final PaymentMethodRepository paymentMethodRepository;
+    private final AcqUserRepository acqUserRepository;
     private final ModelMapper modelMapper;
 
-    public MerchantServiceImpl(MerchantRepository merchantRepository, MapValidationErrorService mapValidationErrorService, StatusRepository statusRepository, CityRepository cityRepository, PaymentMethodRepository paymentMethodRepository, ModelMapper modelMapper) {
+    public MerchantServiceImpl(MerchantRepository merchantRepository, MapValidationErrorService mapValidationErrorService, StatusRepository statusRepository, CityRepository cityRepository, PaymentMethodRepository paymentMethodRepository, AcqUserRepository acqUserRepository, ModelMapper modelMapper) {
         this.merchantRepository = merchantRepository;
         this.mapValidationErrorService = mapValidationErrorService;
         this.statusRepository = statusRepository;
         this.cityRepository = cityRepository;
         this.paymentMethodRepository = paymentMethodRepository;
+        this.acqUserRepository = acqUserRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -156,6 +153,51 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
+    public String getUserIdByMerchantId(Integer merchantId) {
+        AcqUser credentials = acqUserRepository.getByMerchant_MerchantId(merchantId);
+
+        if (credentials == null) throw new RequestedResourceNotFoundException("Trgovac sa IDem: " + merchantId + " nema generisane kredencijale");
+
+        return credentials.getUserId();
+    }
+
+    @Override
+    public List<MerchantNames> getMerchantNames() {
+        return merchantRepository.findMerchantNames();
+    }
+
+    @Override
+    public boolean checkMerchantCredentialsByMerchantId(Integer merchantId) {
+        return acqUserRepository.existsByMerchant_MerchantId(merchantId);
+    }
+
+    @Override
+    public AcqUser saveCredentials(Integer merchantId, String userId) {
+        Merchant found = merchantRepository.getByMerchantId(merchantId);
+
+        if (found == null) {
+            throw new RequestedResourceNotFoundException("Ne postoji trgovac sa ID-em: " + merchantId);
+        }
+
+        AcqUser merchantCredentials = new AcqUser();
+        merchantCredentials.setUserId(userId);
+        merchantCredentials.setMerchant(found);
+        return acqUserRepository.save(merchantCredentials);
+    }
+
+    @Override
+    public AcqUser updateCredentials(Integer merchantId, String userId) {
+        AcqUser foundCredentials = acqUserRepository.getByMerchant_MerchantId(merchantId);
+
+        if (foundCredentials == null) {
+            throw new RequestedResourceNotFoundException("Ne postoje kredencijali za trgovca sa ID-em: " + merchantId);
+        }
+
+        foundCredentials.setUserId(userId);
+        return acqUserRepository.save(foundCredentials);
+    }
+
+    @Override
     public void deleteMerchant(Integer id) {
         Merchant found = merchantRepository.getByMerchantId(id);
 
@@ -180,6 +222,8 @@ public class MerchantServiceImpl implements MerchantService {
 
         return merchantMetadata;
     }
+
+
 
     private Merchant convertToEntity(MerchantDto merchantDto, Merchant merchant)  {
 
@@ -233,13 +277,13 @@ public class MerchantServiceImpl implements MerchantService {
             if(!filtered.getContent().isEmpty()) return filtered;
         }
 
-        filtered = merchantRepository.findByMerchantNameContaining(term, page);
+        filtered = merchantRepository.findByMerchantNameContainingIgnoreCase(term, page);
         if(!filtered.getContent().isEmpty()) return filtered;
-        filtered = merchantRepository.findByMerchantAddressContaining(term, page);
+        filtered = merchantRepository.findByCity_cityNameContainingIgnoreCase(term, page);
         if(!filtered.getContent().isEmpty()) return filtered;
-        filtered = merchantRepository.findByCity_cityNameContaining(term, page);
+        filtered = merchantRepository.findByMerchantAddressContainingIgnoreCase(term, page);
         if(!filtered.getContent().isEmpty()) return filtered;
-        filtered = merchantRepository.findByLocalMerchantIdContaining(term,page);
+        filtered = merchantRepository.findByLocalMerchantIdContainingIgnoreCase(term,page);
         if(!filtered.getContent().isEmpty()) return filtered;
 
         return filtered;
@@ -262,7 +306,7 @@ public class MerchantServiceImpl implements MerchantService {
             errorMap = null;
         }
         else {
-            if (!personalIdentityNumber.isEmpty() && merchantRepository.existsByPersonalIdentityNumber(personalIdentityNumber)){
+            if (personalIdentityNumber != null && merchantRepository.existsByPersonalIdentityNumber(personalIdentityNumber)){
                 errorMap = new HashMap<>();
                 errorMap.put("personalIdentityNumber", "Trgovac sa unetim matičnim brojem: " + personalIdentityNumber + " već postoji u bazi");
                 return errorMap;
@@ -273,7 +317,7 @@ public class MerchantServiceImpl implements MerchantService {
             errorMap = null;
         }
         else {
-            if (!taxIdentityNumber.isEmpty() && merchantRepository.existsByTaxIdentityNumber(taxIdentityNumber)){
+            if (taxIdentityNumber != null && merchantRepository.existsByTaxIdentityNumber(taxIdentityNumber)){
                 errorMap = new HashMap<>();
                 errorMap.put("taxIdentityNumber", "Trgovac sa unetim PIB: " + taxIdentityNumber + " već postoji u bazi");
                 return errorMap;

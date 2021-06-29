@@ -3,6 +3,7 @@ package com.payten.instapay.model.custom;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.math.BigDecimal;
 
 @Entity
 public class TerminalTransaction {
@@ -24,7 +25,7 @@ public class TerminalTransaction {
     private String statusCode;
 
     @Column(name = "INSTRUCTED_AMOUNT")
-    private Float instructedAmount;
+    private BigDecimal instructedAmount;
 
     public TerminalTransaction() {
     }
@@ -53,14 +54,6 @@ public class TerminalTransaction {
         this.status = status;
     }
 
-    public String getStatusDate() {
-        return statusDate;
-    }
-
-    public void setStatusDate(String statusDate) {
-        this.statusDate = statusDate;
-    }
-
     public String getStatusCode() {
         return statusCode;
     }
@@ -69,11 +62,19 @@ public class TerminalTransaction {
         this.statusCode = statusCode;
     }
 
-    public Float getInstructedAmount() {
+    public String getStatusDate() {
+        return statusDate;
+    }
+
+    public void setStatusDate(String statusDate) {
+        this.statusDate = statusDate;
+    }
+
+    public BigDecimal getInstructedAmount() {
         return instructedAmount;
     }
 
-    public void setInstructedAmount(Float instructedAmount) {
+    public void setInstructedAmount(BigDecimal instructedAmount) {
         this.instructedAmount = instructedAmount;
     }
 }

@@ -17,24 +17,26 @@ const Merchants = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    const fetchMerchants = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get('/user/merchants?pagenum=0');
-
-        const { content: merchants, totalPages } = (response && response.data) || {};
-        setMerchants(merchants);
-        setTotalPages(totalPages);
-        setLoading(false);
-      } catch (err) {
-        console.error(err.response);
-      }
-    };
     fetchMerchants();
   }, []);
 
+  const fetchMerchants = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get('/user/merchants?pagenum=0');
+
+      const { content: merchants, totalPages } = (response && response.data) || {};
+      setMerchants(merchants);
+      setTotalPages(totalPages);
+      setLoading(false);
+    } catch (err) {
+      console.error(err.response);
+    }
+  };
+
   const onPageChange = async (e, { activePage }) => {
     setActivePage(activePage);
+    setLoading(true);
     let response = null;
     if (searchTerm) {
       response = await axios.get(
@@ -45,6 +47,7 @@ const Merchants = () => {
     }
 
     setMerchants(response.data.content);
+    setLoading(false);
   };
 
   const onChangeSearchTerm = async (term) => {
@@ -108,6 +111,7 @@ const Merchants = () => {
           tableHandlePageChange={onPageChange}
           tableTotalPages={totalPages}
           tableColumnSortHandler={onColumnSort}
+          tableCustomFunction={fetchMerchants}
         />
       </div>
     )

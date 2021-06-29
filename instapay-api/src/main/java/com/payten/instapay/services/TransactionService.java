@@ -6,6 +6,6 @@ import com.payten.instapay.model.custom.TerminalTransactionPage;
 import java.util.List;
 
 public interface TransactionService {
-     TerminalTransactionPage getTransactionByTerminalIdAndDateRangePaginated(String dateFrom, String dateTo, String terminalId, Integer pageNum, Integer pageSize);
+     TerminalTransactionPage getTransactionByTerminalIdAndDateRangePaginated(String dateFrom, String dateTo, String terminalId, Integer merchantId, Integer pageNum, Integer pageSize);
      List<TerminalTransactionDetails> getTransactionDetailsByEndToEndId(String endToEndId);
 }

@@ -1,6 +1,7 @@
 package com.payten.instapay.services.impl;
 
 import com.payten.instapay.dto.PointOfSale.PointOfSaleDto;
+import com.payten.instapay.dto.PointOfSale.PointOfSaleNames;
 import com.payten.instapay.exceptions.handlers.RequestedResourceNotFoundException;
 import com.payten.instapay.exceptions.handlers.ValidationException;
 import com.payten.instapay.model.*;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -95,10 +97,12 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
             throw new RequestedResourceNotFoundException("Trgovac sa ID-em: " + merchantId + " ne postoji");
         }
 
+        //Merchant merchant = merchantRepository.getByMerchantId(merchantId);
+
         if (errorMap != null){
             throw new ValidationException(errorMap);
         } else {
-            errorMap = checkPointOfSaleUniqueConstraints(pointOfSaleDto.getPointOfSaleLocalId(), null);
+            errorMap = checkPointOfSaleUniqueConstraints(pointOfSaleDto.getPointOfSaleLocalId(), null, merchantId);
             if (errorMap != null) {
                 throw new ValidationException(errorMap);
             }
@@ -122,7 +126,7 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
         if (errorMap != null) {
             throw new ValidationException(errorMap);
         } else {
-            errorMap = checkPointOfSaleUniqueConstraints(pointOfSaleDto.getPointOfSaleLocalId(), found);
+            errorMap = checkPointOfSaleUniqueConstraints(pointOfSaleDto.getPointOfSaleLocalId(), found, null);
             if (errorMap != null) {
                 throw new ValidationException(errorMap);
             }
@@ -190,14 +194,16 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
         return modelMapper.map(pointOfSale, PointOfSaleDto.class);
     }
 
-    private Map<String, String> checkPointOfSaleUniqueConstraints(String pointOfSaleLocalId, PointOfSale pointOfSale){
+    private Map<String, String> checkPointOfSaleUniqueConstraints(String pointOfSaleLocalId, PointOfSale pointOfSale, Integer merchantId){
         Map<String,String> errorMap;
+        Integer mId = merchantId != null ? merchantId : pointOfSale.getMerchantId();
+
         if (pointOfSale != null && pointOfSale.getPointOfSaleLocalId() != null && pointOfSale.getPointOfSaleLocalId().equals(pointOfSaleLocalId)){
             errorMap = null;
         } else {
-            if (!pointOfSaleLocalId.isEmpty() && pointOfSaleRepository.existsByPointOfSaleLocalId(pointOfSaleLocalId)) {
+            if (pointOfSaleLocalId != null && pointOfSaleRepository.existsByPointOfSaleLocalIdAndMerchantId(pointOfSaleLocalId, mId)) {
                 errorMap = new HashMap<>();
-                errorMap.put("pointOfSaleLocalId", "Prodajno mesto sa unetim ID-em: " + pointOfSaleLocalId + " već postoji u bazi");
+                errorMap.put("pointOfSaleLocalId", "Prodajno mesto sa unetim ID-em: " + pointOfSaleLocalId + " već postoji za ovog trgovca");
                 return errorMap;
             }
         }
@@ -209,15 +215,15 @@ public class PointOfSaleServiceImpl implements PointOfSaleService {
         Page<PointOfSale> filtered;
 
         if (NumberUtils.isParsable(term)) {
-            filtered = pointOfSaleRepository.findByMerchantIdAndPointOfSaleAccountContaining(merchantId, term, page);
+            filtered = pointOfSaleRepository.findByMerchantIdAndPointOfSaleAccountContainingIgnoreCase(merchantId, term, page);
             if (!filtered.getContent().isEmpty()) return filtered;
         }
 
-        filtered = pointOfSaleRepository.findByMerchantIdAndPointOfSaleNameContaining(merchantId, term, page);
+        filtered = pointOfSaleRepository.findByMerchantIdAndPointOfSaleNameContainingIgnoreCase(merchantId, term, page);
         if (!filtered.getContent().isEmpty()) return filtered;
-        filtered = pointOfSaleRepository.findByMerchantIdAndPointOfSaleLocalIdContaining(merchantId, term, page);
+        filtered = pointOfSaleRepository.findByMerchantIdAndPointOfSaleLocalIdContainingIgnoreCase(merchantId, term, page);
         if (!filtered.getContent().isEmpty()) return filtered;
-        filtered = pointOfSaleRepository.findByMerchantIdAndCity_cityNameContaining(merchantId, term, page);
+        filtered = pointOfSaleRepository.findByMerchantIdAndCity_cityNameContainingIgnoreCase(merchantId, term, page);
         if (!filtered.getContent().isEmpty()) return filtered;
 
         return filtered;

@@ -11,6 +11,7 @@ import './TransactionActions.scss';
 const TransactionActions = ({ endToEndId, actions }) => {
   const [loading, setLoading] = useState(false);
   const [details, setDetails] = useState(null);
+  const [error, setError] = useState(null);
 
   const onOpenModal = async () => {
     setLoading(true);
@@ -20,6 +21,7 @@ const TransactionActions = ({ endToEndId, actions }) => {
       setLoading(false);
     } catch (error) {
       console.error(error.response);
+      setError(`Došlo je do greške pri dobijanju detalja transakcije za referencu:  ${endToEndId}`);
       setLoading(false);
     }
   };
@@ -28,13 +30,20 @@ const TransactionActions = ({ endToEndId, actions }) => {
     return loading ? (
       <CustomLoader />
     ) : (
-      details && (
-        <CustomTable
-          tableTitle={`Detalji transakcije - ${endToEndId}`}
-          content={formatTerminalDetails(details)}
-          tableHeader={transactionDetailsTableHeader}
-        />
-      )
+      <>
+        {details && (
+          <CustomTable
+            tableTitle={`Detalji transakcije - ${endToEndId}`}
+            content={formatTerminalDetails(details)}
+            tableHeader={transactionDetailsTableHeader}
+          />
+        )}
+        {error && (
+          <div className="errorContainer">
+            <p style={{ fontSize: '20px', fontWeight: '500' }}>{error}</p>
+          </div>
+        )}
+      </>
     );
   };
 

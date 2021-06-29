@@ -1,5 +1,7 @@
 package com.payten.instapay.services.impl;
 
+import com.payten.instapay.dto.PointOfSale.PointOfSaleNames;
+import com.payten.instapay.dto.Terminal.TerminalAcquirerIds;
 import com.payten.instapay.dto.Terminal.TerminalDto;
 import com.payten.instapay.dto.Terminal.TerminalMetadata;
 import com.payten.instapay.exceptions.handlers.RequestedResourceNotFoundException;
@@ -16,7 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
-import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,14 +32,16 @@ public class TerminalServiceImpl implements TerminalService {
     private final MapValidationErrorService mapValidationErrorService;
     private final TerminalTypeRepository terminalTypeRepository;
     private final StatusRepository statusRepository;
+    private final AcqUserRepository acqUserRepository;
 
-    public TerminalServiceImpl(TerminalRepository terminalRepository, PointOfSaleRepository pointOfSaleRepository, PaymentMethodRepository paymentMethodRepository, MapValidationErrorService mapValidationErrorService, TerminalTypeRepository terminalTypeRepository, StatusRepository statusRepository) {
+    public TerminalServiceImpl(TerminalRepository terminalRepository, PointOfSaleRepository pointOfSaleRepository, PaymentMethodRepository paymentMethodRepository, MapValidationErrorService mapValidationErrorService, TerminalTypeRepository terminalTypeRepository, StatusRepository statusRepository, AcqUserRepository acqUserRepository) {
         this.terminalRepository = terminalRepository;
         this.pointOfSaleRepository = pointOfSaleRepository;
         this.paymentMethodRepository = paymentMethodRepository;
         this.mapValidationErrorService = mapValidationErrorService;
         this.terminalTypeRepository = terminalTypeRepository;
         this.statusRepository = statusRepository;
+        this.acqUserRepository = acqUserRepository;
     }
 
     @Override
@@ -157,6 +161,31 @@ public class TerminalServiceImpl implements TerminalService {
         return acquirerTid;
     }
 
+    @Override
+    public String getUserIdByTerminalId(Integer terminalId) {
+        AcqUser credentials = acqUserRepository.getByTerminal_TerminalId(terminalId);
+
+        if (credentials == null) throw new RequestedResourceNotFoundException("Terminal sa IDem: " + terminalId + " nema generisane kredencijale");
+
+        return credentials.getUserId();
+    }
+
+    @Override
+    public List<TerminalAcquirerIds> getTerminalAcquirerIdsByMerchantId(Integer merchantId) {
+        List<TerminalAcquirerIds> terminalAcquirerIds = new ArrayList<>();
+
+        List<PointOfSaleNames> pointOfSaleNamesList = pointOfSaleRepository.findPointOfSaleIds(merchantId);
+        if (pointOfSaleNamesList != null && !pointOfSaleNamesList.isEmpty()) {
+            for (PointOfSaleNames pos: pointOfSaleNamesList) {
+                List<TerminalAcquirerIds> terminalsForPos = terminalRepository.findTerminalAcquirerIdsByPointOfSaleId(pos.getPointOfSaleId());
+                if (terminalsForPos != null && !terminalsForPos.isEmpty()) {
+                    terminalAcquirerIds.addAll(terminalsForPos);
+                }
+            }
+        }
+
+        return terminalAcquirerIds;
+    }
 
     @Override
     public void deleteTerminal(Integer terminalId) {
@@ -167,15 +196,6 @@ public class TerminalServiceImpl implements TerminalService {
         }
 
         terminalRepository.delete(found);
-    }
-
-    @Override
-    @Transactional
-    public void generateCredentials(Integer terminalId, boolean regenerate) {
-        if (regenerate) {
-            terminalRepository.updateTerminalStatusToInactive(terminalId, statusRepository.getStatusByStatusName("Inactive"));
-        }
-        terminalRepository.generateCredentials(terminalId);
     }
 
 
@@ -222,7 +242,7 @@ public class TerminalServiceImpl implements TerminalService {
         terminalDto.setPaymentMethodId(terminal.getPaymentMethod());
         terminalDto.setStatusId(terminal.getStatus().getStatusId());
         terminalDto.setSetupDate(terminal.getSetupDate().toString());
-        terminalDto.setTerminalTypeId(terminalType.getTerminalTypeId());
+        terminalDto.setTerminalTypeId(terminalType != null ? terminalType.getTerminalTypeId() : null);
 
         return terminalDto;
     }
@@ -246,11 +266,11 @@ public class TerminalServiceImpl implements TerminalService {
         Page<Terminal> filtered;
 
         if (NumberUtils.isParsable(term)) {
-            filtered = terminalRepository.findByPointOfSaleIdAndTerminalAccountContaining(pointOfSaleId, term, page);
+            filtered = terminalRepository.findByPointOfSaleIdAndTerminalAccountContainingIgnoreCase(pointOfSaleId, term, page);
             if(!filtered.getContent().isEmpty()) return filtered;
         }
 
-        filtered = terminalRepository.findByPointOfSaleIdAndAcquirerTidContaining(pointOfSaleId, term, page);
+        filtered = terminalRepository.findByPointOfSaleIdAndAcquirerTidContainingIgnoreCase(pointOfSaleId, term, page);
         if (!filtered.getContent().isEmpty()) return filtered;
 
         return filtered;

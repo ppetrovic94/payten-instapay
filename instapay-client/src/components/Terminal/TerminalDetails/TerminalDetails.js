@@ -14,20 +14,43 @@ import EmailCard from '../../Cards/EmailCard/EmailCard';
 const TerminalDetails = () => {
   const [loading, setLoading] = useState(false);
   const [terminalDetails, setTerminalDetails] = useState(null);
+  const [terminalUserId, setTerminalUserId] = useState(null);
+  const [merchantUserId, setMerchantUserId] = useState(null);
   const [merchantEmail, setMerchantEmail] = useState('');
   const [sections, setSections] = useState(null);
   const [notFound, setNotFound] = useState(null);
+  const [noCredentials, setNoCredentials] = useState(false);
   const { id } = useParams();
 
-  const fetchTerminalById = async (id) => {
+  const fetchCredentials = async (id) => {
+    const merchantId = localStorage.getItem('merchantId');
     setLoading(true);
     try {
-      const response = await axios.get(`/user/terminals/${id}/details`);
-      setTerminalDetails(response.data);
+      const hasCredentialsOnMerchant = await axios.get(
+        `/user/merchants/${merchantId}/hasCredentials`,
+      );
+      if (hasCredentialsOnMerchant.data) {
+        const merchantCredentials = await axios.get(`/user/merchants/${merchantId}/credentials`);
+        setMerchantUserId(merchantCredentials.data);
+      } else {
+        const userIdRes = await axios.get(`/user/terminals/${id}/userId`);
+        setTerminalUserId(userIdRes.data);
+      }
+
       setLoading(false);
     } catch (err) {
-      setNotFound(err.response);
       setLoading(false);
+    }
+  };
+
+  const fetchTerminalDetails = async (id) => {
+    setLoading(true);
+    try {
+      const detailsRes = await axios.get(`/user/terminals/${id}/details`);
+      setTerminalDetails(detailsRes.data);
+    } catch (err) {
+      setLoading(false);
+      setNotFound(err.response);
     }
   };
 
@@ -40,6 +63,14 @@ const TerminalDetails = () => {
       console.error(error.response);
     }
   };
+
+  useEffect(() => {
+    if (!terminalUserId && !merchantUserId) {
+      setNoCredentials(true);
+    } else {
+      setNoCredentials(false);
+    }
+  }, [terminalUserId, merchantUserId]);
 
   useEffect(() => {
     const fetchNavbarData = async () => {
@@ -72,7 +103,8 @@ const TerminalDetails = () => {
       }
     };
 
-    fetchTerminalById(id);
+    fetchTerminalDetails(id);
+    fetchCredentials(id);
     fetchNavbarData();
     fetchEmailByMerchantId();
   }, [id]);
@@ -80,7 +112,7 @@ const TerminalDetails = () => {
   const regenerateCredentials = async (terminalId) => {
     setLoading(true);
     try {
-      await axios.get(`/user/terminals/${terminalId}/generateCredentials?regenerate=true`);
+      await axios.get(`/user/credentials/generate?terminalId=${terminalId}`);
       toast.success('Uspešno ste generisali nove kredencijale');
     } catch (err) {
       toast.error('Došlo je do greške pri generisanju novih kredencijala');
@@ -89,12 +121,24 @@ const TerminalDetails = () => {
     }
   };
 
+  const deleteCredentials = async (userId) => {
+    try {
+      await axios.delete(`/user/credentials/delete?userId=${userId}`);
+      toast.success('Uspešno ste obrisali kredencijale');
+      setNoCredentials(true);
+      setTerminalUserId(null);
+    } catch (error) {
+      toast.error('Došlo je do greške pri brisanju kredencijala');
+      console.error(error.response);
+    }
+  };
+
   const sendOnMail = async (receiverMail) => {
     var reader = new FileReader();
     pdf(
       <TerminalCredentialsPdf
         acquirerTid={terminalDetails.acquirerTid}
-        userId={terminalDetails.userId}
+        userId={terminalUserId}
         activationCode={terminalDetails.activationCode}
       />,
     )
@@ -139,15 +183,25 @@ const TerminalDetails = () => {
         </div>
         <div className="terminalDetailsCards">
           <CredentialsCard
+            terminalUserId={terminalUserId}
+            merchantUserId={merchantUserId}
             details={terminalDetails}
             regenerateCredentials={regenerateCredentials}
-            fetchTerminalById={fetchTerminalById}
+            fetchTerminalById={() => {
+              fetchTerminalDetails(id);
+              fetchCredentials(id);
+            }}
+            noCredentials={noCredentials}
+            deleteCredentials={deleteCredentials}
           />
-          <EmailCard
-            onSendHandler={sendOnMail}
-            details={terminalDetails}
-            merchantEmail={merchantEmail}
-          />
+          {!noCredentials && (
+            <EmailCard
+              onSendHandler={sendOnMail}
+              userId={terminalUserId}
+              details={terminalDetails}
+              merchantEmail={merchantEmail}
+            />
+          )}
         </div>
       </div>
     )

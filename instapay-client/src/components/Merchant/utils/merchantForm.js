@@ -47,7 +47,7 @@ export const merchantFormConfig = {
   },
   setupDate: { key: 'setupDate', title: 'Datum postavljanja', type: 'DATE', required: true },
   mcc: { key: 'mcc', title: 'MCC', type: 'NUMBER', required: true },
-  merchantAccount: { key: 'merchantAccount', title: 'Broj računa', type: 'NUMBER', required: true },
+  merchantAccount: { key: 'merchantAccount', title: 'Broj računa', type: 'TEXT', required: true },
   paymentMethod: {
     key: 'paymentMethodId',
     title: 'Metod plaćanja',

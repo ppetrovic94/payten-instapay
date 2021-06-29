@@ -40,6 +40,18 @@
   align-items: center;
   background-color: #c7c1c1;
   height: 500px;
+  min-width: 618px;
+}
+
+.tableDetailsRotated {
+  transform: rotateX(180deg);
+  overflow-x: auto;
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+.tableContentRotated {
+  transform: rotateX(180deg);
 }
 
 .tableStatus {

@@ -13,7 +13,7 @@ const AddTerminal = () => {
   const [terminalMetadata, setTerminalMetadata] = useState(null);
   const [pointOfSaleTitle, setPointOfSaleTitle] = useState('');
   const [terminalFields, setTerminalFields] = useState({ ...terminalFormTemplate });
-  const [terminalId, setTerminalId] = useState(null);
+  const [tid, setTid] = useState(null);
   const [errors, setErrors] = useState(null);
   const [warnings, setWarnings] = useState({
     active: false,
@@ -52,7 +52,7 @@ const AddTerminal = () => {
   const generateCredentials = async (terminalId) => {
     setLoading(true);
     try {
-      await axios.get(`/user/terminals/${terminalId}/generateCredentials`);
+      await axios.get(`/user/credentials/generate?terminalId=${terminalId}`);
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -60,22 +60,35 @@ const AddTerminal = () => {
     }
   };
 
+  const checkCredentialsOnMerchant = async () => {
+    const merchantId = localStorage.getItem('merchantId');
+    try {
+      const response = await axios.get(`/user/merchants/${merchantId}/hasCredentials`);
+      return response.data;
+    } catch (error) {
+      console.error(error.response);
+    }
+  };
+
   useEffect(() => {
-    if (terminalId) {
+    if (tid) {
       if (terminalFields.terminalTypeId === 1) {
-        generateCredentials(terminalId);
+        const hasCredentials = checkCredentialsOnMerchant();
+        if (!hasCredentials) {
+          generateCredentials(tid);
+        }
       }
       history.goBack();
       setLoading(false);
     }
-  }, [terminalId]);
+  }, [tid]);
 
   const saveTerminal = async () => {
     setLoading(true);
     try {
       const addedTerminal = await axios.post(`/user/pos/${id}/terminals/add`, terminalFields);
       toast.success(`Uspešno ste dodali terminal ${terminalFields.acquirerTid}`);
-      setTerminalId(addedTerminal.data.terminalId);
+      setTid(addedTerminal.data.terminalId);
     } catch (err) {
       toast.error('Došlo je do greške pri dodavanju terminala');
       setLoading(false);

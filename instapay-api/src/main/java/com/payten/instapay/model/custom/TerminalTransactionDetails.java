@@ -1,7 +1,5 @@
 package com.payten.instapay.model.custom;
 
-import java.sql.Timestamp;
-
 public class TerminalTransactionDetails {
 
     private String endToEndId;
@@ -14,7 +12,7 @@ public class TerminalTransactionDetails {
 
     private String statusDate;
 
-    private Timestamp setupDate;
+    private String setupDate;
 
     private String instructionId;
 
@@ -69,11 +67,12 @@ public class TerminalTransactionDetails {
         this.instructionId = instructionId;
     }
 
-    public Timestamp getSetupDate() {
+    public String getSetupDate() {
         return setupDate;
     }
 
-    public void setSetupDate(Timestamp setupDate) {
+    public void setSetupDate(String setupDate) {
         this.setupDate = setupDate;
     }
+
 }

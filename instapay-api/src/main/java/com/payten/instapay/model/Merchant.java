@@ -1,9 +1,15 @@
 package com.payten.instapay.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "ACQ_MERCHANTS")
@@ -20,7 +26,13 @@ public class Merchant implements Serializable {
     @Column(name = "MERCHANT_ADDRESS")
     private String merchantAddress;
 
-    @Column(name = "E_MAIL")
+    @Column(name = "MERCHANT_MIN_FEE")
+    private Integer merchantMinFee;
+
+    @Column(name = "MERCHANT_PERC_FEE")
+    private Double merchantPercFee;
+
+    @Column(name = "MERCHANT_EMAIL")
     private String merchantEmail;
 
     @Basic
@@ -65,6 +77,14 @@ public class Merchant implements Serializable {
     @OneToOne
     @JoinColumn(name = "MERCHANT_CITY_ID")
     private City city;
+
+    @OneToOne(mappedBy = "merchant")
+    @JsonIgnoreProperties("merchant")
+    private AcqUser acqUser;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "merchantId")
+    @JsonIgnore
+    private List<PointOfSale> pointOfSales = new ArrayList<>();
 
     public Merchant() {
     }
@@ -203,5 +223,37 @@ public class Merchant implements Serializable {
 
     public void setMerchantEmail(String merchantEmail) {
         this.merchantEmail = merchantEmail;
+    }
+
+    public Integer getMerchantMinFee() {
+        return merchantMinFee;
+    }
+
+    public void setMerchantMinFee(Integer merchantMinFee) {
+        this.merchantMinFee = merchantMinFee;
+    }
+
+    public Double getMerchantPercFee() {
+        return merchantPercFee;
+    }
+
+    public void setMerchantPercFee(Double merchantPercFee) {
+        this.merchantPercFee = merchantPercFee;
+    }
+
+    public AcqUser getAcqUser() {
+        return acqUser;
+    }
+
+    public void setAcqUser(AcqUser acqUser) {
+        this.acqUser = acqUser;
+    }
+
+    public List<PointOfSale> getPointOfSales() {
+        return pointOfSales;
+    }
+
+    public void setPointOfSales(List<PointOfSale> pointOfSales) {
+        this.pointOfSales = pointOfSales;
     }
 }
